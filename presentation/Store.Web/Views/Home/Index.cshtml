@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Store.Category>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,7 +9,14 @@
     <button type="submit">Найти</button>
 </form>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table">
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

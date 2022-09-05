@@ -9,5 +9,6 @@ namespace Store
     public interface IProductRepository
     {
         Product[] GetAllByTitle(string titlePart);
+        Product[] GetAllByCategoryId(int categoryId);
     }
 }
