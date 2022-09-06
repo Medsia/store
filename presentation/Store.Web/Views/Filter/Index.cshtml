@@ -1,0 +1,25 @@
+﻿@using Store
+
+@{
+    Category category = ViewBag.Category;
+    Product[] products = ViewBag.Products;
+}
+
+@{
+    ViewData["Title"] = "Filter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Html.DisplayFor(modelItem => category.Name)</h1>
+
+<table class="table">
+    <tbody>
+@foreach (Product item in products) {
+        <tr>
+            <td>
+                <a href="">@Html.DisplayFor(modelItem => item.Title)</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
