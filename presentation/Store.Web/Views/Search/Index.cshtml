@@ -1,12 +1,26 @@
-﻿@model IEnumerable<Store.Product>
+﻿@model Product[]
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Результат поиска";
 }
 
-<h1>Index</h1>
+<h1>Результат поиска</h1>
 
-<p>
+@if(Model.Length == 0)
+{
+    <p>Ничего не найдено</p>
+}
+else
+ {
+    <ul>
+    @foreach(var product in Model)
+     {
+        <li><a href="@Url.Action("Index", "Product", new { id = product.Id })">@product.Title</a></li>
+     }
+    </ul>
+ }
+
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -38,4 +52,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@
