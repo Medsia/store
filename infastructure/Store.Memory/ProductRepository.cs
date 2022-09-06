@@ -12,9 +12,9 @@ namespace Store.Memory
             new Product(3, "Брелок Тетрадь смерти", new Category(3, "Брелоки")),
         };
 
-        public Product[] GetAllByTitle(string titlePart)
+        public Product[] GetAllByTitle(string query)
         {
-            return products.Where(product => product.Title.Contains(titlePart))
+            return products.Where(product => product.Title.Contains(query))
                            .ToArray();
         }
 
