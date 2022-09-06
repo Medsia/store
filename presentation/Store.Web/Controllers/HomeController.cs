@@ -22,7 +22,7 @@ namespace Store.Web.Controllers
 
         public IActionResult Index()
         {
-            return View(categoryRepository.GetAllCategories());
+            return View(categoryRepository.GetAll());
         }
 
         public IActionResult Privacy()

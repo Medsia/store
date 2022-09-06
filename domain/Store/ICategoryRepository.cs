@@ -6,6 +6,7 @@ namespace Store
 {
     public interface ICategoryRepository
     {
-        Category[] GetAllCategories();
+        Category[] GetAll();
+        Category GetById(int id);
     }
 }

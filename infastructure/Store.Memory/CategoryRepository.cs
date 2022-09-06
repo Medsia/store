@@ -7,14 +7,19 @@ namespace Store.Memory
     {
         private readonly Category[] categories = new[]
         {
-            new Category(1, "Значок"),
-            new Category(2, "Плакат"),
-            new Category(3, "Брелок"),
+            new Category(1, "Значки"),
+            new Category(2, "Плакаты"),
+            new Category(3, "Брелоки"),
         };
 
-        public Category[] GetAllCategories()
+        public Category[] GetAll()
         {
             return categories;
+        }
+
+        public Category GetById(int categoryId)
+        {
+            return categories.First(category => category.Id == categoryId);
         }
     }
 }

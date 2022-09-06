@@ -14,7 +14,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <a href="@Url.Action("Index", "Filter", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
             </td>
         </tr>
 }
