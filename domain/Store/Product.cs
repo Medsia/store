@@ -6,11 +6,17 @@
         public string Title { get; }
         public int CategoryId { get; }
 
-        public Product(int id, string title, Category category)
+        public string Description { get; }
+
+        public decimal Price { get; }
+
+        public Product(int id, string title, Category category, string description, decimal price)
         {
             Id = id;
             Title = title;
             CategoryId = category.Id;
+            Description = description;
+            Price = price;
         }
     }
 }

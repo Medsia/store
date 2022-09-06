@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Store.Memory
 {
@@ -7,9 +6,12 @@ namespace Store.Memory
     {
         private readonly Product[] products = new[]
         {
-            new Product(1, "Значок Тетрадь смерти", new Category(1, "Значки")),
-            new Product(2, "Плакат Ван пис", new Category(2, "Плакаты")),
-            new Product(3, "Брелок Тетрадь смерти", new Category(3, "Брелоки")),
+            new Product(1, "Значок Тетрадь смерти", new Category(1, "Значки"), "Материал - металл. " +
+                "Диаметр значка 58 мм", 1.5m),
+            new Product(2, "Плакат Ван пис", new Category(2, "Плакаты"), "Формат А3(29,7см х42 см). " +
+                "плотность бумаги 150гр", 4m),
+            new Product(3, "Брелок Тетрадь смерти", new Category(3, "Брелоки"), "Размер: 4х5.5 см. " +
+                "Материал: PVC", 2m),
         };
 
         public Product[] GetAllByTitle(string query)
@@ -22,6 +24,11 @@ namespace Store.Memory
         {
             return products.Where(product => product.CategoryId == categoryId)
                            .ToArray();
+        }
+
+        public Product GetById(int id)
+        {
+            return products.Single(product => product.Id == id);
         }
     }
 }
