@@ -30,6 +30,7 @@ namespace Store.Web
 
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<ProductService>();
         }
 
