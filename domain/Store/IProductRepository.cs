@@ -11,5 +11,6 @@ namespace Store
         Product[] GetAllByTitle(string titlePart);
         Product[] GetAllByCategoryId(int categoryId);
         Product GetById(int id);
+        Product[] GetAllByIds(IEnumerable<int> productIds);
     }
 }
