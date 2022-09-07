@@ -96,7 +96,7 @@ namespace Store.Web.Controllers
             }
 
             var product = productRepository.GetById(id);
-            order.RemoveBook(product);
+            order.RemoveProduct(product);
             orderRepository.Update(order);
 
             cart.TotalCount = order.TotalCount;
