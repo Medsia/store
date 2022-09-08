@@ -9,15 +9,15 @@ namespace Store.Memory
         {
             new Category(1, "Значки"),
             new Category(2, "Плакаты"),
-            new Category(3, "Брелоки"),
+            new Category(3, "Брелки"),
         };
 
-        public Category[] GetAll()
+        public Category[] GetAllCategories()
         {
             return categories;
         }
 
-        public Category GetById(int categoryId)
+        public Category GetCategoryById(int categoryId)
         {
             return categories.First(category => category.Id == categoryId);
         }

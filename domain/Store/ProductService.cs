@@ -1,4 +1,5 @@
-﻿namespace Store
+﻿
+namespace Store
 {
     public class ProductService
     {
@@ -10,9 +11,12 @@
         }
         public Product[] GetAllByQuery(string query)
         {
-            //if (IsCategory(query))
-            //    return productRepository.GetAllByCategoryId(query);
             return productRepository.GetAllByTitle(query);
+        }
+
+        public Product[] GetAllByQuery(int query)
+        {
+            return productRepository.GetAllByCategoryId(query);
         }
     }
 }

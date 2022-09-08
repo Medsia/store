@@ -9,7 +9,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a href="@Url.Action("Index", "Filter", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                <a href="@Url.Action("SearchByCategory", "Search", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
             </td>
         </tr>
 }
