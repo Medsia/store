@@ -5,15 +5,7 @@ namespace Store.Memory
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly Product[] products = new[]
-        {
-            new Product(1, "Значок Тетрадь смерти", new Category(1, "Значки"), "Материал - металл. " +
-                "Диаметр значка 58 мм", 1.5m),
-            new Product(2, "Плакат Ван пис", new Category(2, "Плакаты"), "Формат А3(29,7см х42 см). " +
-                "плотность бумаги 150гр", 4m),
-            new Product(3, "Брелок Тетрадь смерти", new Category(3, "Брелки"), "Размер: 4х5.5 см. " +
-                "Материал: PVC", 2m),
-        };
+        private readonly Product[] products = TemporaryData.products;
 
         public Product[] GetAllByTitle(string query)
         {
