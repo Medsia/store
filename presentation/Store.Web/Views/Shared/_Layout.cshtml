@@ -15,6 +15,11 @@
                 <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
             </form>
+
+            <a class="navbar-nav" href="@Url.Action("Delivery", "Home")">Доставка</a>
+            <a class="navbar-nav" href="@Url.Action("Contacts", "Home")">Контакты</a>
+            <a class="navbar-nav" href="@Url.Action("About", "Home")">О магазине</a>
+
             <span class="navbar-text ml-auto">
                 @{
                     if (Context.Session.TryGetCart(out Cart cart) && cart.TotalCount > 0)

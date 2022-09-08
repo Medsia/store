@@ -23,6 +23,21 @@ namespace Store.Web.Controllers
             return View(categoryRepository.GetAllCategories());
         }
 
+        public IActionResult Delivery()
+        {
+            return View("Delivery");
+        }
+
+        public IActionResult Contacts()
+        {
+            return View("Contacts");
+        }
+
+        public IActionResult About()
+        {
+            return View("About");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
