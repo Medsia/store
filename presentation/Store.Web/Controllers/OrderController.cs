@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.Messages;
 using Store.Web.Models;
+using Store.Contractors;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,13 +17,16 @@ namespace Store.Web.Controllers
         private readonly IProductRepository productRepository;
         private readonly IOrderRepository orderRepository;
         private readonly INotificationService notificationService;
+        private readonly IEnumerable<IDeliveryService> deliveryServices;
         public OrderController(IProductRepository productRepository,
                               IOrderRepository orderRepository,
+                               IEnumerable<IDeliveryService> deliveryServices,
                               INotificationService notificationService)
         {
             this.productRepository = productRepository;
             this.orderRepository = orderRepository;
             this.notificationService = notificationService;
+            this.deliveryServices = deliveryServices;
         }
 
         [HttpGet]
@@ -163,7 +168,7 @@ namespace Store.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult StartDelivery(int id, string cellPhone, int code)
+        public IActionResult Confirmate(int id, string cellPhone, int code)
         {
             int? storedCode = HttpContext.Session.GetInt32(cellPhone);
             if (storedCode == null)
@@ -194,9 +199,44 @@ namespace Store.Web.Controllers
                             }); ;
             }
 
-            //
+            // todo: сохранить CellPhone
 
-            return View();
+            HttpContext.Session.Remove(cellPhone);
+
+            var model = new DeliveryModel
+            {
+                OrderId = id,
+                Methods = deliveryServices.ToDictionary(service => service.UniqueCode,
+                                                        service => service.Title),
+            };
+
+            return View("DeliveryMethod", model);
+        }
+
+        [HttpPost]
+        public IActionResult StartDelivery(int id, string uniqueCode)
+        {
+            var deliveryService = deliveryServices.Single(service => service.UniqueCode == uniqueCode);
+            var order = orderRepository.GetById(id);
+
+            var form = deliveryService.CreateForm(order);
+
+            return View("DeliveryStep", form);
+        }
+
+        [HttpPost]
+        public IActionResult NextDelivery(int id, string uniqueCode, int step, Dictionary<string, string> values)
+        {
+            var deliveryService = deliveryServices.Single(service => service.UniqueCode == uniqueCode);
+
+            var form = deliveryService.MoveNext(id, step, values);
+
+            if (form.IsFinal)
+            {
+                return null;
+            }
+
+            return View("DeliveryStep", form);
         }
     }
 }
