@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Store.Memory
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : Store.IProductRepository
     {
         private readonly Product[] products = TemporaryData.products;
 
