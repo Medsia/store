@@ -8,16 +8,16 @@ namespace Store.Web.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductRepository productRepository;
+        private readonly ProductService productService;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(ProductService productService)
         {
-            this.productRepository = productRepository;
+            this.productService = productService;
         }
         public IActionResult Index(int id)
         {
-            Product product = productRepository.GetById(id);
-            return View(product);
+            var model = productService.GetById(id);
+            return View(model);
         }
     }
 }

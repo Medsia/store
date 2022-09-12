@@ -15,13 +15,13 @@ namespace Store.Web.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly IProductRepository productRepository;
+        private readonly ProductService productRepository;
         private readonly IOrderRepository orderRepository;
         private readonly INotificationService notificationService;
         private readonly IEnumerable<IDeliveryService> deliveryServices;
         private readonly IEnumerable<IPaymentService> paymentServices;
         private readonly IEnumerable<IWebContractorService> webContractorServices;
-        public OrderController(IProductRepository productRepository,
+        public OrderController(ProductService productRepository,
                               IOrderRepository orderRepository,
                               IEnumerable<IDeliveryService> deliveryServices,
                               IEnumerable<IPaymentService> paymentServices,
@@ -53,22 +53,22 @@ namespace Store.Web.Controllers
 
         private OrderModel Map(Order order)
         {
-            var productIds = order.Items.Select(item => item.ProductId);
-            var products = productRepository.GetAllByIds(productIds);
-            var itemModels = from item in order.Items
-                             join product in products on item.ProductId equals product.Id
-                             select new OrderItemModel
-                             {
-                                 ProductId = product.Id,
-                                 Title = product.Title,
-                                 Price = item.Price,
-                                 Count = item.Count,
-                             };
+            //var productIds = order.Items.Select(item => item.ProductId);
+            //var products = productRepository.GetAllByIds(productIds);
+            //var itemModels = from item in order.Items
+            //                 join product in products on item.ProductId equals product.Id
+            //                 select new OrderItemModel
+            //                 {
+            //                     ProductId = product.Id,
+            //                     Title = product.Title,
+            //                     Price = item.Price,
+            //                     Count = item.Count,
+            //                 };
 
             return new OrderModel
             {
                 Id = order.Id,
-                Items = itemModels.ToArray(),
+                //Items = itemModels.ToArray(),
                 TotalCount = order.TotalCount,
                 TotalPrice = order.TotalPrice,
 
@@ -82,7 +82,10 @@ namespace Store.Web.Controllers
 
             var product = productRepository.GetById(productId);
 
-            order.AddOrUpdateItem(product, count);
+            if (order.Items.TryGet(productId, out OrderItem orderItem))
+                orderItem.Count += count;
+            else
+                order.Items.Add(productId, product.Price, count);
 
             SaveOrderAndCart(order, cart);
             return RedirectToAction("Index", "Product", new { id = productId });
@@ -94,7 +97,7 @@ namespace Store.Web.Controllers
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
 
-            order.GetItem(productId).Count = count;
+            order.Items.Get(productId).Count = count;
 
             SaveOrderAndCart(order, cart);
             return RedirectToAction("Index", "Order");
@@ -112,7 +115,7 @@ namespace Store.Web.Controllers
             else
             {
                 order = orderRepository.Create();
-                cart = new Cart(order.Id);
+                cart = new Cart(order.Id, 0, 0m);
             }
 
             return (order, cart);
@@ -121,8 +124,7 @@ namespace Store.Web.Controllers
         {
             orderRepository.Update(order);
 
-            cart.TotalCount = order.TotalCount;
-            cart.TotalPrice = order.TotalPrice;
+            cart = new Cart(order.Id, order.TotalCount, order.TotalPrice);
 
             HttpContext.Session.Set(cart);
         }
@@ -132,7 +134,7 @@ namespace Store.Web.Controllers
         {
             (Order order, Cart cart) = GetOrCreateOrderAndCart();
 
-            order.RemoveItem(productId);
+            order.Items.Remove(productId);
 
             SaveOrderAndCart(order, cart);
 
