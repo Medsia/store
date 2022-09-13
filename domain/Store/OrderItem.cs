@@ -6,6 +6,8 @@ namespace Store
     {
         public int ProductId { get; }
 
+        //public string Title { get; }
+
         private int count;
         public int Count 
         { 
@@ -22,6 +24,7 @@ namespace Store
         public OrderItem(int productId, decimal price, int count)
         {
             ThrowIfInvalidCount(count);
+
             ProductId = productId;
             Count = count;
             Price = price;
