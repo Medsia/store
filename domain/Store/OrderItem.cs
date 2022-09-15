@@ -6,8 +6,6 @@ namespace Store
     {
         public int ProductId { get; }
 
-        //public string Title { get; }
-
         private int count;
         public int Count 
         { 

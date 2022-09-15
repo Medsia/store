@@ -58,8 +58,8 @@ namespace Store.Web.App
                         join product in products on item.ProductId equals product.Id
                         select new OrderItemModel
                         {
-                            ProductId = item.ProductId,
-                            //Title = item.Title, // какая-то хуета
+                            ProductId = product.Id,
+                            Title = product.Title,
                             Count = item.Count,
                             Price = item.Price,
                         };
