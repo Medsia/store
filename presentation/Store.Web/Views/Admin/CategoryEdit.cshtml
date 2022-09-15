@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Категории";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table category-edit-table">
+    <tr>
+        <th>
+            Название
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryEdit", "Admin")" method="post">
+                <input type="hidden" name="categoryId" value="@item.Id"/>
+                <input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30" value="@Html.DisplayFor(modelItem => item.Name)"/>
+                <button class="btn btn-info my-2 my-sm-0 update-btn" type="submit">Обновить</button>
+            </form>
+        </td>
+        <td>
+            <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryDelete", "Admin")" method="post">
+                <input type="hidden" name="categoryId" value="@item.Id"/>
+                <button class="btn btn-info my-2 my-sm-0 update-btn" type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+}
+</table>

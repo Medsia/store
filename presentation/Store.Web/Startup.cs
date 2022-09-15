@@ -34,6 +34,7 @@ namespace Store.Web
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddSingleton<IInfoRepository, InfoRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();

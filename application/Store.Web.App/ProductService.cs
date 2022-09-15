@@ -8,12 +8,14 @@ namespace Store.Web.App
     public class ProductService
     {
         private readonly IProductRepository productRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             this.productRepository = productRepository;
-        } 
-        
+            this.categoryRepository = categoryRepository;
+        }
+
         public ProductModel GetById(int id)
         {
             var product = productRepository.GetById(id);
@@ -43,7 +45,7 @@ namespace Store.Web.App
             {
                 Id = product.Id,
                 Title = product.Title,
-                CategoryId = product.CategoryId,
+                Category = categoryRepository.GetCategoryById(product.CategoryId),
                 Description = product.Description,
                 Price = product.Price,
             };
