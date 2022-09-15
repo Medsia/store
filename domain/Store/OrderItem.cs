@@ -22,6 +22,7 @@ namespace Store
         public OrderItem(int productId, decimal price, int count)
         {
             ThrowIfInvalidCount(count);
+
             ProductId = productId;
             Count = count;
             Price = price;

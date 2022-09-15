@@ -3,7 +3,7 @@ using Store.Web.App;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Store
+namespace Store.Web.App
 {
     public class ProductService
     {
@@ -29,6 +29,14 @@ namespace Store
                         .ToArray();
         }
 
+        public IReadOnlyCollection<ProductModel> GetAllByQuery(int categoryId)
+        {
+            var products = productRepository.GetAllByCategoryId(categoryId);
+
+            return products.Select(Map)
+                        .ToArray();
+        }
+
         private ProductModel Map(Product product)
         {
             return new ProductModel
@@ -41,11 +49,6 @@ namespace Store
             };
       
 
-        }
-  
-        public Product[] GetAllByQuery(int query)
-        {
-            return productRepository.GetAllByCategoryId(query);
         }
     }
 }
