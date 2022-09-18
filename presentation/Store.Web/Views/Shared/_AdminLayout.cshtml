@@ -10,17 +10,10 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white">
-            <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Index">Интернет Аниме-магазин</a>
         </nav>
     </header>
 
     <div class="dropdown-menu-left sidebar admin-menu-list p-0 m-0 w-100">
-        <span class="d-block admin-menu-title">
-            <span class="row no-gutters">
-                <span class="col-auto"></span>
-                <span class="col">Магазин</span>
-            </span>
-        </span>
         <span class="d-block admin-menu-item">
             <a href="@Url.Action("Index", "Admin")">
                 <span class="col-auto"></span>
@@ -36,19 +29,11 @@
 
         <span class="d-block admin-menu-title">
             <a href="@Url.Action("InfoList", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Инфо страницы</span>
-                </span>
+                <span class="col-auto"></span>
+                <span class="col">Инфо страницы</span>
             </a>
         </span>
 
-        <span class="d-block admin-menu-title">
-            <span class="row no-gutters">
-                <span class="col-auto"></span>
-                <span class="col">Безопасность</span>
-            </span>
-        </span>
         <span class="d-block admin-menu-item">
             <a href="@Url.Action("AccountManagement", "Admin")">
                 <span class="col-auto"></span>

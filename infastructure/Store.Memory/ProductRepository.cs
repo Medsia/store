@@ -33,6 +33,11 @@ namespace Store.Memory
             return foundProducts.ToArray();
         }
 
+        public Product[] GetAllProducts()
+        {
+            return products.ToArray();
+        }
+
         public bool AddNewItem(Product item)
         {
             throw new System.NotImplementedException();

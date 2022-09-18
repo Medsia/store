@@ -1,0 +1,58 @@
+﻿@model ProductModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("ProductEdit", "Admin")" method="post">
+    <header>
+        <h2>
+            <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Заголовок" name="title" value="@Model.Title"/>
+        </h2>
+    </header>
+
+    <body>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>
+                        <p >Категория:</p>
+                    </td>
+                    <td>
+                        <p >Цена:</p>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select name="categoryId">
+                            @foreach(var category in ViewBag.Categories)
+                            {
+                                @if(category.Id == Model.Category.Id)
+                                {
+                                    <option value="@category.Id" selected>@category.Name</option>
+                                    continue;
+                                }
+                                <option value="@category.Id">@category.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control price-input mr-ms-2" type="text" placeholder="0.00" name="price" value="@Model.Price"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <textarea class="form-control description-textarea mr-ms-2" name="description" placeholder="Описание" maxlength="255" rows="10" wrap="soft">@Model.Description</textarea>
+
+        <p>
+            <button class="btn btn-primary btn-update my-2 my-sm-0" type="submit">Обновить</button>
+        </p>
+    </body>
+</form>
+

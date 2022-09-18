@@ -6,7 +6,7 @@
 }
 
 <header>
-    <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("Search", "Admin")" method="post">
+    <form class="form-inline my-2 my-lg-0 mr-auto" action="@Url.Action("Search", "Admin")" method="post">
         <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
         <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
     </form>
@@ -25,13 +25,14 @@
         <th>
             Цена
         </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Title)
+            <a href="@Url.Action("Product", "Admin", new {productId = item.Id})">
+                <span class="col">@item.Title</span>
+            </a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category.Name)

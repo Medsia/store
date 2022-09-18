@@ -1,6 +1,4 @@
-﻿
-using Store.Web.App;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Store.Web.App
@@ -34,6 +32,14 @@ namespace Store.Web.App
         public IReadOnlyCollection<ProductModel> GetAllByQuery(int categoryId)
         {
             var products = productRepository.GetAllByCategoryId(categoryId);
+
+            return products.Select(Map)
+                        .ToArray();
+        }
+
+        public IReadOnlyCollection<ProductModel> GetAll()
+        {
+            var products = productRepository.GetAllProducts();
 
             return products.Select(Map)
                         .ToArray();

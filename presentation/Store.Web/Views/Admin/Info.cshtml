@@ -7,7 +7,7 @@
 
 <form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("InfoEdit", "Admin")" method="post">
     <input type="hidden" name="id" value="@Model.Id"/>
-    <input class="form-control title-textarea mr-ms-2" type="text" name="title" placeholder="Заголовок" maxlength="30" value="@Model.Title"/>
+    <input class="form-control title-input mr-ms-2" type="text" name="title" placeholder="Заголовок" maxlength="30" value="@Model.Title"/>
     <textarea class="form-control description-textarea mr-ms-2" name="description" placeholder="Описание" maxlength="1024" rows="10" wrap="soft" autofocus>@Model.Description</textarea>
     <button class="btn btn-primary btn-update my-2 my-sm-0" type="submit">Обновить</button>
 </form>

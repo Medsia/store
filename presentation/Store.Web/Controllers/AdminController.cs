@@ -21,7 +21,7 @@ namespace Store.Web.Controllers
 
         public IActionResult Index()
         {
-            var model = productService.GetAllByQuery(1);
+            var model = productService.GetAll();
             return View(model);
         }
 
@@ -34,13 +34,25 @@ namespace Store.Web.Controllers
 
 
 
+        public IActionResult Product(int productId)
+        {
+            var model = productService.GetById(productId);
+
+            ViewBag.Categories = categoryRepository.GetAllCategories();
+
+            return View(model);
+        }
+
+
+
+
 
 
 
         public IActionResult Category()
         {
-            var content = categoryRepository.GetAllCategories();
-            return View(content);
+            var model = categoryRepository.GetAllCategories();
+            return View(model);
         }
 
         public IActionResult CategoryAdd(int categoryId, string categoryName)
@@ -48,8 +60,8 @@ namespace Store.Web.Controllers
             var category = new Category(categoryId, categoryName);
             adminControlService.AddCategory(category);
 
-            var content = categoryRepository.GetAllCategories();
-            return View(content);
+            var model = categoryRepository.GetAllCategories();
+            return View(model);
         }
 
         public IActionResult CategoryEdit(int categoryId, string categoryName)
@@ -57,8 +69,8 @@ namespace Store.Web.Controllers
             var category = new Category(categoryId, categoryName);
             adminControlService.EditCategory(category);
 
-            var content = categoryRepository.GetAllCategories();
-            return View(content);
+            var model = categoryRepository.GetAllCategories();
+            return View(model);
         }
 
         public IActionResult CategoryDelete(int categoryId, string categoryName)
@@ -66,18 +78,15 @@ namespace Store.Web.Controllers
             var category = new Category(categoryId, categoryName);
             adminControlService.DeleteCategory(category);
 
-            var content = categoryRepository.GetAllCategories();
-            return View(content);
+            var model = categoryRepository.GetAllCategories();
+            return View(model);
         }
-
-
-
 
 
         public IActionResult Info(int id)
         {
-            var content = infoRepository.GetInfoById(id);
-            return View("Info", content);
+            var model = infoRepository.GetInfoById(id);
+            return View("Info", model);
         }
 
         public IActionResult InfoEdit(int id, string title, string description)
@@ -85,8 +94,8 @@ namespace Store.Web.Controllers
             var info = new Info(id, title, description);
             adminControlService.EditInfo(info);
 
-            var content = infoRepository.GetInfoById(id);
-            return View("Info", content);
+            var model = infoRepository.GetInfoById(id);
+            return View("Info", model);
         }
 
 
