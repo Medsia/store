@@ -1,9 +1,12 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Store.Memory
 {
     public static class TemporaryData
     {
-        public static readonly Category[] categories = new[]
+
+        public static Category[] categories = new[]
         {
             new Category(1, "Значки"),
             new Category(2, "Плакаты"),
@@ -11,7 +14,7 @@ namespace Store.Memory
             new Category(4, "Аксесуары"),
         };
 
-        public static readonly Product[] products = new[]
+        public static Product[] products = new[]
         {
             new Product(1, "Значок Тетрадь смерти", categories[0], "Материал - металл. " +
                 "Диаметр значка 58 мм", 1.5m),
@@ -40,6 +43,14 @@ namespace Store.Memory
                 "Материал: PVC", 2m),
             new Product(12, "Очки \"Как у Двачера\"", categories[3], "Размер: 4х5.5 см. " +
                 "Материал: PVC", 2m),
+        };
+
+        public static List<Info> infos = new List<Info>
+        {
+            new Info(1, "Контакты", "МТС: 8(800)555-35-35"),
+            new Info(2, "Оплата", "Налом или картой? Калом"),
+            new Info(3, "Доставка", "Доставляем Яндекс Едой"),
+            new Info(4, "О магазине", "Самый кайфовый магаз"),
         };
     }
 }

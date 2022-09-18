@@ -12,5 +12,8 @@ namespace Store
         Product[] GetAllByCategoryId(int categoryId);
         Product GetById(int id);
         Product[] GetAllByIds(IEnumerable<int> productIds);
+        bool AddNewItem(Product item);
+        bool EditExistingItem(Product item);
+        bool DeleteItem(Product item);
     }
 }

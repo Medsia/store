@@ -1,34 +1,36 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Store.Memory
 {
     public class InfoRepository : IInfoRepository
     {
-        private Info[] info =
-        {
-            new Info(1, "Контакты", "МТС: 8(800)555-35-35"),
-            new Info(2, "Оплата", "Налом или картой? Калом"),
-            new Info(3, "Доставка", "Доставляем Яндекс Едой"),
-            new Info(4, "О магазине", "Самый кайфовый магаз"),
-        };
+        private List<Info> infos = TemporaryData.infos;
 
-        public Info GetContactsInfo()
+        public Info GetInfoById(int id)
         {
-            return info[0];
+            if (id < 0)
+                throw new IndexOutOfRangeException("id cannot be less then 0");
+
+            int itemDbId = infos.FindIndex(infosItem => infosItem.Id == id);
+            return infos[itemDbId];
         }
 
-        public Info GetPaymentInfo()
+        public IEnumerable<Info> GetAllInfo()
         {
-            return info[1];
+            return infos;
         }
 
-        public Info GetDeliveryInfo()
+        public bool EditExistingItem(Info item)
         {
-            return info[2];
-        }
+            int itemDbId = infos.FindIndex(infosItem => infosItem.Id == item.Id);
 
-        public Info GetAboutInfo()
-        {
-            return info[3];
+            if (itemDbId == -1)
+                return false;
+
+            infos[itemDbId] = item;
+            return true;
         }
     }
 }

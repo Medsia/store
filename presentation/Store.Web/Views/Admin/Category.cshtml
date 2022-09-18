@@ -32,4 +32,12 @@
         </td>
     </tr>
 }
+    <tr>
+        <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryAdd", "Admin")" method="post">
+            <td><input class="form-control mr-ms-2" type="text" name="categoryId" placeholder="id"/></td>
+             <td><input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30"/></td>
+            <td><button class="btn btn-info my-2 my-sm-0 update-btn" type="submit">Добавить</button></td>
+        </form>
+    </tr>
 </table>
+

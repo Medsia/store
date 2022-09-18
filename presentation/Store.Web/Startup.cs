@@ -45,6 +45,7 @@ namespace Store.Web
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
+            services.AddSingleton<AdminControlService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Store.Memory
 {
-    public class ProductRepository : Store.IProductRepository
+    public class ProductRepository : IProductRepository
     {
-        private readonly Product[] products = TemporaryData.products;
+        private Product[] products = TemporaryData.products;
 
         public Product[] GetAllByTitle(string query)
         {
@@ -31,6 +31,21 @@ namespace Store.Memory
                                 select product;
 
             return foundProducts.ToArray();
+        }
+
+        public bool AddNewItem(Product item)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool EditExistingItem(Product item)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool DeleteItem(Product item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

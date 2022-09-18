@@ -11,90 +11,54 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white">
             <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Index">Интернет Аниме-магазин</a>
-            <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("Search", "Admin")" method="post">
-                <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
-            </form>
         </nav>
     </header>
 
-    <div class="dropdown-menu-left admin-menu-list p-0 m-0 w-100">
+    <div class="dropdown-menu-left sidebar admin-menu-list p-0 m-0 w-100">
         <span class="d-block admin-menu-title">
-            <span class="col-auto"></span>
-            <span class="col">Магазин</span>
+            <span class="row no-gutters">
+                <span class="col-auto"></span>
+                <span class="col">Магазин</span>
+            </span>
         </span>
         <span class="d-block admin-menu-item">
             <a href="@Url.Action("Index", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Товары</span>
-                </span>
+                <span class="col-auto"></span>
+                <span class="col">Товары</span>
             </a>
         </span>
         <span class="d-block admin-menu-item">
-            <a href="@Url.Action("CategoryEdit", "Admin")">
+            <a href="@Url.Action("Category", "Admin")">
+                <span class="col-auto"></span>
+                <span class="col">Категории</span>
+            </a>
+        </span>
+
+        <span class="d-block admin-menu-title">
+            <a href="@Url.Action("InfoList", "Admin")">
                 <span class="row no-gutters">
                     <span class="col-auto"></span>
-                    <span class="col">Категории</span>
+                    <span class="col">Инфо страницы</span>
                 </span>
             </a>
         </span>
 
         <span class="d-block admin-menu-title">
-            <span class="col-auto"></span>
-            <span class="col">Инфо страницы</span>
-        </span>
-        <span class="d-block admin-menu-item">
-            <a href="@Url.Action("ContactsEdit", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Контакты</span>
-                </span>
-            </a>
-        </span>
-        <span class="d-block admin-menu-item">
-            <a href="@Url.Action("PaymentEdit", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Оплата</span>
-                </span>
-            </a>
-        </span>
-        <span class="d-block admin-menu-item">
-            <a href="@Url.Action("DeliveryEdit", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Доставка</span>
-                </span>
-            </a>
-        </span>
-        <span class="d-block admin-menu-item">
-            <a href="@Url.Action("AboutEdit", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">О магазине</span>
-                </span>
-            </a>
-        </span>
-
-        <span class="d-block admin-menu-title">
-            <span class="col-auto"></span>
-            <span class="col">Безопасность</span>
+            <span class="row no-gutters">
+                <span class="col-auto"></span>
+                <span class="col">Безопасность</span>
+            </span>
         </span>
         <span class="d-block admin-menu-item">
             <a href="@Url.Action("AccountManagement", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Аккаунты</span>
-                </span>
+                <span class="col-auto"></span>
+                <span class="col">Аккаунты</span>
             </a>
         </span>
         <span class="d-block admin-menu-item">
             <a href="@Url.Action("Security", "Admin")">
-                <span class="row no-gutters">
-                    <span class="col-auto"></span>
-                    <span class="col">Доступ</span>
-                </span>
+                <span class="col-auto"></span>
+                <span class="col">Доступ</span>
             </a>
         </span>
     </div>

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Info>
+
+@{
+    ViewData["Title"] = "Инфо страницы";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table class="table">
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                <a href="@Url.Action("Info", "Admin", new {id=item.Id})">
+                    <span class="row no-gutters">
+                        <span class="col-auto"></span>
+                        <span class="col">@item.Title</span>
+                    </span>
+                </a>
+            </td>
+        </tr>
+    }
+</table>

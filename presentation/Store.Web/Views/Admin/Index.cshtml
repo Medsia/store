@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<header>
+    <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("Search", "Admin")" method="post">
+        <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
+    </form>
+</header>
+
 <h1>@ViewData["Title"]</h1>
 
 <table class="table">
@@ -36,17 +43,3 @@
 }
 
 </table>
-
-@*@if (ViewBag.Page > 0)
-{
-    <form class="form-inline" action="@Url.Action("Index", "Admin")" method="get">
-        <input type="hidden" name="page" value="@ViewBag.Page-1" />
-        <button class="btn btn-primary" type="submit">&lt;</button>
-    </form>
-}
-
-
-<form class="form-inline" action="@Url.Action("Index", "Admin")" method="get">
-    <input type="hidden" name="page" value="@ViewBag.Page+1" />
-    <button class="btn btn-primary" type="submit">&gt;</button>
-</form>*@

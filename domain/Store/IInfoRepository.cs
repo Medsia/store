@@ -1,11 +1,11 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace Store
 {
     public interface IInfoRepository
     {
-        Info GetContactsInfo();
-        Info GetPaymentInfo();
-        Info GetDeliveryInfo();
-        Info GetAboutInfo();
+        Info GetInfoById(int id);
+        IEnumerable<Info> GetAllInfo();
+        bool EditExistingItem(Info item);
     }
 }

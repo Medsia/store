@@ -21,27 +21,9 @@ namespace Store.Web.Controllers
             return View(categoryRepository.GetAllCategories());
         }
 
-        public IActionResult Payment()
+        public IActionResult Info(int id)
         {
-            var content = infoRepository.GetPaymentInfo();
-            return View("Info", content);
-        }
-
-        public IActionResult Delivery()
-        {
-            var content = infoRepository.GetDeliveryInfo();
-            return View("Info", content);
-        }
-
-        public IActionResult Contacts()
-        {
-            var content = infoRepository.GetContactsInfo();
-            return View("Info", content);
-        }
-
-        public IActionResult About()
-        {
-            var content = infoRepository.GetAboutInfo();
+            var content = infoRepository.GetInfoById(id);
             return View("Info", content);
         }
 

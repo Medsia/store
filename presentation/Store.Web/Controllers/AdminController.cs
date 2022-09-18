@@ -6,14 +6,17 @@ namespace Store.Web.Controllers
     public class AdminController : Controller
     {
         private readonly ProductService productService;
+        private readonly AdminControlService adminControlService;
         private readonly IInfoRepository infoRepository;
         private readonly ICategoryRepository categoryRepository;
 
-        public AdminController(ProductService productService, IInfoRepository infoRepository, ICategoryRepository categoryRepository)
+        public AdminController(ProductService productService, AdminControlService adminControlService,  
+                                IInfoRepository infoRepository, ICategoryRepository categoryRepository)
         {
             this.productService = productService;
             this.infoRepository = infoRepository;
             this.categoryRepository = categoryRepository;
+            this.adminControlService = adminControlService;
         }
 
         public IActionResult Index()
@@ -21,49 +24,75 @@ namespace Store.Web.Controllers
             var model = productService.GetAllByQuery(1);
             return View(model);
         }
-        
-        public IActionResult CategoryEdit(int? categoryId = null, string categoryName = "")
+
+        public IActionResult InfoList()
         {
-            if (categoryId != null && string.IsNullOrEmpty(categoryName))
-            {
-                // some edit logic
-            }
+            var model = infoRepository.GetAllInfo();
+            return View(model);
+        }
+
+
+
+
+
+
+
+        public IActionResult Category()
+        {
+            var content = categoryRepository.GetAllCategories();
+            return View(content);
+        }
+
+        public IActionResult CategoryAdd(int categoryId, string categoryName)
+        {
+            var category = new Category(categoryId, categoryName);
+            adminControlService.AddCategory(category);
 
             var content = categoryRepository.GetAllCategories();
             return View(content);
         }
 
-        public IActionResult CategoryDelete(int categoryId)
+        public IActionResult CategoryEdit(int categoryId, string categoryName)
         {
-            // some delete logic
+            var category = new Category(categoryId, categoryName);
+            adminControlService.EditCategory(category);
 
             var content = categoryRepository.GetAllCategories();
-            return View("CategoryEdit", content);
+            return View(content);
         }
 
-        public IActionResult ContactsEdit()
+        public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
-            var content = infoRepository.GetContactsInfo();
-            return View("InfoEdit", content);
+            var category = new Category(categoryId, categoryName);
+            adminControlService.DeleteCategory(category);
+
+            var content = categoryRepository.GetAllCategories();
+            return View(content);
         }
 
-        public IActionResult PaymentEdit()
+
+
+
+
+        public IActionResult Info(int id)
         {
-            var content = infoRepository.GetPaymentInfo();
-            return View("InfoEdit", content);
+            var content = infoRepository.GetInfoById(id);
+            return View("Info", content);
         }
 
-        public IActionResult DeliveryEdit()
+        public IActionResult InfoEdit(int id, string title, string description)
         {
-            var content = infoRepository.GetDeliveryInfo();
-            return View("InfoEdit", content);
+            var info = new Info(id, title, description);
+            adminControlService.EditInfo(info);
+
+            var content = infoRepository.GetInfoById(id);
+            return View("Info", content);
         }
 
-        public IActionResult AboutEdit()
-        {
-            var content = infoRepository.GetAboutInfo();
-            return View("InfoEdit", content);
-        }
+
+
+
+
 
         public IActionResult AccountManagement()
         {
