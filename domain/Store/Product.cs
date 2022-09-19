@@ -10,11 +10,11 @@
 
         public decimal Price { get; }
 
-        public Product(int id, string title, Category category, string description, decimal price)
+        public Product(int id, string title, int categoryId, string description, decimal price)
         {
             Id = id;
             Title = title;
-            CategoryId = category.Id;
+            CategoryId = categoryId;
             Description = description;
             Price = price;
         }

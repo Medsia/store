@@ -36,14 +36,43 @@ namespace Store.Web.Controllers
 
         public IActionResult Product(int productId)
         {
-            var model = productService.GetById(productId);
-
             ViewBag.Categories = categoryRepository.GetAllCategories();
 
+            var model = productService.GetById(productId);
             return View(model);
         }
 
+        public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
+        {
+            Product product = new Product(productId, title, categoryId, description, price);
+            adminControlService.AddProduct(product);
 
+            ViewBag.Categories = categoryRepository.GetAllCategories();
+
+            var model = productService.GetAll();
+            return View("Product", model);
+        }
+
+        public IActionResult ProductEdit(int productId, string title, int categoryId, decimal price, string description)
+        {
+            Product product = new Product(productId, title, categoryId, description, price);
+            adminControlService.EditProduct(product);
+
+            ViewBag.Categories = categoryRepository.GetAllCategories();
+
+            var model = productService.GetById(productId);
+            return View("Product", model);
+        }
+
+        public IActionResult ProductDelete(int productId)
+        {
+            //adminControlService.DeleteProduct();
+
+            ViewBag.Categories = categoryRepository.GetAllCategories();
+
+            var model = productService.GetAll();
+            return View("Product", model);
+        }
 
 
 
@@ -61,7 +90,7 @@ namespace Store.Web.Controllers
             adminControlService.AddCategory(category);
 
             var model = categoryRepository.GetAllCategories();
-            return View(model);
+            return View("Category", model);
         }
 
         public IActionResult CategoryEdit(int categoryId, string categoryName)
@@ -70,16 +99,18 @@ namespace Store.Web.Controllers
             adminControlService.EditCategory(category);
 
             var model = categoryRepository.GetAllCategories();
-            return View(model);
+            return View("Category", model);
         }
 
         public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
+            adminControlService.ResetCategoryIdInProducts(categoryId);
+
             var category = new Category(categoryId, categoryName);
             adminControlService.DeleteCategory(category);
 
             var model = categoryRepository.GetAllCategories();
-            return View(model);
+            return View("Category", model);
         }
 
 
@@ -97,10 +128,6 @@ namespace Store.Web.Controllers
             var model = infoRepository.GetInfoById(id);
             return View("Info", model);
         }
-
-
-
-
 
 
         public IActionResult AccountManagement()

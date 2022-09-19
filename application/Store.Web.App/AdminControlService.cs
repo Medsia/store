@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 namespace Store.Web.App
 {
     public class AdminControlService
@@ -6,6 +7,7 @@ namespace Store.Web.App
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IInfoRepository infoRepository;
+        private readonly int resetId = 0;
 
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, IInfoRepository infoRepository)
         {
@@ -22,6 +24,17 @@ namespace Store.Web.App
         public void EditProduct(Product product)
         {
             productRepository.EditExistingItem(product);
+        }
+
+        public void ResetCategoryIdInProducts(int categoryId)
+        {
+            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
+
+            foreach (var product in productsToEdit)
+            {
+                Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
+                EditProduct(newProduct);
+            }
         }
 
         public void DeleteProduct(Product product)
@@ -44,6 +57,7 @@ namespace Store.Web.App
         {
             categoryRepository.DeleteItem(category);
         }
+
 
         public void EditInfo(Info info)
         {

@@ -7,6 +7,7 @@
 
 
 <form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("ProductEdit", "Admin")" method="post">
+    <input type="hidden" name="productId" value="@Model.Id"/>
     <header>
         <h2>
             <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Заголовок" name="title" value="@Model.Title"/>
@@ -32,11 +33,12 @@
                         <select name="categoryId">
                             @foreach(var category in ViewBag.Categories)
                             {
-                                @if(category.Id == Model.Category.Id)
+                                @if (category.Id == Model.Category.Id)
                                 {
                                     <option value="@category.Id" selected>@category.Name</option>
                                     continue;
                                 }
+                                @if (category.Id == 0) continue;
                                 <option value="@category.Id">@category.Name</option>
                             }
                         </select>

@@ -9,6 +9,7 @@
 
 <table class="table category-edit-table">
 @foreach (var item in Model) {
+    @if (item.Id == 0) continue;
     <tr>
         <td>
             <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryEdit", "Admin")" method="post">
