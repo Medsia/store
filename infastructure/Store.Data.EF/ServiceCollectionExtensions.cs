@@ -22,7 +22,7 @@ namespace Store.Data.EF
             );
 
             services.AddScoped<Dictionary<Type, StoreDbContext>>();
-            //services.AddSingleton<DbContextFactory>();
+            services.AddSingleton<DbContextFactory>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
 

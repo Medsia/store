@@ -9,6 +9,7 @@ using Store.YandexKassa;
 using Store.Web.Contractors;
 using Store.Web.App;
 using Store.Data.EF;
+using Store.Memory;
 
 namespace Store.Web
 {
@@ -42,6 +43,7 @@ namespace Store.Web
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
