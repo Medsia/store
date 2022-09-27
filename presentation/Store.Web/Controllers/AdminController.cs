@@ -32,50 +32,69 @@ namespace Store.Web.Controllers
         }
 
 
-
-
-        public IActionResult Product(int productId)
-        {
-            ViewBag.Categories = categoryRepository.GetAllCategories();
-
-            var model = productService.GetById(productId);
-            return View(model);
-        }
-
+        [HttpPost]
         public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
         {
-            Product product = new Product(productId, title, categoryId, description, price);
-            adminControlService.AddProduct(product);
+            ProductModel productModel = new ProductModel
+            {
+                Id = productId,
+                Title = title,
+                Category = categoryRepository.GetCategoryById(categoryId),
+                Description = description,
+                Price = price,
+            };
+
+            if (productService.IsValid(productModel))
+            {
+                adminControlService.AddProduct(productModel);
+                TempData["message"] = string.Format("Добавлено");
+
+                return RedirectToAction("Index");
+            }
 
             ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Mode = "ProductAdd";
 
-            var model = productService.GetAll();
-            return View("Product", model);
+            return View("Product", productModel);
         }
 
+        [HttpPost]
         public IActionResult ProductEdit(int productId, string title, int categoryId, decimal price, string description)
         {
-            Product product = new Product(productId, title, categoryId, description, price);
-            adminControlService.EditProduct(product);
+            ProductModel productModel = new ProductModel
+            {
+                Id = productId,
+                Title = title,
+                Category = categoryRepository.GetCategoryById(categoryId),
+                Description = description,
+                Price = price,
+            };
+            
+            if (productService.IsValid(productModel))
+            {
+                adminControlService.EditProduct(productModel);
+                TempData["message"] = string.Format("Изменения сохранены");
+
+                return RedirectToAction("Index");
+            }
 
             ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Mode = "ProductEdit";
 
             var model = productService.GetById(productId);
+
             return View("Product", model);
         }
 
+        [HttpPost]
         public IActionResult ProductDelete(int productId)
         {
-            //adminControlService.DeleteProduct();
+            adminControlService.DeleteProduct(productService.GetById(productId));
 
-            ViewBag.Categories = categoryRepository.GetAllCategories();
+            TempData["message"] = string.Format("Изменения сохранены");
 
-            var model = productService.GetAll();
-            return View("Product", model);
+            return RedirectToAction("Index");
         }
-
-
-
 
 
         public IActionResult Category()
@@ -84,6 +103,7 @@ namespace Store.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public IActionResult CategoryAdd(int categoryId, string categoryName)
         {
             var category = new Category(categoryId, categoryName);
@@ -93,6 +113,7 @@ namespace Store.Web.Controllers
             return View("Category", model);
         }
 
+        [HttpPost]
         public IActionResult CategoryEdit(int categoryId, string categoryName)
         {
             var category = new Category(categoryId, categoryName);
@@ -102,10 +123,9 @@ namespace Store.Web.Controllers
             return View("Category", model);
         }
 
+        [HttpPost]
         public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
-            adminControlService.ResetCategoryIdInProducts(categoryId);
-
             var category = new Category(categoryId, categoryName);
             adminControlService.DeleteCategory(category);
 
@@ -114,12 +134,14 @@ namespace Store.Web.Controllers
         }
 
 
+        [HttpPost]
         public IActionResult Info(int id)
         {
             var model = infoRepository.GetInfoById(id);
             return View("Info", model);
         }
 
+        [HttpPost]
         public IActionResult InfoEdit(int id, string title, string description)
         {
             var info = new Info(id, title, description);

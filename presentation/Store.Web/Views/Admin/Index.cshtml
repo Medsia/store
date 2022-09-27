@@ -5,12 +5,14 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<header>
-    <form class="form-inline my-2 my-lg-0 mr-auto" action="@Url.Action("Search", "Admin")" method="post">
-        <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
-        <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
-    </form>
-</header>
+<form class="form-inline my-2" action="@Url.Action("Search", "Admin")" method="post">
+    <input class="form-control" type="search" name="query" placeholder="Поиск в каталоге"/>
+    <button class="btn btn-primary" type="submit">Искать</button>
+</form>
+
+<form class="btn-offset my-2" action="@Url.Action("ProductAdd", "Admin")" method="post">
+    <button class="btn btn-primary btn-info">Добавить продукт</button>
+</form>
 
 <h1>@ViewData["Title"]</h1>
 
@@ -30,15 +32,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <a href="@Url.Action("Product", "Admin", new {productId = item.Id})">
-                <span class="col">@item.Title</span>
-            </a>
+            <form action="@Url.Action("ProductEdit", "Admin")" method="post">
+                <input type="hidden" name="productId" value="@item.Id"/>
+                <button class="btn btn-outline-info" type="submit">@item.Title</button>
+            </form>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            <form action="@Url.Action("ProductDelete", "Admin")" method="post">
+                <input type="hidden" name="productId" value="@item.Id"/>
+                <button class="btn btn-outline-danger" type="submit">Удалить</button>
+            </form>
         </td>
     </tr>
 }

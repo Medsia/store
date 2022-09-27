@@ -5,56 +5,49 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+@{
+    string actionName = @ViewBag.Mode;
+}
 
-<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("ProductEdit", "Admin")" method="post">
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action(actionName, "Admin")" method="post">
     <input type="hidden" name="productId" value="@Model.Id"/>
-    <header>
-        <h2>
-            <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Заголовок" name="title" value="@Model.Title"/>
-        </h2>
-    </header>
 
     <body>
+        <div class="my-2">
+            <label class="editor-label" >Название:</label>
+            <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Заголовок" name="title" value="@Model.Title"/>
+        </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>
-                        <p >Категория:</p>
-                    </td>
-                    <td>
-                        <p >Цена:</p>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <select name="categoryId">
-                            @foreach(var category in ViewBag.Categories)
-                            {
-                                @if (category.Id == Model.Category.Id)
-                                {
-                                    <option value="@category.Id" selected>@category.Name</option>
-                                    continue;
-                                }
-                                @if (category.Id == 0) continue;
-                                <option value="@category.Id">@category.Name</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <input class="form-control price-input mr-ms-2" type="text" placeholder="0.00" name="price" value="@Model.Price"/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="my-2">
+            <label class="editor-label" >Категория:</label>
+            <select class="form-control category-selector" name="categoryId">
+                @foreach(var category in ViewBag.Categories)
+                {
+                    @if (category.Id == Model.Category.Id)
+                    {
+                        <option value="@category.Id" selected>@category.Name</option>
+                        continue;
+                    }
+                    @if (category.Id == 0) continue;
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
 
-        <textarea class="form-control description-textarea mr-ms-2" name="description" placeholder="Описание" maxlength="255" rows="10" wrap="soft">@Model.Description</textarea>
+        <div class="my-2">
+            <label class="editor-label" >Цена:</label>
+            <input class="form-control price-input" type="text" placeholder="0.00" name="price" value="@Model.Price"/>
+        </div>
 
-        <p>
-            <button class="btn btn-primary btn-update my-2 my-sm-0" type="submit">Обновить</button>
-        </p>
+        <div class="my-2">
+            <label class="editor-label" >Описание:</label>
+            <textarea class="form-control description-textarea mr-ms-2" name="description" placeholder="Описание" maxlength="255" rows="10" wrap="soft">@Model.Description</textarea>
+        </div>
+
+        <div class="btn-offset my-2">
+            <button class="btn btn-primary btn-update my-2 my-sm-0" type="submit">Сохранить</button>
+            @Html.ActionLink("Отменить и вернуться к списку", "Index", "Admin")
+        </div>
     </body>
 </form>
 

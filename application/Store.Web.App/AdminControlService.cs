@@ -16,30 +16,24 @@ namespace Store.Web.App
             this.infoRepository = infoRepository;
         }
 
-        public void AddProduct(Product product)
+        private Product Map(ProductModel productModel)
         {
-            productRepository.AddNewItem(product);
+            return new Product(productModel.Id, productModel.Title, productModel.Category.Id, productModel.Description, productModel.Price);
         }
 
-        public void EditProduct(Product product)
+        public void AddProduct(ProductModel productModel)
         {
-            productRepository.EditExistingItem(product);
+            productRepository.AddNewItem(Map(productModel));
         }
 
-        public void ResetCategoryIdInProducts(int categoryId)
+        public void EditProduct(ProductModel productModel)
         {
-            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
-
-            foreach (var product in productsToEdit)
-            {
-                Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
-                EditProduct(newProduct);
-            }
+            productRepository.EditExistingItem(Map(productModel));
         }
 
-        public void DeleteProduct(Product product)
+        public void DeleteProduct(ProductModel productModel)
         {
-            productRepository.DeleteItem(product);
+            productRepository.DeleteItem(Map(productModel));
         }
 
 
@@ -53,8 +47,20 @@ namespace Store.Web.App
             categoryRepository.EditExistingItem(category);
         }
 
+        public void ResetCategoryIdInProducts(int categoryId)
+        {
+            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
+
+            foreach (var product in productsToEdit)
+            {
+                Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
+                productRepository.EditExistingItem(product);
+            }
+        }
+
         public void DeleteCategory(Category category)
         {
+            ResetCategoryIdInProducts(category.Id);
             categoryRepository.DeleteItem(category);
         }
 

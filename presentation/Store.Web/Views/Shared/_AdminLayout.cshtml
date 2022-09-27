@@ -50,6 +50,10 @@
 
     <div class="container">
         <main>
+            @if (TempData["message"] != null)
+            {
+                <div class="alert alert-success">@TempData["message"]</div>
+            }
             @RenderBody()
         </main>
     </div>

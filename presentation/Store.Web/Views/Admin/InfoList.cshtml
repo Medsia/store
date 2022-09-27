@@ -11,12 +11,10 @@
     @foreach (var item in Model) {
         <tr>
             <td>
-                <a href="@Url.Action("Info", "Admin", new {id=item.Id})">
-                    <span class="row no-gutters">
-                        <span class="col-auto"></span>
-                        <span class="col">@item.Title</span>
-                    </span>
-                </a>
+                <form action="@Url.Action("Info", "Admin")" method="post">
+                    <input type="hidden" name="id" value="@item.Id"/>
+                    <button class="btn btn-outline-info" type="submit">@item.Title</button>
+                </form>
             </td>
         </tr>
     }

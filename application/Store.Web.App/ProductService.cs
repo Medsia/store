@@ -55,8 +55,14 @@ namespace Store.Web.App
                 Description = product.Description,
                 Price = product.Price,
             };
-      
+        }
 
+        public bool IsValid(ProductModel productModel)
+        {
+            if (productModel == null || string.IsNullOrWhiteSpace(productModel.Title) || productModel.Price == 0)
+                return false;
+
+            return true;
         }
     }
 }
