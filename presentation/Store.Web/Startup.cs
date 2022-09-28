@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Store.Memory;
 using Store.Messages;
 using Store.Contractors;
 using Store.YandexKassa;
 using Store.Web.Contractors;
 using Store.Web.App;
+using Store.Data.EF;
+using Store.Memory;
 
 namespace Store.Web
 {
@@ -35,9 +36,9 @@ namespace Store.Web
             });
 
             services.AddSingleton<IInfoRepository, InfoRepository>();
-            services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
-            services.AddSingleton<IOrderRepository, OrderRepository>();
+            
+            services.AddEfRepositories(Configuration.GetConnectionString("Store"));
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
             services.AddSingleton<IPaymentService, CashPaymentService>();
@@ -45,6 +46,7 @@ namespace Store.Web
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
+            
             services.AddSingleton<AdminControlService>();
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.Web.App;
+using System.Collections.Generic;
 
 namespace Store.Web.Controllers
 {
@@ -18,7 +19,7 @@ namespace Store.Web.Controllers
 
             return View("Index", products);
         }
-        public IActionResult SearchByCategory(int categoryId)
+        public IActionResult SearchByCategory(IEnumerable<int> categoryId)
         {
             var products = productService.GetAllByQuery(categoryId);
 
