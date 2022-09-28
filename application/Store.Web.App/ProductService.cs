@@ -29,7 +29,7 @@ namespace Store.Web.App
                         .ToArray();
         }
 
-        public IReadOnlyCollection<ProductModel> GetAllByQuery(int categoryId)
+        public IReadOnlyCollection<ProductModel> GetAllByQuery(IEnumerable<int> categoryId)
         {
             var products = productRepository.GetAllByCategoryId(categoryId);
 

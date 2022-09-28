@@ -104,6 +104,8 @@ namespace Store.Web.App
                 orderItem.Count += count;
             else
                 order.Items.Add(product.Id, product.Price, count);
+
+            orderRepository.Update(order);
         }
 
         internal void UpdateSession(Order order)

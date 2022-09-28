@@ -12,7 +12,6 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\..\domain\Store\Store.csproj" />
-    <ProjectReference Include="..\..\infastructure\Store.Memory\Store.Memory.csproj" />
   </ItemGroup>
 
 </Project>
