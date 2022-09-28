@@ -16,24 +16,24 @@ namespace Store.Web.App
             this.infoRepository = infoRepository;
         }
 
-        private Product Map(ProductModel productModel)
-        {
-            return new Product(productModel.Id, productModel.Title, productModel.Category.Id, productModel.Description, productModel.Price);
-        }
+        //private Product Map(ProductModel productModel)
+        //{
+        //    return new Product(productModel.Id, productModel.Title, productModel.Category.Id, productModel.Description, productModel.Price);
+        //}
 
         public void AddProduct(ProductModel productModel)
         {
-            productRepository.AddNewItem(Map(productModel));
+            //productRepository.AddNewItem(Map(productModel));
         }
 
         public void EditProduct(ProductModel productModel)
         {
-            productRepository.EditExistingItem(Map(productModel));
+            //productRepository.EditExistingItem(Map(productModel));
         }
 
         public void DeleteProduct(ProductModel productModel)
         {
-            productRepository.DeleteItem(Map(productModel));
+            //productRepository.DeleteItem(Map(productModel));
         }
 
 
@@ -49,13 +49,13 @@ namespace Store.Web.App
 
         public void ResetCategoryIdInProducts(int categoryId)
         {
-            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
+            //var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
 
-            foreach (var product in productsToEdit)
-            {
-                Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
-                productRepository.EditExistingItem(product);
-            }
+            //foreach (var product in productsToEdit)
+            //{
+            //    Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
+            //    productRepository.EditExistingItem(product);
+            //}
         }
 
         public void DeleteCategory(Category category)

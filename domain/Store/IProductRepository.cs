@@ -9,7 +9,7 @@ namespace Store
     public interface IProductRepository
     {
         IEnumerable<Product> GetAllByTitle(string titlePart);
-        IEnumerable<Product> GetAllByCategoryId(int categoryId);
+        IEnumerable<Product> GetAllByCategoryId(IEnumerable<int> categoryIds);
         Product GetById(int id);
         IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();

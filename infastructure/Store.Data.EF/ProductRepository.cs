@@ -13,7 +13,7 @@ namespace Store.Data.EF
         {
             this.dbContextFactory = dbContextFactory;
         }
-        public Product[] GetAllByCategoryId(IEnumerable<int> categoryIds)
+        public IEnumerable<Product> GetAllByCategoryId(IEnumerable<int> categoryIds)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
@@ -24,7 +24,7 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
-        public Product[] GetAllByIds(IEnumerable<int> productIds)
+        public IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
@@ -35,7 +35,7 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
-        public Product[] GetAllByTitle(string titlePart)
+        public IEnumerable<Product> GetAllByTitle(string titlePart)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
@@ -56,6 +56,54 @@ namespace Store.Data.EF
                                .Single(product => product.Id == id);
 
             return Product.Mapper.Map(dto);
+        }
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            throw new NotImplementedException();
+            //return products.ToArray();
+        }
+
+        public bool AddNewItem(Product item)
+        {
+
+            throw new NotImplementedException();
+
+            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            //if (itemDbId != -1)
+            //    return false;
+
+            //products.Add(item);
+            //return true;
+        }
+
+        public bool EditExistingItem(Product item)
+        {
+
+            throw new NotImplementedException();
+
+            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            //if (itemDbId == -1)
+            //    return false;
+
+            //products[itemDbId] = item;
+            //return true;
+        }
+
+        public bool DeleteItem(Product item)
+        {
+
+            throw new NotImplementedException();
+
+            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            //if (itemDbId == -1)
+            //    return false;
+
+            //products.RemoveAt(itemDbId);
+            //return true;
         }
     }
 }
