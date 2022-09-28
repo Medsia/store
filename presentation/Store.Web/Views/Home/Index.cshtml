@@ -6,12 +6,14 @@
 
 <table class="table">
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a href="@Url.Action("SearchByCategory", "Search", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model) {
+            @if (item.Id == 0) continue;
+                <tr>
+                    <td>
+                        <a href="@Url.Action("SearchByCategory", "Search", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                </tr>
+        }
     </tbody>
 </table>
+

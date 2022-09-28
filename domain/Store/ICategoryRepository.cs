@@ -6,7 +6,10 @@ namespace Store
 {
     public interface ICategoryRepository
     {
-        Category[] GetAllCategories();
+        IEnumerable<Category> GetAllCategories();
         Category GetCategoryById(int id);
+        bool AddNewItem(Category item);
+        bool EditExistingItem(Category item);
+        bool DeleteItem(Category item);
     }
 }

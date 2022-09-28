@@ -3,17 +3,17 @@ using System.Linq;
 
 namespace Store.Memory
 {
-    public class ProductRepository : Store.IProductRepository
+    public class ProductRepository : IProductRepository
     {
-        private readonly Product[] products = TemporaryData.products;
+        private List<Product> products = TemporaryData.products;
 
-        public Product[] GetAllByTitle(string query)
+        public IEnumerable<Product> GetAllByTitle(string query)
         {
             return products.Where(product => product.Title.Contains(query))
                            .ToArray();
         }
 
-        public Product[] GetAllByCategoryId(int categoryId)
+        public IEnumerable<Product> GetAllByCategoryId(int categoryId)
         {
             return products.Where(product => product.CategoryId == categoryId)
                            .ToArray();
@@ -24,13 +24,51 @@ namespace Store.Memory
             return products.Single(product => product.Id == id);
         }
 
-        public Product[] GetAllByIds(IEnumerable<int> productIds)
+        public IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds)
         {
             var foundProducts = from product in products
                                 join productId in productIds on product.Id equals productId
                                 select product;
 
             return foundProducts.ToArray();
+        }
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return products.ToArray();
+        }
+
+        public bool AddNewItem(Product item)
+        {
+            int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            if (itemDbId != -1)
+                return false;
+
+            products.Add(item);
+            return true;
+        }
+
+        public bool EditExistingItem(Product item)
+        {
+            int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            if (itemDbId == -1)
+                return false;
+
+            products[itemDbId] = item;
+            return true;
+        }
+
+        public bool DeleteItem(Product item)
+        {
+            int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
+
+            if (itemDbId == -1)
+                return false;
+
+            products.RemoveAt(itemDbId);
+            return true;
         }
     }
 }

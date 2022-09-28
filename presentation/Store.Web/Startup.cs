@@ -35,6 +35,9 @@ namespace Store.Web
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddSingleton<IInfoRepository, InfoRepository>();
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            
             services.AddEfRepositories(Configuration.GetConnectionString("Store"));
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
@@ -43,7 +46,8 @@ namespace Store.Web
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
-            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            
+            services.AddSingleton<AdminControlService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
