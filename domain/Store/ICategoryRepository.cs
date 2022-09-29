@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Store
 {
@@ -8,8 +6,8 @@ namespace Store
     {
         IEnumerable<Category> GetAllCategories();
         Category GetCategoryById(int id);
-        bool AddNewItem(Category item);
-        bool EditExistingItem(Category item);
-        bool DeleteItem(Category item);
+        void AddNewItem(Category item);
+        void EditExistingItem(Category item);
+        void DeleteItem(Category item);
     }
 }

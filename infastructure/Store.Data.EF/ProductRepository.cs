@@ -60,50 +60,36 @@ namespace Store.Data.EF
 
         public IEnumerable<Product> GetAllProducts()
         {
-            throw new NotImplementedException();
-            //return products.ToArray();
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            return dbContext.Products
+                            .AsEnumerable()
+                            .Select(Product.Mapper.Map)
+                            .ToArray();
         }
 
-        public bool AddNewItem(Product item)
+        public void AddNewItem(Product item)
         {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            throw new NotImplementedException();
-
-            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId != -1)
-            //    return false;
-
-            //products.Add(item);
-            //return true;
+            dbContext.Products.Add(Product.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
 
-        public bool EditExistingItem(Product item)
+        public void EditExistingItem(Product item)
         {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            throw new NotImplementedException();
-
-            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId == -1)
-            //    return false;
-
-            //products[itemDbId] = item;
-            //return true;
+            dbContext.Products.Update(Product.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
 
-        public bool DeleteItem(Product item)
+        public void DeleteItem(Product item)
         {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            throw new NotImplementedException();
-
-            //int itemDbId = products.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId == -1)
-            //    return false;
-
-            //products.RemoveAt(itemDbId);
-            //return true;
+            dbContext.Products.Remove(Product.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
     }
 }

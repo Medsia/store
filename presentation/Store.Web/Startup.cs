@@ -9,7 +9,6 @@ using Store.YandexKassa;
 using Store.Web.Contractors;
 using Store.Web.App;
 using Store.Data.EF;
-using Store.Memory;
 
 namespace Store.Web
 {
@@ -35,18 +34,16 @@ namespace Store.Web
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddSingleton<IInfoRepository, InfoRepository>();
-            services.AddSingleton<ICategoryRepository, CategoryRepository>();
-            
             services.AddEfRepositories(Configuration.GetConnectionString("Store"));
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
             services.AddSingleton<IPaymentService, CashPaymentService>();
             services.AddSingleton<IPaymentService, YandexKassaPaymentService>();
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
+
+            services.AddSingleton<CategoryService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
-            
             services.AddSingleton<AdminControlService>();
         }
 

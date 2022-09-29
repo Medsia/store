@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Store.Data;
 using Store.Web.App;
 
 namespace Store.Web.Controllers
@@ -7,27 +8,19 @@ namespace Store.Web.Controllers
     {
         private readonly ProductService productService;
         private readonly AdminControlService adminControlService;
-        private readonly IInfoRepository infoRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly CategoryService categoryService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                IInfoRepository infoRepository, ICategoryRepository categoryRepository)
+                                CategoryService categoryService)
         {
             this.productService = productService;
-            this.infoRepository = infoRepository;
-            this.categoryRepository = categoryRepository;
+            this.categoryService = categoryService;
             this.adminControlService = adminControlService;
         }
 
         public IActionResult Index()
         {
             var model = productService.GetAll();
-            return View(model);
-        }
-
-        public IActionResult InfoList()
-        {
-            var model = infoRepository.GetAllInfo();
             return View(model);
         }
 
@@ -39,7 +32,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryRepository.GetCategoryById(categoryId),
+                Category = categoryService.GetById(categoryId),
                 Description = description,
                 Price = price,
             };
@@ -52,7 +45,7 @@ namespace Store.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductAdd";
 
             return View("Product", productModel);
@@ -65,7 +58,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryRepository.GetCategoryById(categoryId),
+                Category = categoryService.GetById(categoryId),
                 Description = description,
                 Price = price,
             };
@@ -78,7 +71,7 @@ namespace Store.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductEdit";
 
             var model = productService.GetById(productId);
@@ -99,56 +92,68 @@ namespace Store.Web.Controllers
 
         public IActionResult Category()
         {
-            var model = categoryRepository.GetAllCategories();
+            var model = categoryService.GetAll();
             return View(model);
         }
 
         [HttpPost]
         public IActionResult CategoryAdd(int categoryId, string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.AddCategory(category);
+            CategoryModel categoryModel = new CategoryModel
+            {
+                Id = categoryId,
+                Name = categoryName,
+            };
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
+            if (categoryService.IsValid(categoryModel))
+            {
+                adminControlService.AddCategory(categoryModel);
+                TempData["message"] = string.Format("Добавлено");
+            }
+
+            ViewBag.Categories = categoryService.GetAll();
+
+            return View("Category", categoryModel);
         }
 
         [HttpPost]
         public IActionResult CategoryEdit(int categoryId, string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.EditCategory(category);
+            CategoryModel categoryModel = new CategoryModel
+            {
+                Id = categoryId,
+                Name = categoryName,
+            };
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
+            if (categoryService.IsValid(categoryModel))
+            {
+                adminControlService.EditCategory(categoryModel);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+
+            ViewBag.Categories = categoryService.GetAll();
+
+            return View("Category", categoryModel);
         }
 
         [HttpPost]
         public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.DeleteCategory(category);
+            CategoryModel categoryModel = new CategoryModel
+            {
+                Id = categoryId,
+                Name = categoryName,
+            };
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
-        }
+            if (categoryService.IsValid(categoryModel))
+            {
+                adminControlService.DeleteCategory(categoryModel);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
 
+            ViewBag.Categories = categoryService.GetAll();
 
-        [HttpPost]
-        public IActionResult Info(int id)
-        {
-            var model = infoRepository.GetInfoById(id);
-            return View("Info", model);
-        }
-
-        [HttpPost]
-        public IActionResult InfoEdit(int id, string title, string description)
-        {
-            var info = new Info(id, title, description);
-            adminControlService.EditInfo(info);
-
-            var model = infoRepository.GetInfoById(id);
-            return View("Info", model);
+            return View("Category", categoryModel);
         }
 
 

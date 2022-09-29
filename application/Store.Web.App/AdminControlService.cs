@@ -6,20 +6,13 @@ namespace Store.Web.App
     {
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IInfoRepository infoRepository;
         private readonly int resetId = 0;
 
-        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, IInfoRepository infoRepository)
+        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
-            this.infoRepository = infoRepository;
         }
-
-        //private Product Map(ProductModel productModel)
-        //{
-        //    return new Product(productModel.Id, productModel.Title, productModel.Category.Id, productModel.Description, productModel.Price);
-        //}
 
         public void AddProduct(ProductModel productModel)
         {
@@ -37,14 +30,14 @@ namespace Store.Web.App
         }
 
 
-        public void AddCategory(Category category)
+        public void AddCategory(CategoryModel categoryModel)
         {
-            categoryRepository.AddNewItem(category);
+            //categoryRepository.AddNewItem(category);
         }
 
-        public void EditCategory(Category category)
+        public void EditCategory(CategoryModel category)
         {
-            categoryRepository.EditExistingItem(category);
+            //categoryRepository.EditExistingItem(category);
         }
 
         public void ResetCategoryIdInProducts(int categoryId)
@@ -58,16 +51,10 @@ namespace Store.Web.App
             //}
         }
 
-        public void DeleteCategory(Category category)
+        public void DeleteCategory(CategoryModel category)
         {
-            ResetCategoryIdInProducts(category.Id);
-            categoryRepository.DeleteItem(category);
-        }
-
-
-        public void EditInfo(Info info)
-        {
-            infoRepository.EditExistingItem(info);
+            //ResetCategoryIdInProducts(category.Id);
+            //categoryRepository.DeleteItem(category);
         }
     }
 }

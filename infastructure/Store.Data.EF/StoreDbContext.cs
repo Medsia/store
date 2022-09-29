@@ -17,6 +17,8 @@ namespace Store.Data.EF
 
         public DbSet<OrderItemDto> OrderItems { get; set; }
 
+        public DbSet<CategoryDto> Categories { get; set; }
+
         public StoreDbContext(DbContextOptions<StoreDbContext> options) 
             : base(options)
         { }
@@ -27,7 +29,6 @@ namespace Store.Data.EF
             BuildOrders(modelBuilder);
             BuildOrderItems(modelBuilder);
             BuildCategories(modelBuilder);
-            BuildInfos(modelBuilder);
         }
 
         private void BuildOrderItems(ModelBuilder modelBuilder)
@@ -105,20 +106,6 @@ namespace Store.Data.EF
                       .IsRequired();
 
                 action.HasData( TemporaryData.CategoryDtoList );
-            });
-        }
-
-        private void BuildInfos(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<InfoDto>(action =>
-            {
-                action.Property(dto => dto.Title)
-                      .IsRequired();
-
-                action.Property(dto => dto.Description)
-                      .IsRequired();
-
-                action.HasData(TemporaryData.CategoryDtoList);
             });
         }
     }

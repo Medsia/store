@@ -124,25 +124,5 @@ namespace Store.Data
                 "Материал: PVC",
                 Price = 2m }
         };
-
-        public static readonly List<InfoDto> InfoDtoList = new List<InfoDto>
-        {
-            //new CategoryDto{
-            //    Id = 1,
-            //    Name = "Значки" },
-
-            //new CategoryDto{
-            //    Id = 2,
-            //    Name = "Плакаты" },
-
-            //new CategoryDto{
-            //    Id = 3,
-            //    Name = "Брелки" },
-
-            //new CategoryDto{
-            //    Id = 4,
-            //    Name = "Аксесуары" },
-
-        };
     }
 }

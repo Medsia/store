@@ -13,8 +13,8 @@ namespace Store
         Product GetById(int id);
         IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();
-        bool AddNewItem(Product item);
-        bool EditExistingItem(Product item);
-        bool DeleteItem(Product item);
+        void AddNewItem(Product item);
+        void EditExistingItem(Product item);
+        void DeleteItem(Product item);
     }
 }

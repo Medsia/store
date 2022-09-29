@@ -1,67 +1,61 @@
-﻿using Store.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-namespace Store.Memory
+namespace Store.Data.EF
 {
-    public class CategoryRepository : ICategoryRepository
+    class CategoryRepository : ICategoryRepository
     {
-        //private readonly Category[] categories = TemporaryData.categories;
+        private readonly DbContextFactory dbContextFactory;
+        public CategoryRepository(DbContextFactory dbContextFactory)
+        {
+            this.dbContextFactory = dbContextFactory;
+        }
 
         public IEnumerable<Category> GetAllCategories()
         {
-            throw new NotImplementedException();
+            var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            //return categories;
+            return dbContext.Categories
+                            .AsEnumerable()
+                            .Select(Category.Mapper.Map)
+                            .ToArray();
         }
 
-        public Category GetCategoryById(int categoryId)
+        public Category GetCategoryById(int id)
         {
+            var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            throw new NotImplementedException();
+            var dto = dbContext.Categories
+                               .Single(category => category.Id == id);
 
-            //return categories.First(category => category.Id == categoryId);
+            return Category.Mapper.Map(dto);
         }
 
-        public bool AddNewItem(Category item)
+        public void AddNewItem(Category item)
         {
-            throw new NotImplementedException();
+            var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            //int itemDbId = categories.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId != -1)
-            //    return false;
-
-            //categories.Add(item);
-            //return true;
+            dbContext.Categories.Add(Category.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
 
-        public bool EditExistingItem(Category item)
+        public void EditExistingItem(Category item)
         {
+            var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            throw new NotImplementedException();
-
-            //int itemDbId = categories.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId == -1)
-            //    return false;
-
-            //categories[itemDbId] = item;
-            //return true;
+            dbContext.Categories.Update(Category.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
 
-        public bool DeleteItem(Category item)
+        public void DeleteItem(Category item)
         {
-            throw new NotImplementedException();
+            var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            //int itemDbId = categories.FindIndex(categoriesItem => categoriesItem.Id == item.Id);
-
-            //if (itemDbId == -1)
-            //    return false;
-
-            //categories.RemoveAt(itemDbId);
-            //return true;
+            dbContext.Categories.Remove(Category.Mapper.Map(item));
+            dbContext.SaveChanges();
         }
     }
 }
