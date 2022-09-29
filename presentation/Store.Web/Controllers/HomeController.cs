@@ -18,11 +18,9 @@ namespace Store.Web.Controllers
             return View(categoryRepository.GetAllCategories());
         }
 
-        //public IActionResult Info(int id)
-        //{
-        //    var content = infoRepository.GetInfoById(id);
-        //    return View("Info", content);
-        //}
+        // инфо страницы
+        //
+        // ---
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
