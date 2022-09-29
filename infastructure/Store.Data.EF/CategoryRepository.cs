@@ -7,7 +7,7 @@ namespace Store.Memory
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly Category[] categories = TemporaryData.categories;
+        //private readonly Category[] categories = TemporaryData.categories;
 
         public IEnumerable<Category> GetAllCategories()
         {
@@ -18,7 +18,10 @@ namespace Store.Memory
 
         public Category GetCategoryById(int categoryId)
         {
-            return categories.First(category => category.Id == categoryId);
+
+            throw new NotImplementedException();
+
+            //return categories.First(category => category.Id == categoryId);
         }
 
         public bool AddNewItem(Category item)

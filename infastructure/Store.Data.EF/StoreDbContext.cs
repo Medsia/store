@@ -26,6 +26,8 @@ namespace Store.Data.EF
             BuildProducts(modelBuilder);
             BuildOrders(modelBuilder);
             BuildOrderItems(modelBuilder);
+            BuildCategories(modelBuilder);
+            BuildInfos(modelBuilder);
         }
 
         private void BuildOrderItems(ModelBuilder modelBuilder)
@@ -91,97 +93,32 @@ namespace Store.Data.EF
                 action.Property(dto => dto.Price)
                       .HasColumnType("money");
 
+                action.HasData( TemporaryData.ProductDtoList );
+            });
+        }
 
-                action.HasData(
-        
-            new ProductDto{
-                        Id = 1,
-                        Title = "Значок Тетрадь смерти",
-                        CategoryId = TemporaryData.categories[0].Id,
-                        Description = "Материал - металл. " +
-                "Диаметр значка 58 мм", 
-                        Price =  1.5m },
-            new ProductDto{
-                Id = 2, 
-                Title = "Значок Наруто Шипуден",
-                CategoryId = TemporaryData.categories[0].Id,
-                Description = "Материал - металл. " +
-                "Диаметр значка 44 мм",
-                Price = 1.2m },
-            new ProductDto{
-                Id = 3,
-                Title = "Значок Один кусок",
-                CategoryId = TemporaryData.categories[0].Id,
-                Description = "Материал - металл. " +
-                "Диаметр значка 58 мм",
-                Price = 1m },
+        private void BuildCategories(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CategoryDto>(action =>
+            {
+                action.Property(dto => dto.Name)
+                      .IsRequired();
 
-            new ProductDto{
-                Id = 4,
-                Title = "Плакат Ван пис",
-                CategoryId = TemporaryData.categories[1].Id,
-                Description = "Формат А3(29,7см х42 см). " +
-                "плотность бумаги 150гр",
-                Price = 4m },
-            new ProductDto{
-                Id = 5,
-                Title = "Плакат БТС",
-                CategoryId = TemporaryData.categories[1].Id,
-                Description = "Формат А3(29,7см х42 см). " +
-                "плотность бумаги 150гр",
-                Price = 10m },
-            new ProductDto{
-                Id = 6,
-                Title = "Плакат Геншын Инфаркт",
-                CategoryId = TemporaryData.categories[1].Id,
-                Description = "Формат А3(29,7см х42 см). " +
-                "плотность бумаги 150гр",
-                Price = 1m },
+                action.HasData( TemporaryData.CategoryDtoList );
+            });
+        }
 
-            new ProductDto{
-                Id = 7,
-                Title = "Брелок Тетрадь смерти",
-                CategoryId = TemporaryData.categories[2].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m },
-            new ProductDto{
-                Id = 8,
-                Title = "Брелок Атака Гигантов",
-                CategoryId = TemporaryData.categories[2].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m },
-            new ProductDto{
-                Id = 9,
-                Title = "Брелок Девочки Волшебницы",
-                CategoryId = TemporaryData.categories[2].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m },
+        private void BuildInfos(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<InfoDto>(action =>
+            {
+                action.Property(dto => dto.Title)
+                      .IsRequired();
 
-            new ProductDto{
-                Id = 10,
-                Title = "Кольцо БТС",
-                CategoryId = TemporaryData.categories[3].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m },
-            new ProductDto{
-                Id = 11,
-                Title = "Браслет Кросс Фаер)",
-                CategoryId = TemporaryData.categories[3].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m },
-            new ProductDto{
-                Id = 12,
-                Title = "Очки \"Как у Двачера\"",
-                CategoryId = TemporaryData.categories[3].Id,
-                Description = "Размер: 4х5.5 см. " +
-                "Материал: PVC",
-                Price = 2m }
-                );
+                action.Property(dto => dto.Description)
+                      .IsRequired();
+
+                action.HasData(TemporaryData.CategoryDtoList);
             });
         }
     }
