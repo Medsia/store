@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Store.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,12 @@ namespace Store
     public interface IProductRepository
     {
         IEnumerable<Product> GetAllByTitle(string titlePart);
-        IEnumerable<Product> GetAllByCategoryId(IEnumerable<int> categoryIds);
+        IEnumerable<Product> GetAllByCategoryId(int categoryId);
         Product GetById(int id);
         IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();
-        void AddNewItem(Product item);
-        void EditExistingItem(Product item);
-        void DeleteItem(Product item);
+        void AddNewItem(ProductDto item);
+        void EditExistingItem(ProductDto item);
+        void DeleteItem(ProductDto item);
     }
 }

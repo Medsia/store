@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Store.Data;
+using System.Linq;
 
 namespace Store.Web.App
 {
@@ -14,47 +15,71 @@ namespace Store.Web.App
             this.categoryRepository = categoryRepository;
         }
 
+        private ProductDto Map(ProductModel productModel)
+        {
+            return new ProductDto
+            {
+                Id = productModel.Id,
+                Title = productModel.Title,
+                Description = productModel.Description,
+                Price = productModel.Price,
+                CategoryId = productModel.Category.Id,
+            };
+        }
+
+        private CategoryDto Map(CategoryModel productModel)
+        {
+            return new CategoryDto
+            {
+                Id = productModel.Id,
+                Name = productModel.Name,
+            };
+        }
+
         public void AddProduct(ProductModel productModel)
         {
-            //productRepository.AddNewItem(Map(productModel));
+            productRepository.AddNewItem(Map(productModel));
         }
 
         public void EditProduct(ProductModel productModel)
         {
-            //productRepository.EditExistingItem(Map(productModel));
+            productRepository.EditExistingItem(Map(productModel));
         }
 
         public void DeleteProduct(ProductModel productModel)
         {
-            //productRepository.DeleteItem(Map(productModel));
+            productRepository.DeleteItem(Map(productModel));
         }
 
 
         public void AddCategory(CategoryModel categoryModel)
         {
-            //categoryRepository.AddNewItem(category);
+            categoryRepository.AddNewItem(Map(categoryModel));
         }
 
-        public void EditCategory(CategoryModel category)
+        public void EditCategory(CategoryModel categoryModel)
         {
-            //categoryRepository.EditExistingItem(category);
+            categoryRepository.EditExistingItem(Map(categoryModel));
         }
 
         public void ResetCategoryIdInProducts(int categoryId)
         {
-            //var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
+            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
 
-            //foreach (var product in productsToEdit)
-            //{
-            //    Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
-            //    productRepository.EditExistingItem(product);
-            //}
+            foreach (var product in productsToEdit)
+            {
+                ProductDto productDto = Product.Mapper.Map(product);
+                productDto.Id = resetId;
+
+                productRepository.EditExistingItem(productDto);
+            }
         }
 
-        public void DeleteCategory(CategoryModel category)
+        public void DeleteCategory(CategoryModel categoryModel)
         {
-            //ResetCategoryIdInProducts(category.Id);
-            //categoryRepository.DeleteItem(category);
+            ResetCategoryIdInProducts(categoryModel.Id);
+
+            categoryRepository.DeleteItem(Map(categoryModel));
         }
     }
 }

@@ -13,12 +13,12 @@ namespace Store.Data.EF
         {
             this.dbContextFactory = dbContextFactory;
         }
-        public IEnumerable<Product> GetAllByCategoryId(IEnumerable<int> categoryIds)
+        public IEnumerable<Product> GetAllByCategoryId(int categoryId)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
             return dbContext.Products
-                            .Where(product => categoryIds.Contains(product.CategoryId))
+                            .Where(product => product.CategoryId == categoryId)
                             .AsEnumerable()
                             .Select(Product.Mapper.Map)
                             .ToArray();
@@ -68,27 +68,27 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
-        public void AddNewItem(Product item)
+        public void AddNewItem(ProductDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            dbContext.Products.Add(Product.Mapper.Map(item));
+            dbContext.Products.Add(item);
             dbContext.SaveChanges();
         }
 
-        public void EditExistingItem(Product item)
+        public void EditExistingItem(ProductDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            dbContext.Products.Update(Product.Mapper.Map(item));
+            dbContext.Products.Update(item);
             dbContext.SaveChanges();
         }
 
-        public void DeleteItem(Product item)
+        public void DeleteItem(ProductDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            dbContext.Products.Remove(Product.Mapper.Map(item));
+            dbContext.Products.Remove(item);
             dbContext.SaveChanges();
         }
     }

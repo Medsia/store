@@ -34,27 +34,27 @@ namespace Store.Data.EF
             return Category.Mapper.Map(dto);
         }
 
-        public void AddNewItem(Category item)
+        public void AddNewItem(CategoryDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            dbContext.Categories.Add(Category.Mapper.Map(item));
+            dbContext.Categories.Add(item);
             dbContext.SaveChanges();
         }
 
-        public void EditExistingItem(Category item)
+        public void EditExistingItem(CategoryDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            dbContext.Categories.Update(Category.Mapper.Map(item));
+            dbContext.Categories.Update(item);
             dbContext.SaveChanges();
         }
 
-        public void DeleteItem(Category item)
+        public void DeleteItem(CategoryDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            dbContext.Categories.Remove(Category.Mapper.Map(item));
+            dbContext.Categories.Remove(item);
             dbContext.SaveChanges();
         }
     }
