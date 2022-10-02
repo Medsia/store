@@ -9,13 +9,15 @@ namespace Store.Web.Controllers
         private readonly ProductService productService;
         private readonly AdminControlService adminControlService;
         private readonly CategoryService categoryService;
+        private readonly ContentService contentService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService)
+                                CategoryService categoryService, ContentService contentService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
+            this.contentService = contentService;
         }
 
         public IActionResult Index()
@@ -146,9 +148,40 @@ namespace Store.Web.Controllers
         }
 
 
-        public IActionResult InfoList()
+        public IActionResult InfoList(int id)
         {
-            return View();
+            switch (id)
+            {
+                case 1: var contactsSO = contentService.GetContacts(); return View("ContactsInfo", contactsSO);
+                case 2: var paymentSO = contentService.GetPayment(); return View("PaymentInfo", paymentSO);
+                case 3: var deliverySO = contentService.GetDelivery(); return View("DeliveryInfo", deliverySO);
+                case 4: var aboutSO = contentService.GetAbout(); return View("AboutInfo", aboutSO);
+                default: return View();
+            }
+        }
+
+        public IActionResult ContactsEdit(string location, string worktime, string[] numbers, string additional)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
+
+        public IActionResult PaymentEdit(string[] options, string additional)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
+
+        public IActionResult DeliveryEdit(string[] options, string additional)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
+
+        public IActionResult AboutEdit(string description)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
         }
 
 

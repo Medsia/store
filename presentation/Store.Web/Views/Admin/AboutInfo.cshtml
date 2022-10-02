@@ -1,0 +1,18 @@
+﻿@model  Store.Data.Content.AboutSO
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("ContactsEdit", "Admin")" method="post">
+    <div>
+        <label class="">О магазине</label>
+        <textarea class="" rows="10" cols="20" name="description">@Model.Description</textarea>
+    </div>
+
+    <div>
+        <button class="" type="submit">Сохранить</button>
+        <a class="" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
+    </div>
+</form>

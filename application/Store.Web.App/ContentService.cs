@@ -18,19 +18,37 @@ namespace Store.Web.App
 
         public ContactsSO GetContacts()
         {
-            return infoRepository.GetJsData().Contacts;
+            return infoRepository.GetData().Contacts;
         }
         public PaymentSO GetPayment()
         {
-            return infoRepository.GetJsData().Payment;
+            return infoRepository.GetData().Payment;
         }
         public DeliverySO GetDelivery()
         {
-            return infoRepository.GetJsData().Delivery;
+            return infoRepository.GetData().Delivery;
         }
         public AboutSO GetAbout()
         {
-            return infoRepository.GetJsData().About;
+            return infoRepository.GetData().About;
+        }
+
+
+        public void EditContacts()
+        {
+            // В ПРОЦЕССЕ
+        }
+        public void EditPayment()
+        {
+            // В ПРОЦЕССЕ
+        }
+        public void EditDelivery()
+        {
+            // В ПРОЦЕССЕ
+        }
+        public void EditAbout()
+        {
+            // В ПРОЦЕССЕ
         }
     }
 }

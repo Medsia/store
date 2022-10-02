@@ -8,28 +8,32 @@
 <table class="table">
         <tr>
             <td>
-                <form action="@Url.Action("ContactsInfo", "InfoEdit")" method="post">
+                <form action="@Url.Action("InfoList", "Admin")" method="post">
+                    <input type="hidden" name="id" value="1"/>
                     <button class="btn btn-outline-info" type="submit">Контакты</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("PaymentInfo", "InfoEdit")" method="post">
+                <form action="@Url.Action("InfoList", "Admin")" method="post">
+                    <input type="hidden" name="id" value="2"/>
                     <button class="btn btn-outline-info" type="submit">Оплата</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("DeliveryInfo", "InfoEdit")" method="post">
+                <form action="@Url.Action("InfoList", "Admin")" method="post">
+                    <input type="hidden" name="id" value="3"/>
                     <button class="btn btn-outline-info" type="submit">Доставка</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("AboutInfo", "InfoEdit")" method="post">
+                <form action="@Url.Action("InfoList", "Admin")" method="post">
+                    <input type="hidden" name="id" value="4"/>
                     <button class="btn btn-outline-info" type="submit">О магазине</button>
                 </form>
             </td>
