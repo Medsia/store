@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Category>
+﻿@model IEnumerable<CategoryModel>
 
 @{
     ViewData["Title"] = "Категории";
@@ -9,7 +9,7 @@
 
 <table class="table category-edit-table">
 @foreach (var item in Model) {
-    @if (item.Id == 0) continue;
+    @if (item.Id == 1) continue;
     <tr>
         <td>
             <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryEdit", "Admin")" method="post">
@@ -21,6 +21,7 @@
         <td>
             <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryDelete", "Admin")" method="post">
                 <input type="hidden" name="categoryId" value="@item.Id"/>
+                <input type="hidden" name="categoryName" value="@item.Name"/>
                 <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Удалить</button>
             </form>
         </td>
@@ -28,7 +29,6 @@
 }
     <tr>
         <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryAdd", "Admin")" method="post">
-            <td><input class="form-control mr-ms-2" type="text" name="categoryId" placeholder="id"/></td>
              <td><input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30"/></td>
             <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
         </form>

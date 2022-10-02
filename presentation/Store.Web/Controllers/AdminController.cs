@@ -20,10 +20,15 @@ namespace Store.Web.Controllers
 
         public IActionResult Index()
         {
+            //var model = productService.GetAll();
+            return View();
+        }
+
+        public IActionResult ProductList()
+        {
             var model = productService.GetAll();
             return View(model);
         }
-
 
         [HttpPost]
         public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
@@ -42,7 +47,7 @@ namespace Store.Web.Controllers
                 adminControlService.AddProduct(productModel);
                 TempData["message"] = string.Format("Добавлено");
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ProductList");
             }
 
             ViewBag.Categories = categoryService.GetAll();
@@ -68,7 +73,7 @@ namespace Store.Web.Controllers
                 adminControlService.EditProduct(productModel);
                 TempData["message"] = string.Format("Изменения сохранены");
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ProductList");
             }
 
             ViewBag.Categories = categoryService.GetAll();
@@ -82,11 +87,11 @@ namespace Store.Web.Controllers
         [HttpPost]
         public IActionResult ProductDelete(int productId)
         {
-            adminControlService.DeleteProduct(productService.GetById(productId));
+            adminControlService.DeleteProduct(productId);
 
             TempData["message"] = string.Format("Изменения сохранены");
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
 
 
@@ -97,11 +102,10 @@ namespace Store.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CategoryAdd(int categoryId, string categoryName)
+        public IActionResult CategoryAdd(string categoryName)
         {
             CategoryModel categoryModel = new CategoryModel
             {
-                Id = categoryId,
                 Name = categoryName,
             };
 
@@ -111,9 +115,7 @@ namespace Store.Web.Controllers
                 TempData["message"] = string.Format("Добавлено");
             }
 
-            ViewBag.Categories = categoryService.GetAll();
-
-            return View("Category", categoryModel);
+            return RedirectToAction("Category");
         }
 
         [HttpPost]
@@ -131,29 +133,22 @@ namespace Store.Web.Controllers
                 TempData["message"] = string.Format("Изменения сохранены");
             }
 
-            ViewBag.Categories = categoryService.GetAll();
-
-            return View("Category", categoryModel);
+            return RedirectToAction("Category");
         }
 
         [HttpPost]
         public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
-            CategoryModel categoryModel = new CategoryModel
-            {
-                Id = categoryId,
-                Name = categoryName,
-            };
+            adminControlService.DeleteCategory(categoryId);
+            TempData["message"] = string.Format("Удалено: " + categoryName);
 
-            if (categoryService.IsValid(categoryModel))
-            {
-                adminControlService.DeleteCategory(categoryModel);
-                TempData["message"] = string.Format("Изменения сохранены");
-            }
+            return RedirectToAction("Category");
+        }
 
-            ViewBag.Categories = categoryService.GetAll();
 
-            return View("Category", categoryModel);
+        public IActionResult InfoList()
+        {
+            return View();
         }
 
 

@@ -1,25 +1,37 @@
-﻿@* @model IEnumerable<Info> *@
-
-@{
+﻿@{
     ViewData["Title"] = "Инфо страницы";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<h1>Not implemented</h1>
-
-@*
 <table class="table">
-    @foreach (var item in Model) {
         <tr>
             <td>
-                <form action="@Url.Action("Info", "Admin")" method="post">
-                    <input type="hidden" name="id" value="@item.Id"/>
-                    <button class="btn btn-outline-info" type="submit">@item.Title</button>
+                <form action="@Url.Action("ContactsInfo", "InfoEdit")" method="post">
+                    <button class="btn btn-outline-info" type="submit">Контакты</button>
                 </form>
             </td>
         </tr>
-    }
+        <tr>
+            <td>
+                <form action="@Url.Action("PaymentInfo", "InfoEdit")" method="post">
+                    <button class="btn btn-outline-info" type="submit">Оплата</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form action="@Url.Action("DeliveryInfo", "InfoEdit")" method="post">
+                    <button class="btn btn-outline-info" type="submit">Доставка</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form action="@Url.Action("AboutInfo", "InfoEdit")" method="post">
+                    <button class="btn btn-outline-info" type="submit">О магазине</button>
+                </form>
+            </td>
+        </tr>
 </table>
-*@

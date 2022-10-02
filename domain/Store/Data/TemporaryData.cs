@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Store.Data.Content;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

@@ -7,12 +7,14 @@ namespace Store.Web.App
     {
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly int resetId = 0;
+        private readonly IInfoRepository infoRepository;
+        private readonly int resetId = 1;
 
-        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, IInfoRepository infoRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
+            this.infoRepository = infoRepository;
         }
 
         private ProductDto Map(ProductModel productModel)
@@ -46,9 +48,10 @@ namespace Store.Web.App
             productRepository.EditExistingItem(Map(productModel));
         }
 
-        public void DeleteProduct(ProductModel productModel)
+        public void DeleteProduct(int productId)
         {
-            productRepository.DeleteItem(Map(productModel));
+            ProductDto productDto = Product.Mapper.Map(productRepository.GetById(productId));
+            productRepository.DeleteItem(productDto);
         }
 
 
@@ -69,17 +72,25 @@ namespace Store.Web.App
             foreach (var product in productsToEdit)
             {
                 ProductDto productDto = Product.Mapper.Map(product);
-                productDto.Id = resetId;
+                productDto.CategoryId = resetId;
 
                 productRepository.EditExistingItem(productDto);
             }
         }
 
-        public void DeleteCategory(CategoryModel categoryModel)
+        public void DeleteCategory(int id)
         {
-            ResetCategoryIdInProducts(categoryModel.Id);
+            ResetCategoryIdInProducts(id);
 
-            categoryRepository.DeleteItem(Map(categoryModel));
+            CategoryDto categoryDto = Category.Mapper.Map(categoryRepository.GetCategoryById(id));
+            categoryRepository.DeleteItem(categoryDto);
+        }
+
+
+        // В ПРОЦЕССЕ
+        public void EditInfo(int id)
+        {
+            //infoRepository.EditData(id);
         }
     }
 }
