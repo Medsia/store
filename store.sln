@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{254E899F-6E65-4764-AAA4-1C1F5CA6E53B}"
 EndProject
@@ -25,7 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Web.App", "application\Store.Web.App\Store.Web.App.csproj", "{AAAAA70B-8E99-45AC-906B-22EBB36C2ADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.Data.EF", "infastructure\Store.Data.EF\Store.Data.EF.csproj", "{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Data.EF", "infastructure\Store.Data.EF\Store.Data.EF.csproj", "{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Content", "infastructure\Store.Content\Store.Content.csproj", "{63FC9836-3D47-4355-9790-486953191420}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -121,6 +123,18 @@ Global
 		{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2}.Release|x64.Build.0 = Release|Any CPU
 		{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2}.Release|x86.Build.0 = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|x64.Build.0 = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Debug|x86.Build.0 = Debug|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|x64.ActiveCfg = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|x64.Build.0 = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|x86.ActiveCfg = Release|Any CPU
+		{63FC9836-3D47-4355-9790-486953191420}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +147,7 @@ Global
 		{92D8F038-37CB-461D-91EE-113E32C68435} = {B907BBCD-DE0D-4B7E-B8C1-9B8E799C6CED}
 		{AAAAA70B-8E99-45AC-906B-22EBB36C2ADA} = {463ED36D-2798-42B2-BD0E-C6FBA0B0D03C}
 		{E6BF5A0A-F19E-42FD-A7EC-6D7497DCEEF2} = {AC7C4275-FEE2-478C-A83D-46A924723DAC}
+		{63FC9836-3D47-4355-9790-486953191420} = {AC7C4275-FEE2-478C-A83D-46A924723DAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0B27C39E-8519-48B5-A931-AC2FE598AD8D}

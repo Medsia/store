@@ -1,0 +1,34 @@
+﻿@model  Store.Data.Content.PaymentSO
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("ContactsEdit", "Admin")" method="post">
+    
+    @*
+        нужен способ вернуть в контроллер массив строк сделанный из этого \/
+    *@
+    <div>
+        <label class="">Способы оплаты</label>
+        @foreach(var item in Model.Options)
+        {
+            <input class="" type="text" name="options" value="@item"/>
+        }
+    </div>
+    @*
+        ----------------------------------------------------------------------
+    *@
+
+
+    <div>
+        <label class="">Дополнительная информация</label>
+        <textarea class="" rows="10" cols="20" name="additional">@Model.Additional</textarea>
+    </div>
+
+    <div>
+        <button class="" type="submit">Сохранить</button>
+        <a class="" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
+    </div>
+</form>

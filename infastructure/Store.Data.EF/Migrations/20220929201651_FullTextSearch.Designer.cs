@@ -9,7 +9,7 @@ using Store.Data.EF;
 namespace Store.Data.EF.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20220926165004_FullTextSearch")]
+    [Migration("20220929201651_FullTextSearch")]
     partial class FullTextSearch
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,6 +19,44 @@ namespace Store.Data.EF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Store.Data.CategoryDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Значки"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Плакаты"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Брелки"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Аксесуары"
+                        });
+                });
 
             modelBuilder.Entity("Store.Data.OrderDto", b =>
                 {

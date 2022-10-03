@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Store.Data;
 using Store.Web.App;
 
 namespace Store.Web.Controllers
@@ -7,30 +8,29 @@ namespace Store.Web.Controllers
     {
         private readonly ProductService productService;
         private readonly AdminControlService adminControlService;
-        private readonly IInfoRepository infoRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly CategoryService categoryService;
+        private readonly ContentService contentService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                IInfoRepository infoRepository, ICategoryRepository categoryRepository)
+                                CategoryService categoryService, ContentService contentService)
         {
             this.productService = productService;
-            this.infoRepository = infoRepository;
-            this.categoryRepository = categoryRepository;
+            this.categoryService = categoryService;
             this.adminControlService = adminControlService;
+            this.contentService = contentService;
         }
 
         public IActionResult Index()
         {
+            //var model = productService.GetAll();
+            return View();
+        }
+
+        public IActionResult ProductList()
+        {
             var model = productService.GetAll();
             return View(model);
         }
-
-        public IActionResult InfoList()
-        {
-            var model = infoRepository.GetAllInfo();
-            return View(model);
-        }
-
 
         [HttpPost]
         public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
@@ -39,7 +39,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryRepository.GetCategoryById(categoryId),
+                Category = categoryService.GetById(categoryId),
                 Description = description,
                 Price = price,
             };
@@ -49,10 +49,10 @@ namespace Store.Web.Controllers
                 adminControlService.AddProduct(productModel);
                 TempData["message"] = string.Format("Добавлено");
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ProductList");
             }
 
-            ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductAdd";
 
             return View("Product", productModel);
@@ -65,7 +65,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryRepository.GetCategoryById(categoryId),
+                Category = categoryService.GetById(categoryId),
                 Description = description,
                 Price = price,
             };
@@ -75,10 +75,10 @@ namespace Store.Web.Controllers
                 adminControlService.EditProduct(productModel);
                 TempData["message"] = string.Format("Изменения сохранены");
 
-                return RedirectToAction("Index");
+                return RedirectToAction("ProductList");
             }
 
-            ViewBag.Categories = categoryRepository.GetAllCategories();
+            ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductEdit";
 
             var model = productService.GetById(productId);
@@ -89,66 +89,99 @@ namespace Store.Web.Controllers
         [HttpPost]
         public IActionResult ProductDelete(int productId)
         {
-            adminControlService.DeleteProduct(productService.GetById(productId));
+            adminControlService.DeleteProduct(productId);
 
             TempData["message"] = string.Format("Изменения сохранены");
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ProductList");
         }
 
 
         public IActionResult Category()
         {
-            var model = categoryRepository.GetAllCategories();
+            var model = categoryService.GetAll();
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult CategoryAdd(int categoryId, string categoryName)
+        public IActionResult CategoryAdd(string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.AddCategory(category);
+            CategoryModel categoryModel = new CategoryModel
+            {
+                Name = categoryName,
+            };
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
+            if (categoryService.IsValid(categoryModel))
+            {
+                adminControlService.AddCategory(categoryModel);
+                TempData["message"] = string.Format("Добавлено");
+            }
+
+            return RedirectToAction("Category");
         }
 
         [HttpPost]
         public IActionResult CategoryEdit(int categoryId, string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.EditCategory(category);
+            CategoryModel categoryModel = new CategoryModel
+            {
+                Id = categoryId,
+                Name = categoryName,
+            };
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
+            if (categoryService.IsValid(categoryModel))
+            {
+                adminControlService.EditCategory(categoryModel);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+
+            return RedirectToAction("Category");
         }
 
         [HttpPost]
         public IActionResult CategoryDelete(int categoryId, string categoryName)
         {
-            var category = new Category(categoryId, categoryName);
-            adminControlService.DeleteCategory(category);
+            adminControlService.DeleteCategory(categoryId);
+            TempData["message"] = string.Format("Удалено: " + categoryName);
 
-            var model = categoryRepository.GetAllCategories();
-            return View("Category", model);
+            return RedirectToAction("Category");
         }
 
 
-        [HttpPost]
-        public IActionResult Info(int id)
+        public IActionResult InfoList(int id)
         {
-            var model = infoRepository.GetInfoById(id);
-            return View("Info", model);
+            switch (id)
+            {
+                case 1: var contactsSO = contentService.GetContacts(); return View("ContactsInfo", contactsSO);
+                case 2: var paymentSO = contentService.GetPayment(); return View("PaymentInfo", paymentSO);
+                case 3: var deliverySO = contentService.GetDelivery(); return View("DeliveryInfo", deliverySO);
+                case 4: var aboutSO = contentService.GetAbout(); return View("AboutInfo", aboutSO);
+                default: return View();
+            }
         }
 
-        [HttpPost]
-        public IActionResult InfoEdit(int id, string title, string description)
+        public IActionResult ContactsEdit(string location, string worktime, string[] numbers, string additional)
         {
-            var info = new Info(id, title, description);
-            adminControlService.EditInfo(info);
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
 
-            var model = infoRepository.GetInfoById(id);
-            return View("Info", model);
+        public IActionResult PaymentEdit(string[] options, string additional)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
+
+        public IActionResult DeliveryEdit(string[] options, string additional)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
+        }
+
+        public IActionResult AboutEdit(string description)
+        {
+            // В ПРОЦЕССЕ
+            return View("InfoList");
         }
 
 

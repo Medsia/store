@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Store.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,8 @@ namespace Store
         Product GetById(int id);
         IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();
-        bool AddNewItem(Product item);
-        bool EditExistingItem(Product item);
-        bool DeleteItem(Product item);
+        void AddNewItem(ProductDto item);
+        void EditExistingItem(ProductDto item);
+        void DeleteItem(ProductDto item);
     }
 }

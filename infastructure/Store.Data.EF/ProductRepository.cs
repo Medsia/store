@@ -13,18 +13,18 @@ namespace Store.Data.EF
         {
             this.dbContextFactory = dbContextFactory;
         }
-        public Product[] GetAllByCategoryId(IEnumerable<int> categoryIds)
+        public IEnumerable<Product> GetAllByCategoryId(int categoryId)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
             return dbContext.Products
-                            .Where(product => categoryIds.Contains(product.CategoryId))
+                            .Where(product => product.CategoryId == categoryId)
                             .AsEnumerable()
                             .Select(Product.Mapper.Map)
                             .ToArray();
         }
 
-        public Product[] GetAllByIds(IEnumerable<int> productIds)
+        public IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
@@ -35,7 +35,7 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
-        public Product[] GetAllByTitle(string titlePart)
+        public IEnumerable<Product> GetAllByTitle(string titlePart)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
@@ -56,6 +56,40 @@ namespace Store.Data.EF
                                .Single(product => product.Id == id);
 
             return Product.Mapper.Map(dto);
+        }
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            return dbContext.Products
+                            .AsEnumerable()
+                            .Select(Product.Mapper.Map)
+                            .ToArray();
+        }
+
+        public void AddNewItem(ProductDto item)
+        {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            dbContext.Products.Add(item);
+            dbContext.SaveChanges();
+        }
+
+        public void EditExistingItem(ProductDto item)
+        {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            dbContext.Products.Update(item);
+            dbContext.SaveChanges();
+        }
+
+        public void DeleteItem(ProductDto item)
+        {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            dbContext.Products.Remove(item);
+            dbContext.SaveChanges();
         }
     }
 }

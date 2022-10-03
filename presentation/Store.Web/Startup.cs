@@ -9,7 +9,7 @@ using Store.YandexKassa;
 using Store.Web.Contractors;
 using Store.Web.App;
 using Store.Data.EF;
-using Store.Memory;
+using Store.Content;
 
 namespace Store.Web
 {
@@ -35,19 +35,19 @@ namespace Store.Web
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddSingleton<IInfoRepository, InfoRepository>();
-            services.AddSingleton<ICategoryRepository, CategoryRepository>();
-            
             services.AddEfRepositories(Configuration.GetConnectionString("Store"));
+            services.AddDataRepositories();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
             services.AddSingleton<IPaymentService, CashPaymentService>();
             services.AddSingleton<IPaymentService, YandexKassaPaymentService>();
             services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
+
+            services.AddSingleton<CategoryService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
-            
             services.AddSingleton<AdminControlService>();
+            services.AddSingleton<ContentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

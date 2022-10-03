@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Store.Data;
+using System.Linq;
 
 namespace Store.Web.App
 {
@@ -7,7 +8,7 @@ namespace Store.Web.App
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IInfoRepository infoRepository;
-        private readonly int resetId = 0;
+        private readonly int resetId = 1;
 
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, IInfoRepository infoRepository)
         {
@@ -16,9 +17,25 @@ namespace Store.Web.App
             this.infoRepository = infoRepository;
         }
 
-        private Product Map(ProductModel productModel)
+        private ProductDto Map(ProductModel productModel)
         {
-            return new Product(productModel.Id, productModel.Title, productModel.Category.Id, productModel.Description, productModel.Price);
+            return new ProductDto
+            {
+                Id = productModel.Id,
+                Title = productModel.Title,
+                Description = productModel.Description,
+                Price = productModel.Price,
+                CategoryId = productModel.Category.Id,
+            };
+        }
+
+        private CategoryDto Map(CategoryModel productModel)
+        {
+            return new CategoryDto
+            {
+                Id = productModel.Id,
+                Name = productModel.Name,
+            };
         }
 
         public void AddProduct(ProductModel productModel)
@@ -31,20 +48,21 @@ namespace Store.Web.App
             productRepository.EditExistingItem(Map(productModel));
         }
 
-        public void DeleteProduct(ProductModel productModel)
+        public void DeleteProduct(int productId)
         {
-            productRepository.DeleteItem(Map(productModel));
+            ProductDto productDto = Product.Mapper.Map(productRepository.GetById(productId));
+            productRepository.DeleteItem(productDto);
         }
 
 
-        public void AddCategory(Category category)
+        public void AddCategory(CategoryModel categoryModel)
         {
-            categoryRepository.AddNewItem(category);
+            categoryRepository.AddNewItem(Map(categoryModel));
         }
 
-        public void EditCategory(Category category)
+        public void EditCategory(CategoryModel categoryModel)
         {
-            categoryRepository.EditExistingItem(category);
+            categoryRepository.EditExistingItem(Map(categoryModel));
         }
 
         public void ResetCategoryIdInProducts(int categoryId)
@@ -53,21 +71,26 @@ namespace Store.Web.App
 
             foreach (var product in productsToEdit)
             {
-                Product newProduct = new Product(product.Id, product.Title, resetId, product.Description, product.Price);
-                productRepository.EditExistingItem(product);
+                ProductDto productDto = Product.Mapper.Map(product);
+                productDto.CategoryId = resetId;
+
+                productRepository.EditExistingItem(productDto);
             }
         }
 
-        public void DeleteCategory(Category category)
+        public void DeleteCategory(int id)
         {
-            ResetCategoryIdInProducts(category.Id);
-            categoryRepository.DeleteItem(category);
+            ResetCategoryIdInProducts(id);
+
+            CategoryDto categoryDto = Category.Mapper.Map(categoryRepository.GetCategoryById(id));
+            categoryRepository.DeleteItem(categoryDto);
         }
 
 
-        public void EditInfo(Info info)
+        // В ПРОЦЕССЕ
+        public void EditInfo(int id)
         {
-            infoRepository.EditExistingItem(info);
+            //infoRepository.EditData(id);
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿@model Store.Data.Content.PaymentSO
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<p class="info-title">@Model.Title</p>
+
+
+<div class="info-numers">
+    <label class="info-label">Способы оплаты</label>
+    @foreach(var item in Model.Options)
+    {
+        <p class="info-text">@item</p>
+    }
+</div>
+
+
+<div class="info-additional">
+    <label class="info-label">Дополнительная информация</label>
+    <p class="info-text">@Model.Additional</p>
+</div>

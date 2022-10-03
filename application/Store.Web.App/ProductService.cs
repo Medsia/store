@@ -6,12 +6,12 @@ namespace Store.Web.App
     public class ProductService
     {
         private readonly IProductRepository productRepository;
-        private readonly ICategoryRepository categoryRepository;
+        private readonly CategoryService categoryService;
 
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductService(IProductRepository productRepository, CategoryService categoryService)
         {
             this.productRepository = productRepository;
-            this.categoryRepository = categoryRepository;
+            this.categoryService = categoryService;
         }
 
         public ProductModel GetById(int id)
@@ -29,7 +29,7 @@ namespace Store.Web.App
                         .ToArray();
         }
 
-        public IReadOnlyCollection<ProductModel> GetAllByQuery(IEnumerable<int> categoryId)
+        public IReadOnlyCollection<ProductModel> GetAllByQuery(int categoryId)
         {
             var products = productRepository.GetAllByCategoryId(categoryId);
 
@@ -51,7 +51,7 @@ namespace Store.Web.App
             {
                 Id = product.Id,
                 Title = product.Title,
-                Category = categoryRepository.GetCategoryById(product.CategoryId),
+                Category = categoryService.GetById(product.CategoryId),
                 Description = product.Description,
                 Price = product.Price,
             };

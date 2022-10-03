@@ -19,7 +19,7 @@ namespace Store.Web.Controllers
 
             return View("Index", products);
         }
-        public IActionResult SearchByCategory(IEnumerable<int> categoryId)
+        public IActionResult SearchByCategory(int categoryId)
         {
             var products = productService.GetAllByQuery(categoryId);
 

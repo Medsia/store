@@ -20,7 +20,7 @@
             <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=2 })">Оплата</a>
             <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=3 })">Доставка</a>
             <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=4 })">О магазине</a>
-
+            
             <span class="navbar-text ml-auto">
                 @{
                     if (Context.Session.TryGetCart(out Cart cart) && cart.TotalCount > 0)

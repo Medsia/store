@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Store.Memory;
+using Store.Web.App;
 using Store.Web.Models;
 using System.Diagnostics;
 
@@ -7,24 +7,31 @@ namespace Store.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICategoryRepository categoryRepository;
-        private readonly IInfoRepository infoRepository;
+        private readonly CategoryService categoryService;
+        private readonly ContentService contentService;
 
-        public HomeController(ICategoryRepository categoryRepository, IInfoRepository infoRepository)
+        public HomeController(CategoryService categoryService, ContentService contentService)
         {
-            this.categoryRepository = categoryRepository;
-            this.infoRepository = infoRepository;
+            this.categoryService = categoryService;
+            this.contentService = contentService;
         }
 
         public IActionResult Index()
         {
-            return View(categoryRepository.GetAllCategories());
+            var model = categoryService.GetAll();
+            return View(model);
         }
 
         public IActionResult Info(int id)
         {
-            var content = infoRepository.GetInfoById(id);
-            return View("Info", content);
+            switch (id)
+            {
+                case 1: var contactsSO = contentService.GetContacts();  return View("ContactsInfo", contactsSO);
+                case 2: var paymentSO = contentService.GetPayment();  return View("PaymentInfo", paymentSO);
+                case 3: var deliverySO = contentService.GetDelivery();  return View("DeliveryInfo", deliverySO);
+                case 4: var aboutSO = contentService.GetAbout();  return View("AboutInfo", aboutSO);
+                default: return RedirectToAction("Index");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

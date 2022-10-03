@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Store.Data.Content;
 
 namespace Store
 {
     public interface IInfoRepository
     {
-        Info GetInfoById(int id);
-        IEnumerable<Info> GetAllInfo();
-        bool EditExistingItem(Info item);
+        InfoSO GetData();
+        void UpdateContactsData(ContactsSO contactsSO);
+        void UpdatePaymentData(PaymentSO paymentSO);
+        void UpdateDeliveryData(DeliverySO deliverySO);
+        void UpdateAboutData(AboutSO aboutSO);
     }
 }
