@@ -39,7 +39,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryService.GetById(categoryId),
+                Category = categoryService.GetByIdAsync(categoryId).Result,
                 Description = description,
                 Price = price,
             };
@@ -65,7 +65,7 @@ namespace Store.Web.Controllers
             {
                 Id = productId,
                 Title = title,
-                Category = categoryService.GetById(categoryId),
+                Category = categoryService.GetByIdAsync(categoryId).Result,
                 Description = description,
                 Price = price,
             };
@@ -81,7 +81,7 @@ namespace Store.Web.Controllers
             ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductEdit";
 
-            var model = productService.GetById(productId);
+            var model = productService.GetByIdAsync(productId);
 
             return View("Product", model);
         }

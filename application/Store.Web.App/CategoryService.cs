@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Store.Web.App
 {
@@ -12,9 +13,9 @@ namespace Store.Web.App
             this.categoryRepository = categoryRepository;
         }
 
-        public CategoryModel GetById(int id)
+        public async Task<CategoryModel> GetByIdAsync(int id)
         {
-            var category = categoryRepository.GetCategoryById(id);
+            var category = await categoryRepository.GetCategoryByIdAsync(id);
 
             return Map(category);
         }

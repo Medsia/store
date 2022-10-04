@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.Web.App;
+using System.Threading.Tasks;
 
 namespace Store.Web.Controllers
 {
@@ -11,9 +12,9 @@ namespace Store.Web.Controllers
         {
             this.productService = productService;
         }
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int id)
         {
-            var model = productService.GetById(id);
+            var model = await productService.GetByIdAsync(id);
             return View(model);
         }
     }

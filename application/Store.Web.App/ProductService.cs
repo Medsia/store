@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Store.Web.App
 {
@@ -14,24 +15,24 @@ namespace Store.Web.App
             this.categoryService = categoryService;
         }
 
-        public ProductModel GetById(int id)
+        public async Task<ProductModel> GetByIdAsync(int id)
         {
-            var product = productRepository.GetById(id);
+            var product = await productRepository.GetByIdAsync(id);
 
             return Map(product);
         }
 
-        public IReadOnlyCollection<ProductModel> GetAllByQuery(string query)
+        public async Task<IReadOnlyCollection<ProductModel>> GetAllByQueryAsync(string query)
         {
-            var products = productRepository.GetAllByTitle(query);
-
+            var products = await productRepository.GetAllByTitleAsync(query);                 
+                      
             return products.Select(Map)
                         .ToArray();
         }
 
-        public IReadOnlyCollection<ProductModel> GetAllByQuery(int categoryId)
+        public async Task<IReadOnlyCollection<ProductModel>> GetAllByQueryAsync(int categoryId)
         {
-            var products = productRepository.GetAllByCategoryId(categoryId);
+            var products = await productRepository.GetAllByCategoryIdAsync(categoryId);
 
             return products.Select(Map)
                         .ToArray();
@@ -51,7 +52,7 @@ namespace Store.Web.App
             {
                 Id = product.Id,
                 Title = product.Title,
-                Category = categoryService.GetById(product.CategoryId),
+                Category = categoryService.GetByIdAsync(product.CategoryId).Result,
                 Description = product.Description,
                 Price = product.Price,
             };

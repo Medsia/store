@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,47 +14,52 @@ namespace Store.Data.EF
         {
             this.dbContextFactory = dbContextFactory;
         }
-        public IEnumerable<Product> GetAllByCategoryId(int categoryId)
+        public async Task<IEnumerable<Product>> GetAllByCategoryIdAsync(int categoryId)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            return dbContext.Products
-                            .Where(product => product.CategoryId == categoryId)
-                            .AsEnumerable()
-                            .Select(Product.Mapper.Map)
-                            .ToArray();
+            var dtos = await dbContext.Products
+                                      .Where(product => product.CategoryId == categoryId)
+                                      .ToArrayAsync();
+
+
+            return dtos.Select(Product.Mapper.Map)
+                       .ToArray();
         }
 
-        public IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds)
+        public async Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<int> productIds)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            return dbContext.Products
-                            .Where(product => productIds.Contains(product.Id))
-                            .AsEnumerable()
-                            .Select(Product.Mapper.Map)
-                            .ToArray();
+            var dtos = await dbContext.Products
+                                      .Where(product => productIds.Contains(product.Id))
+                                      .ToArrayAsync();
+
+            return dtos.Select(Product.Mapper.Map)
+                       .ToArray();
         }
 
-        public IEnumerable<Product> GetAllByTitle(string titlePart)
+        public async Task<IEnumerable<Product>> GetAllByTitleAsync(string titlePart)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
             var parameter = new SqlParameter("@titlePart", titlePart);
-            return dbContext.Products
+
+            var dtos = await dbContext.Products
                             .FromSqlRaw("SELECT * FROM Products WHERE CONTAINS((Title), @titlePart)",
                                         parameter)
-                            .AsEnumerable()
-                            .Select(Product.Mapper.Map)
-                            .ToArray();
+                            .ToArrayAsync();
+
+            return dtos.Select(Product.Mapper.Map)
+                       .ToArray();
         }
 
-        public Product GetById(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));
 
-            var dto = dbContext.Products
-                               .Single(product => product.Id == id);
+            var dto = await dbContext.Products
+                               .SingleAsync(product => product.Id == id);
 
             return Product.Mapper.Map(dto);
         }
