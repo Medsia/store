@@ -50,7 +50,7 @@ namespace Store.Web.App
 
         public void DeleteProduct(int productId)
         {
-            ProductDto productDto = Product.Mapper.Map(productRepository.GetById(productId));
+            ProductDto productDto = Product.Mapper.Map(productRepository.GetByIdAsync(productId).Result);
             productRepository.DeleteItem(productDto);
         }
 
@@ -67,7 +67,7 @@ namespace Store.Web.App
 
         public void ResetCategoryIdInProducts(int categoryId)
         {
-            var productsToEdit = productRepository.GetAllByCategoryId(categoryId);
+            var productsToEdit = productRepository.GetAllByCategoryIdAsync(categoryId).Result;
 
             foreach (var product in productsToEdit)
             {
@@ -82,7 +82,7 @@ namespace Store.Web.App
         {
             ResetCategoryIdInProducts(id);
 
-            CategoryDto categoryDto = Category.Mapper.Map(categoryRepository.GetCategoryById(id));
+            CategoryDto categoryDto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(id).Result);
             categoryRepository.DeleteItem(categoryDto);
         }
 

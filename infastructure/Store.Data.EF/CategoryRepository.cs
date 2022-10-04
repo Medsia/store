@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,12 +25,12 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
-        public Category GetCategoryById(int id)
+        public async Task<Category> GetCategoryByIdAsync(int id)
         {
             var dbContext = dbContextFactory.Create(typeof(CategoryRepository));
 
-            var dto = dbContext.Categories
-                               .Single(category => category.Id == id);
+            var dto = await dbContext.Categories
+                               .SingleAsync(category => category.Id == id);
 
             return Category.Mapper.Map(dto);
         }

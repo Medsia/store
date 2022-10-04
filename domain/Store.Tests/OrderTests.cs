@@ -1,9 +1,4 @@
 ﻿using Store.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Store.Tests
@@ -45,10 +40,10 @@ namespace Store.Tests
 
         private static Order CreateTestOrder()
         {
-            
+
             return new Order(new OrderDto
             {
-                
+
                 Id = 1,
                 Items = new[]
                 {

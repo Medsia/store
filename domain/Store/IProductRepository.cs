@@ -9,10 +9,10 @@ namespace Store
 {
     public interface IProductRepository
     {
-        IEnumerable<Product> GetAllByTitle(string titlePart);
-        IEnumerable<Product> GetAllByCategoryId(int categoryId);
-        Product GetById(int id);
-        IEnumerable<Product> GetAllByIds(IEnumerable<int> productIds);
+        Task <IEnumerable<Product>> GetAllByTitleAsync(string titlePart);
+        Task <IEnumerable<Product>> GetAllByCategoryIdAsync(int categoryId);
+        Task<Product> GetByIdAsync(int id);
+        Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();
         void AddNewItem(ProductDto item);
         void EditExistingItem(ProductDto item);
