@@ -162,5 +162,10 @@ namespace Store.Web.Controllers
 
             return View("Finish", model);
         }
+
+        public ViewResult OrderConfirmation(ShippingDetails shippingDetails)
+        {
+            return View(new ShippingDetails());
+        }
     }
 }
