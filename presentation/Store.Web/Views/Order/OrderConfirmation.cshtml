@@ -5,9 +5,6 @@
 
 @model Store.ShippingDetails
 
-@{
-    ViewBag.Title = "GameStore: форма заказа";
-}
 
 <h2>Оформить заказ сейчас</h2>
 <p>Пожалуйста введи ваши контактные данные, и мы сразу отправим товар!</p>
@@ -40,10 +37,14 @@
             Использовать подарочную упаковку?
         </label>
     </div>
-    <form action="@Url.Action(nameof(OrderController.ConfirmCellPhone))" method="post">
-            <button type="submit" class="btn btn-success">Оформить заказ</button>
-        </form>
+
+
+    <button href="@Url.Action("ConfirmationCode", "Order")" type="submit" class="btn btn-success">Оформить заказ</button>
     <div class="text-center">
         <input class="btn btn-primary" type="submit" value="Обработать заказ" />
     </div>
+    @*<div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Обработать заказ" />
+        </div>*@
+
 }

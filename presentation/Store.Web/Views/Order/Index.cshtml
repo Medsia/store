@@ -59,9 +59,15 @@
         <button type="submit" class="btn btn-success">Отправить код</button>
     </form>*@
 @*<form action="@Url.Action(nameof(OrderController.ConfirmCellPhone))" method="post">
+        <button type="submit" class="btn btn-success">Оформить заказ</button>
+    </form>*@
+@*<div class="text-center">
+   
+    @Html.ActionLink("Оформить заказ", "OrderConfirmation", null, new { @class = "btn btn-primary" })
+</div>*@
+<form action="@Url.Action(nameof(OrderController.OrderConfirmation))" method="post">
     <button type="submit" class="btn btn-success">Оформить заказ</button>
-</form>*@
-<div class="text-center">
-    
-    @Html.ActionLink("Оформить заказ", "OrderConfirmation", new { @class = "btn btn-primary" })
-</div>
+</form>
+@*<form action="@Url.Action(nameof(OrderController.OrderConfirmation))" method="post">
+        <button type="submit" class="btn btn-success">Оформить заказ</button>
+    </form>*@
