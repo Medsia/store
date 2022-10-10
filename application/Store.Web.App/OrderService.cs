@@ -227,6 +227,7 @@ namespace Store.Web.App
                 order.CellPhone = cellPhone;
                 await orderRepository.UpdateAsync(order);
 
+                Session.Remove(confirmationCode.ToString());
                 Session.Remove(cellPhone);
 
                 return await MapAsync(order);

@@ -175,20 +175,15 @@ namespace Store.Web.Controllers
         }
 
        [HttpPost]
-        public ViewResult OrderConfirmation(ShippingDetails shippingDetails)
+        public async Task<ViewResult> OrderConfirmation(ShippingDetails shippingDetails)
         {
+            var (hasValue, model) = await orderService.TryGetModelAsync();
+            
             if (ModelState.IsValid)
             {                            
-                return View("ConfirmationCode");
+                return View("ConfirmationCode", model);
             }
-            //return View("Index");
-            //orderService.SetPaymentAsync(order, shippingDetails)
-            //notificationService.StartProcessAsync(order, shippingDetails);
-
-            //return View("Finish");
-
-            //notificationService.StartProcessAsync(order, shippingInfo);
-            //return View(shippingDetails);
+            
             else
             {
                 return View(shippingDetails);
