@@ -8,6 +8,7 @@ using Store.Web.Contractors;
 using Store.Web.App;
 using System;
 using System.Threading.Tasks;
+using Store.Messages;
 
 namespace Store.Web.Controllers
 {
@@ -61,7 +62,17 @@ namespace Store.Web.Controllers
 
             return View("Index", model);
         }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmationCode()
+        {
 
+            var (hasValue, model) = await orderService.TryGetModelAsync();
+            if (hasValue)
+                return View("ConfirmationCode", model);
+
+            return View("Empty");
+           
+        }
         [HttpPost]
         public async Task<IActionResult> SendConfirmation(string cellPhone)
         {
@@ -164,6 +175,22 @@ namespace Store.Web.Controllers
             var model = await orderService.SetPaymentAsync(payment);
 
             return View("Finish", model);
+        }
+
+       [HttpPost]
+        public async Task<ViewResult> OrderConfirmation(ShippingDetails shippingDetails)
+        {
+            var (hasValue, model) = await orderService.TryGetModelAsync();
+            
+            if (ModelState.IsValid)
+            {                            
+                return View("ConfirmationCode", model);
+            }
+            
+            else
+            {
+                return View(shippingDetails);
+            }
         }
     }
 }

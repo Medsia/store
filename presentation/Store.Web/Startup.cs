@@ -40,6 +40,7 @@ namespace Store.Web
 
             services.AddEfRepositories(Configuration.GetConnectionString("Store"));
             services.AddDataRepositories();
+            //services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
             services.AddSingleton<IPaymentService, CashPaymentService>();

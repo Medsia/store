@@ -2,6 +2,8 @@
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+
 
 namespace Store.Messages
 {
@@ -19,8 +21,10 @@ namespace Store.Messages
             return Task.CompletedTask;
         }
 
-        public void StartProcess(Order order)
+        public void StartProcess(Order order, ShippingDetails shippingInfo)
         {
+            
+            //    smtpClient.Send(mailMessage);
             //using (var client = new SmtpClient())
             //{
             //    var message = new MailMessage("from@at.my.domain", "to@at.my.domain");
@@ -39,10 +43,11 @@ namespace Store.Messages
             Debug.WriteLine("Order ID {0}", order.Id);
             Debug.WriteLine("Delivery: {0}", (object)order.Delivery.Description);
             Debug.WriteLine("Payment: {0}", (object)order.Payment.Description);
+
         }
-        public Task StartProcessAsync(Order order)
+        public Task StartProcessAsync(Order order, ShippingDetails shippingInfo)
         {
-            StartProcess(order);
+            StartProcess(order,  shippingInfo);
 
             return Task.CompletedTask;
         }

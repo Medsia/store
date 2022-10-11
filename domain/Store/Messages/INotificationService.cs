@@ -8,8 +8,8 @@ namespace Store.Messages
 
         Task SendConfirmationCodeAsync(string cellPhone, int code);
 
-        void StartProcess(Order order);
+        void StartProcess(Order order, ShippingDetails shippingInfo);
 
-        Task StartProcessAsync(Order order);
+        Task StartProcessAsync(Order order, ShippingDetails shippingInfo);
     }
 }
