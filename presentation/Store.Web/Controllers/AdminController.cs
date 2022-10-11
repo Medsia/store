@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Store.Web.Controllers
 {
@@ -81,7 +83,7 @@ namespace Store.Web.Controllers
             ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductEdit";
 
-            var model = productService.GetByIdAsync(productId);
+            var model = productService.GetByIdAsync(productId).Result;
 
             return View("Product", model);
         }
@@ -160,28 +162,34 @@ namespace Store.Web.Controllers
             }
         }
 
-        public IActionResult ContactsEdit(string location, string worktime, string[] numbers, string additional)
+        public IActionResult InfoEdited()
         {
-            // В ПРОЦЕССЕ
+            TempData["message"] = string.Format("Изменения сохранены");
             return View("InfoList");
         }
 
-        public IActionResult PaymentEdit(string[] options, string additional)
+        public IActionResult ContactsEdit(string title, string location, string worktime, List<string> numbers, string additional)
         {
-            // В ПРОЦЕССЕ
-            return View("InfoList");
+            adminControlService.EditContacts(title, location, worktime, numbers, additional);
+            return RedirectToAction("InfoEdited");
         }
 
-        public IActionResult DeliveryEdit(string[] options, string additional)
+        public IActionResult PaymentEdit(string title, List<string> options, string additional)
         {
-            // В ПРОЦЕССЕ
-            return View("InfoList");
+            adminControlService.EditPayment(title, options, additional);
+            return RedirectToAction("InfoEdited");
         }
 
-        public IActionResult AboutEdit(string description)
+        public IActionResult DeliveryEdit(string title, List<string> options, string additional)
         {
-            // В ПРОЦЕССЕ
-            return View("InfoList");
+            adminControlService.EditDelivery(title, options, additional);
+            return RedirectToAction("InfoEdited");
+        }
+
+        public IActionResult AboutEdit(string title, string description)
+        {
+            adminControlService.EditAbout(title, description);
+            return RedirectToAction("InfoEdited");
         }
 
 

@@ -34,21 +34,6 @@ namespace Store.Web.App
         }
 
 
-        public void EditContacts()
-        {
-            // В ПРОЦЕССЕ
-        }
-        public void EditPayment()
-        {
-            // В ПРОЦЕССЕ
-        }
-        public void EditDelivery()
-        {
-            // В ПРОЦЕССЕ
-        }
-        public void EditAbout()
-        {
-            // В ПРОЦЕССЕ
-        }
+        
     }
 }
