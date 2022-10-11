@@ -5,30 +5,43 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("ContactsEdit", "Admin")" method="post">
-    
-    @*
-        нужен способ вернуть в контроллер массив строк сделанный из этого \/
-    *@
-    <div>
-        <label class="">Способы доставки</label>
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("DeliveryEdit", "Admin")" method="post">
+    <input type="hidden" name="title" value="@Model.Title"/>
+
+    <div class="my-4" id="optionsList">
+        <label class="text-info editor-label">Способы доставки</label>
         @foreach(var item in Model.Options)
         {
-            <input class="" type="text" name="options" value="@item"/>
+            <input class="form-control form-text" type="text" id="options" name="options" value="@item" maxlength="100"/>
         }
     </div>
-    @*
-        ----------------------------------------------------------------------
-    *@
 
-
-    <div>
-        <label class="">Дополнительная информация</label>
-        <textarea class="" rows="10" cols="20" name="additional">@Model.Additional</textarea>
+    <div class="my-2">
+        <button class="btn btn-outline-info" type="button" id="btnAddField" onclick="AddNewField()">Добавить поле</button>
     </div>
 
-    <div>
-        <button class="" type="submit">Сохранить</button>
-        <a class="" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
+    <div class="my-4">
+        <label class="text-info editor-label">Дополнительная информация</label>
+        <textarea class="form-control form-text" rows="10" cols="20" name="additional">@Model.Additional</textarea>
+    </div>
+
+    <div class="my-4">
+        <button class="btn btn-success" type="submit">Сохранить</button>
+        <a class="nav-link" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
     </div>
 </form>
+
+
+<script type="text/javascript">
+    
+    function AddNewField() {
+        let containerId = 'optionsList'
+        let divElem = document.getElementById(containerId);
+
+        if (divElem.childElementCount < 10) {
+            var $optionsList = $('#optionsList');
+            $('<input class="form-control form-text" type="text" id="options" name="options" value="" maxlength="100"/>').appendTo($optionsList);
+        }
+    }
+
+</script>

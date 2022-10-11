@@ -67,6 +67,9 @@ namespace Store.Web.Controllers
         {
             var model = await orderService.SendConfirmationAsync(cellPhone);
 
+            if (model.Errors.Count > 0)
+                return View("Index", model);
+
             return View("Confirmation", model);
         }
 

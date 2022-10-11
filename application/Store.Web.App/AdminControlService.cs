@@ -1,4 +1,6 @@
 ﻿using Store.Data;
+using Store.Data.Content;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Store.Web.App
@@ -87,10 +89,49 @@ namespace Store.Web.App
         }
 
 
-        // В ПРОЦЕССЕ
-        public void EditInfo(int id)
+        public void EditContacts(string title, string location, string worktime, List<string> numbers, string additional)
         {
-            //infoRepository.EditData(id);
+            ContactsSO contactsSO = new ContactsSO
+            {
+                Title = title,
+                Location = location,
+                Worktime = worktime,
+                Numbers = numbers.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
+                Additional = additional
+            };
+            infoRepository.UpdateContactsData(contactsSO);
+        }
+
+        public void EditPayment(string title, List<string> options, string additional)
+        {
+            PaymentSO paymentSO = new PaymentSO
+            {
+                Title = title,
+                Options = options.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
+                Additional = additional
+            };
+            infoRepository.UpdatePaymentData(paymentSO);
+        }
+
+        public void EditDelivery(string title, List<string> options, string additional)
+        {
+            DeliverySO deliverySO = new DeliverySO
+            {
+                Title = title,
+                Options = options.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
+                Additional = additional
+            };
+            infoRepository.UpdateDeliveryData(deliverySO);
+        }
+
+        public void EditAbout(string title, string description)
+        {
+            AboutSO aboutSO = new AboutSO
+            {
+                Title = title,
+                Description = description
+            };
+            infoRepository.UpdateAboutData(aboutSO);
         }
     }
 }

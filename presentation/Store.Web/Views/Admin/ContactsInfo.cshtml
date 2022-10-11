@@ -5,39 +5,53 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("ContactsEdit", "Admin")" method="post">
-    <div>
-        <label class="">Адрес</label>
-        <input class="" type="text" name="location" value="@Model.Location"/>
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("ContactsEdit", "Admin")" method="post">
+    <input type="hidden" name="title" value="@Model.Title"/>
+
+    <div class="my-4">
+        <label class="text-info editor-label">Адрес</label>
+        <input class="form-control form-text" type="text" name="location" value="@Model.Location" maxlength="100"/>
     </div>
 
-    <div>
-        <label class="">Время работы</label>
-        <input class="" type="text" name="worktime" value="@Model.Worktime"/>
+    <div class="my-4">
+        <label class="text-info editor-label">Время работы</label>
+        <input class="form-control form-text" type="text" name="worktime" value="@Model.Worktime" maxlength="100"/>
     </div>
 
-    @*
-        нужен способ вернуть в контроллер массив строк сделанный из этого \/
-    *@
-    <div>
-        <label class="">Телефон</label>
+    <div class="my-4" id="numbersList">
+        <label class="text-info editor-label">Телефон</label>
         @foreach(var item in Model.Numbers)
         {
-            <input class="" type="text" name="numbers" value="@item"/>
+            <input class="form-control form-text" type="text" id="numbers" name="numbers" value="@item" maxlength="100"/>
         }
     </div>
-    @*
-        ----------------------------------------------------------------------
-    *@
 
-
-    <div>
-        <label class="">Дополнительная информация</label>
-        <textarea class="" rows="10" cols="20" name="additional">@Model.Additional</textarea>
+    <div class="my-2">
+        <button class="btn btn-outline-info" type="button" id="btnAddField" onclick="AddNewField()">Добавить поле</button>
     </div>
 
-    <div>
-        <button class="" type="submit">Сохранить</button>
-        <a class="" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
+    <div class="my-4">
+        <label class="text-info editor-label">Дополнительная информация</label>
+        <textarea class="form-control form-text" rows="10" cols="20" name="additional">@Model.Additional</textarea>
+    </div>
+
+    <div class="my-4">
+        <button class="btn btn-success" type="submit">Сохранить</button>
+        <a class="nav-link" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
     </div>
 </form>
+
+
+<script type="text/javascript">
+    
+    function AddNewField() {
+        let containerId = 'numbersList'
+        let divElem = document.getElementById(containerId);
+
+        if (divElem.childElementCount < 10) {
+            var $numbersList = $('#numbersList');
+            $('<input class="form-control form-text" type="text" id="numbers" name="numbers" value="" maxlength="100"/>').appendTo($numbersList);
+        }
+    }
+
+</script>
