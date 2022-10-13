@@ -45,7 +45,7 @@ namespace Store.Web
                         options =>
                             {
                                 options.LoginPath = new PathString("/Auth/Login");
-                                options.ExpireTimeSpan = System.TimeSpan.FromHours(12.0);
+                                options.ExpireTimeSpan = System.TimeSpan.FromMinutes(10.0);
                             }
                     );
 

@@ -11,11 +11,11 @@ namespace Store.Web.Controllers
 {
     public class AuthController : Controller
     {
-        private AuthService authServise;
+        private AuthService authService;
 
         public AuthController(AuthService authServise)
         {
-            this.authServise = authServise;
+            this.authService = authServise;
         }
          
         public IActionResult Login()
@@ -26,9 +26,10 @@ namespace Store.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginValidation(string login, string password)
         {
+            login = login.Trim();
             if(!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
             {
-                var userIsCorrect = await authServise.UserIsCorrect(login, password);
+                var userIsCorrect = await authService.UserIsCorrect(login, password);
                 if (userIsCorrect)
                 {
                     await Authenticate(login);
@@ -38,7 +39,7 @@ namespace Store.Web.Controllers
             return View("Login", login);
         }
 
-        private async Task Authenticate(string login)
+        public async Task Authenticate(string login)
         {
             var claims = new List<Claim>
             {

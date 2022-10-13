@@ -7,16 +7,20 @@ namespace Store.Web.App
 {
     public class AdminControlService
     {
+        private readonly int resetId = 1;
+
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IInfoRepository infoRepository;
-        private readonly int resetId = 1;
+        private readonly IUserRepository userRepository;
 
-        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, IInfoRepository infoRepository)
+        public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
+                                    IInfoRepository infoRepository, IUserRepository userRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.infoRepository = infoRepository;
+            this.userRepository = userRepository;
         }
 
         private ProductDto Map(ProductModel productModel)
@@ -132,6 +136,17 @@ namespace Store.Web.App
                 Description = description
             };
             infoRepository.UpdateAboutData(aboutSO);
+        }
+
+
+        public void ChangePassword(string login, string newPassword)
+        {
+            User user = userRepository.GetUserOrDedaultAsync(login).Result;
+
+            UserDto userDto = User.Mapper.Map(user);
+            userDto.Password = PasswordHasher.Hash(newPassword);
+
+            userRepository.EditUser(userDto);
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Store.Web.Controllers
@@ -14,14 +17,16 @@ namespace Store.Web.Controllers
         private readonly AdminControlService adminControlService;
         private readonly CategoryService categoryService;
         private readonly ContentService contentService;
+        private readonly AuthService authService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService, ContentService contentService)
+                                CategoryService categoryService, ContentService contentService, AuthService authService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
             this.contentService = contentService;
+            this.authService = authService;
         }
 
         public IActionResult Index()
@@ -170,24 +175,28 @@ namespace Store.Web.Controllers
             return View("InfoList");
         }
 
+        [HttpPost]
         public IActionResult ContactsEdit(string title, string location, string worktime, List<string> numbers, string additional)
         {
             adminControlService.EditContacts(title, location, worktime, numbers, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult PaymentEdit(string title, List<string> options, string additional)
         {
             adminControlService.EditPayment(title, options, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult DeliveryEdit(string title, List<string> options, string additional)
         {
             adminControlService.EditDelivery(title, options, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult AboutEdit(string title, string description)
         {
             adminControlService.EditAbout(title, description);
@@ -195,14 +204,54 @@ namespace Store.Web.Controllers
         }
 
 
+        private string GetLogin()
+        {
+            return User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value;
+        }
+
         public IActionResult AccountManagement()
         {
-            return View();
+            if (GetLogin() == "master")
+                return View();
+
+            return RedirectToAction("Index");
         }
+
+        //[HttpPost]
+        //public IActionResult ManagementOptions()
+        //{
+        //    return View();
+        //}
+
+
 
         public IActionResult Security()
         {
+            if (GetLogin() == "master")
+                return RedirectToAction("Index");
+
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePass(string oldPassword, string newPassword)
+        {
+            string login = GetLogin();
+
+            if (!string.IsNullOrWhiteSpace(oldPassword) && !string.IsNullOrWhiteSpace(newPassword))
+            {
+                var userIsCorrect = await authService.UserIsCorrect(login, oldPassword);
+                if (userIsCorrect)
+                {
+                    adminControlService.ChangePassword(login, newPassword);
+
+                    TempData["message"] = string.Format("Изменения сохранены");
+                }
+                else TempData["warn"] = string.Format("Не правильный пароль!");
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            return View("Security");
         }
     }
 }

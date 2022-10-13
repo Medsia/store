@@ -1,9 +1,25 @@
 ﻿
 @{
-    ViewData["Title"] = "Security";
+    ViewData["Title"] = "Безопасность";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Security</h1>
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("ChangePass", "Admin")" method="post">
+    <div class="panel-heading ml-auto mt-auto">
+        <h4>Смена пароля</h4>
+    </div>
 
-<p>not implemented</p>
+    <div class="my-4">
+        <label class="text-info security-label">Старый пароль:</label>
+        <input class="form-control form-text col-4" type="password" name="oldPassword" maxlength="30"/>
+    </div>
+
+    <div class="my-4">
+        <label class="text-info security-label">Новый пароль:</label>
+        <input class="form-control form-text col-4" type="password" name="newPassword" maxlength="30"/>
+    </div>
+
+    <div class="my-4">
+        <button class="btn btn-success" type="submit">Сохранить</button>
+    </div>
+</form>

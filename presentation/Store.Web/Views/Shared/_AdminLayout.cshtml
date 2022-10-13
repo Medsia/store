@@ -14,44 +14,52 @@
     </header>
 
     <div class="dropdown-menu-left sidebar admin-menu-list p-0 m-0 w-100">
-        <span class="d-block admin-menu-item">
+        <span class="d-block admin-menu-item my-2">
             <a href="@Url.Action("Index", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Текущие заказы</span>
             </a>
         </span>
-        <span class="d-block admin-menu-item">
+        <span class="d-block admin-menu-item my-2">
             <a href="@Url.Action("ProductList", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Товары</span>
             </a>
         </span>
-        <span class="d-block admin-menu-item">
+        <span class="d-block admin-menu-item my-2">
             <a href="@Url.Action("Category", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Категории</span>
             </a>
         </span>
 
-        <span class="d-block admin-menu-title">
+        <span class="d-block admin-menu-title my-2">
             <a href="@Url.Action("InfoList", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Инфо страницы</span>
             </a>
         </span>
 
-        <span class="d-block admin-menu-item">
+
+        @if (User.HasClaim(System.Security.Claims.ClaimsIdentity.DefaultNameClaimType, "master"))
+        {
+            <span class="d-block admin-menu-item my-2">
             <a href="@Url.Action("AccountManagement", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Аккаунты</span>
             </a>
-        </span>
-        <span class="d-block admin-menu-item">
-            <a href="@Url.Action("Security", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Доступ</span>
-            </a>
-        </span>
+            </span>
+        }
+        else
+        {
+            <span class="d-block admin-menu-item my-2">
+                <a href="@Url.Action("Security", "Admin")">
+                    <span class="col-auto"></span>
+                    <span class="col">Безопасность</span>
+                </a>
+            </span>
+        }
+
     </div>
 
     <div class="container">
@@ -59,6 +67,10 @@
             @if (TempData["message"] != null)
             {
                 <div class="alert alert-success">@TempData["message"]</div>
+            }
+            @if (TempData["warn"] != null)
+            {
+                <div class="alert alert-danger">@TempData["warn"]</div>
             }
             @RenderBody()
         </main>
