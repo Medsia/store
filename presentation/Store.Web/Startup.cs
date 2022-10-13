@@ -10,6 +10,8 @@ using Store.Web.Contractors;
 using Store.Web.App;
 using Store.Data.EF;
 using Store.Content;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Store.Web
 {
@@ -37,6 +39,17 @@ namespace Store.Web
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                        options =>
+                            {
+                                options.LoginPath = new PathString("/Auth/Login");
+                                options.ExpireTimeSpan = System.TimeSpan.FromHours(12.0);
+                            }
+                    );
+
+            services.AddSingleton<AuthService>();
 
             services.AddEfRepositories(Configuration.GetConnectionString("Store"));
             services.AddDataRepositories();
@@ -73,6 +86,7 @@ namespace Store.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSession();

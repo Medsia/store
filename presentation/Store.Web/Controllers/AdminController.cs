@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Store.Web.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly ProductService productService;

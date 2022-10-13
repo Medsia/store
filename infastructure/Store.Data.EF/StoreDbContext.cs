@@ -19,6 +19,8 @@ namespace Store.Data.EF
 
         public DbSet<CategoryDto> Categories { get; set; }
 
+        public DbSet<UserDto> Users { get; set; }
+
         public StoreDbContext(DbContextOptions<StoreDbContext> options) 
             : base(options)
         { }
@@ -29,6 +31,7 @@ namespace Store.Data.EF
             BuildOrders(modelBuilder);
             BuildOrderItems(modelBuilder);
             BuildCategories(modelBuilder);
+            BuildUsers(modelBuilder);
         }
 
         private void BuildOrderItems(ModelBuilder modelBuilder)
@@ -106,6 +109,20 @@ namespace Store.Data.EF
                       .IsRequired();
 
                 action.HasData( TemporaryData.CategoryDtoList );
+            });
+        }
+
+        private void BuildUsers(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserDto>(action =>
+            {
+                action.Property(dto => dto.Login)
+                      .IsRequired();
+
+                action.Property(dto => dto.Password)
+                      .IsRequired();
+
+                action.HasData( TemporaryData.UserDtoList );
             });
         }
     }

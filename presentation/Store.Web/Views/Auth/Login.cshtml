@@ -1,0 +1,37 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+@{
+    string login = "";
+    if (Model != null)
+        login = Model;
+}
+
+<div class="panel ml-auto mb-auto">
+
+    <div class="panel-heading ml-auto mt-auto">
+        <h4>Вход в систему</h4>
+    </div>
+
+    <div class="panel-body">
+        <form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("LoginValidation", "Auth")" method="post">
+
+            <div class="form-group">
+                <label class="text-info login-label">Имя пользователя:</label>
+                <input class="form-control col-4" type="text" maxlength="30" name="login" value="@login"/>
+            </div>
+
+            <div class="form-group">
+                <label class="text-info login-label">Пароль:</label>
+                <input class="form-control col-4" type="password" maxlength="30" name="password"/>
+            </div>
+
+            <button class="btn btn-success" type="submit">Войти</button>
+        </form>
+    </div>
+
+</div>
