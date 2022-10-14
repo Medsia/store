@@ -56,6 +56,20 @@ namespace Store.Data.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderItems",
                 columns: table => new
                 {
@@ -82,10 +96,11 @@ namespace Store.Data.EF.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Значки" },
-                    { 2, "Плакаты" },
-                    { 3, "Брелки" },
-                    { 4, "Аксесуары" }
+                    { 1, "Default" },
+                    { 2, "Значки" },
+                    { 3, "Плакаты" },
+                    { 4, "Брелки" },
+                    { 5, "Аксесуары" }
                 });
 
             migrationBuilder.InsertData(
@@ -93,19 +108,24 @@ namespace Store.Data.EF.Migrations
                 columns: new[] { "Id", "CategoryId", "Description", "Price", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, "Материал - металл. Диаметр значка 58 мм", 1.5m, "Значок Тетрадь смерти" },
-                    { 2, 1, "Материал - металл. Диаметр значка 44 мм", 1.2m, "Значок Наруто Шипуден" },
-                    { 3, 1, "Материал - металл. Диаметр значка 58 мм", 1m, "Значок Один кусок" },
-                    { 4, 2, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 4m, "Плакат Ван пис" },
-                    { 5, 2, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 10m, "Плакат БТС" },
-                    { 6, 2, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 1m, "Плакат Геншын Инфаркт" },
-                    { 7, 3, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Тетрадь смерти" },
-                    { 8, 3, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Атака Гигантов" },
-                    { 9, 3, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Девочки Волшебницы" },
-                    { 10, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Кольцо БТС" },
-                    { 11, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Браслет Кросс Фаер)" },
-                    { 12, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Очки \"Как у Двачера\"" }
+                    { 11, 5, "Размер: 4х5.5 см. Материал: PVC", 2m, "Браслет Кросс Фаер)" },
+                    { 10, 5, "Размер: 4х5.5 см. Материал: PVC", 2m, "Кольцо БТС" },
+                    { 9, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Девочки Волшебницы" },
+                    { 8, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Атака Гигантов" },
+                    { 7, 4, "Размер: 4х5.5 см. Материал: PVC", 2m, "Брелок Тетрадь смерти" },
+                    { 4, 3, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 4m, "Плакат Ван пис" },
+                    { 5, 3, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 10m, "Плакат БТС" },
+                    { 12, 5, "Размер: 4х5.5 см. Материал: PVC", 2m, "Очки \"Как у Двачера\"" },
+                    { 3, 2, "Материал - металл. Диаметр значка 58 мм", 1m, "Значок Один кусок" },
+                    { 2, 2, "Материал - металл. Диаметр значка 44 мм", 1.2m, "Значок Наруто Шипуден" },
+                    { 1, 2, "Материал - металл. Диаметр значка 58 мм", 1.5m, "Значок Тетрадь смерти" },
+                    { 6, 3, "Формат А3(29,7см х42 см). плотность бумаги 150гр", 1m, "Плакат Геншын Инфаркт" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Login", "Password" },
+                values: new object[] { 1, "admin", "$MYHASH$V1$10000$iSZbCJtBHeAXae7+tfKFjYMBn+ZhygDcDdytZ+e2uSm47Y5C" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrderId",
@@ -123,6 +143,9 @@ namespace Store.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Orders");

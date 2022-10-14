@@ -1,25 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Store.Web.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly ProductService productService;
         private readonly AdminControlService adminControlService;
         private readonly CategoryService categoryService;
         private readonly ContentService contentService;
+        private readonly AuthService authService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService, ContentService contentService)
+                                CategoryService categoryService, ContentService contentService, AuthService authService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
             this.contentService = contentService;
+            this.authService = authService;
         }
 
         public IActionResult Index()
@@ -168,24 +175,28 @@ namespace Store.Web.Controllers
             return View("InfoList");
         }
 
+        [HttpPost]
         public IActionResult ContactsEdit(string title, string location, string worktime, List<string> numbers, string additional)
         {
             adminControlService.EditContacts(title, location, worktime, numbers, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult PaymentEdit(string title, List<string> options, string additional)
         {
             adminControlService.EditPayment(title, options, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult DeliveryEdit(string title, List<string> options, string additional)
         {
             adminControlService.EditDelivery(title, options, additional);
             return RedirectToAction("InfoEdited");
         }
 
+        [HttpPost]
         public IActionResult AboutEdit(string title, string description)
         {
             adminControlService.EditAbout(title, description);
@@ -193,14 +204,107 @@ namespace Store.Web.Controllers
         }
 
 
-        public IActionResult AccountManagement()
+        private string GetLogin()
         {
-            return View();
+            return User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value;
         }
+        private bool IsMaster()
+        {
+            if (GetLogin() == "master")
+                return true;
+
+            return false;
+        }
+
 
         public IActionResult Security()
         {
+            if (IsMaster())
+                return RedirectToAction("Index");
+
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePass(string oldPassword, string newPassword)
+        {
+            string login = GetLogin();
+
+            if (!string.IsNullOrWhiteSpace(oldPassword) && !string.IsNullOrWhiteSpace(newPassword))
+            {
+                var userIsCorrect = await authService.UserIsCorrect(login, oldPassword);
+                if (userIsCorrect)
+                {
+                    adminControlService.ChangePassword(login, newPassword);
+
+                    TempData["message"] = string.Format("Изменения сохранены");
+                }
+                else TempData["warn"] = string.Format("Не правильный пароль!");
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            return View("Security");
+        }
+
+
+        public IActionResult AccountManagement()
+        {
+            if (IsMaster())
+            {
+                var model = authService.GetAllAccounts();
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult AccountAdd(string login, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+            {
+                adminControlService.CreateAccount(login, password);
+
+                TempData["message"] = string.Format("Аккаунт добавлен -> " + login);
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
+        }
+
+        [HttpPost]
+        public IActionResult AccountEdit(string login, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+            {
+                adminControlService.ChangePassword(login, password);
+
+                TempData["message"] = string.Format("Изменения сохранены -> " + login);
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
+        }
+
+        [HttpPost]
+        public IActionResult AccountDelete(string login, string confirmation)
+        {
+            if (confirmation == login)
+            {
+                if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(confirmation))
+                {
+                    adminControlService.DeleteAccount(login);
+
+                    TempData["message"] = string.Format("Удалено -> " + login);
+                }
+                else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+            }
+            else TempData["warn"] = string.Format("Ошибка подтверждения!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
         }
     }
 }

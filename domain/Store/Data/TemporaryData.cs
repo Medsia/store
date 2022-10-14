@@ -129,5 +129,15 @@ namespace Store.Data
                 "Материал: PVC",
                 Price = 2m }
         };
+
+        public static List<UserDto> UserDtoList = new List<UserDto>
+        {
+            new UserDto
+            {
+                Id = 1,
+                Login = "admin",
+                Password = "$MYHASH$V1$10000$iSZbCJtBHeAXae7+tfKFjYMBn+ZhygDcDdytZ+e2uSm47Y5C"
+            }
+        };
     }
 }

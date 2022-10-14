@@ -26,6 +26,7 @@ namespace Store.Data.EF
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
 
             return services;
         }

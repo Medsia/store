@@ -22,9 +22,9 @@ namespace Store.Web.App
 
         public IReadOnlyCollection<CategoryModel> GetAll()
         {
-            var category = categoryRepository.GetAllCategories();
+            var categories = categoryRepository.GetAllCategories();
 
-            return category.Select(Map)
+            return categories.Select(Map)
                         .ToArray();
         }
 

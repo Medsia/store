@@ -1,9 +1,47 @@
-﻿
+﻿@model IEnumerable<UserModel>
+
 @{
     ViewData["Title"] = "AccountManagement";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>AccountManagement</h1>
 
-<p>not implemented</p>
+<table class="table account-edit-table">
+    <colgroup>
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 30%;">
+       <col span="1" style="width: 55%;">
+    </colgroup>
+
+
+    @foreach (var item in Model) {
+        @if (item.Id == 1) continue;
+        <tr>
+            <td>
+                <p>@item.Login</p>
+            </td>
+            <td>
+                <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountEdit", "Admin")" method="post">
+                    <input type="hidden" name="login" value="@item.Login"/>
+                    <input class="form-control" type="password" name="password" placeholder="Новый пароль" maxlength="30"/>
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Обновить</button>
+                </form>
+            </td>
+            <td>
+                <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountDelete", "Admin")" method="post">
+                    <input type="hidden" name="login" value="@item.Login"/>
+                    <input class="form-control ml-auto mr-auto col-7" type="text" name="confirmation" placeholder="Повторите логин для подтверждения" maxlength="30"/>
+                    <button class="btn btn-outline-danger ml-auto mr-auto" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+    <tr>
+        <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountAdd", "Admin")" method="post">
+             <td><input class="form-control" type="text" name="login" placeholder="Логин" maxlength="30"/></td>
+             <td><input class="form-control" type="password" name="password" placeholder="Пароль" maxlength="30"/></td>
+             <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
+        </form>
+    </tr>
+</table>
+
