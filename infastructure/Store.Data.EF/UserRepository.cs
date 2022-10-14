@@ -15,6 +15,15 @@ namespace Store.Data.EF
             this.dbContextFactory = dbContextFactory;
         }
 
+        public IEnumerable<User> GetAllUsers()
+        {
+            var dbContext = dbContextFactory.Create(typeof(DbContextFactory));
+
+            return dbContext.Users
+                            .AsEnumerable()
+                            .Select(User.Mapper.Map)
+                            .ToArray();
+        }
 
         public async Task<User> GetUserOrDedaultAsync(string login)
         {

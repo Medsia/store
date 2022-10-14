@@ -139,6 +139,21 @@ namespace Store.Web.App
         }
 
 
+        public void CreateAccount(string login, string password)
+        {
+            User user = userRepository.GetUserOrDedaultAsync(login).Result;
+
+            if (user == null)
+            {
+                UserDto userDto = new UserDto
+                {
+                    Login = login,
+                    Password = PasswordHasher.Hash(password)
+                };
+                userRepository.AddUser(userDto);
+            }
+        }
+
         public void ChangePassword(string login, string newPassword)
         {
             User user = userRepository.GetUserOrDedaultAsync(login).Result;
@@ -147,6 +162,15 @@ namespace Store.Web.App
             userDto.Password = PasswordHasher.Hash(newPassword);
 
             userRepository.EditUser(userDto);
+        }
+
+        public void DeleteAccount(string login)
+        {
+            User user = userRepository.GetUserOrDedaultAsync(login).Result;
+
+            UserDto userDto = User.Mapper.Map(user);
+
+            userRepository.DeleteUser(userDto);
         }
     }
 }

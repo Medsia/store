@@ -208,26 +208,18 @@ namespace Store.Web.Controllers
         {
             return User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value;
         }
-
-        public IActionResult AccountManagement()
+        private bool IsMaster()
         {
             if (GetLogin() == "master")
-                return View();
+                return true;
 
-            return RedirectToAction("Index");
+            return false;
         }
-
-        //[HttpPost]
-        //public IActionResult ManagementOptions()
-        //{
-        //    return View();
-        //}
-
 
 
         public IActionResult Security()
         {
-            if (GetLogin() == "master")
+            if (IsMaster())
                 return RedirectToAction("Index");
 
             return View();
@@ -252,6 +244,67 @@ namespace Store.Web.Controllers
             else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
 
             return View("Security");
+        }
+
+
+        public IActionResult AccountManagement()
+        {
+            if (IsMaster())
+            {
+                var model = authService.GetAllAccounts();
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult AccountAdd(string login, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+            {
+                adminControlService.CreateAccount(login, password);
+
+                TempData["message"] = string.Format("Аккаунт добавлен -> " + login);
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
+        }
+
+        [HttpPost]
+        public IActionResult AccountEdit(string login, string password)
+        {
+            if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(password))
+            {
+                adminControlService.ChangePassword(login, password);
+
+                TempData["message"] = string.Format("Изменения сохранены -> " + login);
+            }
+            else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
+        }
+
+        [HttpPost]
+        public IActionResult AccountDelete(string login, string confirmation)
+        {
+            if (confirmation == login)
+            {
+                if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(confirmation))
+                {
+                    adminControlService.DeleteAccount(login);
+
+                    TempData["message"] = string.Format("Удалено -> " + login);
+                }
+                else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
+            }
+            else TempData["warn"] = string.Format("Ошибка подтверждения!");
+
+            var model = authService.GetAllAccounts();
+            return View("AccountManagement", model);
         }
     }
 }

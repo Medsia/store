@@ -23,14 +23,29 @@ namespace Store.Web.App
 
             if (user != null)
             {
-                //var hash = PasswordHasher.Hash(password);
-
                 var result = PasswordHasher.Verify(password, user.Password);
 
                 return result;
             }
 
             return false;
+        }
+
+        public IEnumerable<UserModel> GetAllAccounts()
+        {
+            IEnumerable<User> users = userRepository.GetAllUsers();
+
+            return users.Select(Map)
+                        .ToArray();
+        }
+
+        public UserModel Map (User user)
+        {
+            return new UserModel
+            {
+                Id = user.Id,
+                Login = user.Login
+            };
         }
     }
 }
