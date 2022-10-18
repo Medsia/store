@@ -11,23 +11,28 @@ namespace Store.Data
         {
              new CategoryDto{
                 Id = 1,
-                Name = "Default" },
+                Name = "Default",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 2,
-                Name = "Значки" },
+                Name = "Значки",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 3,
-                Name = "Плакаты" },
+                Name = "Плакаты",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 4,
-                Name = "Брелки" },
+                Name = "Брелки",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 5,
-                Name = "Аксесуары" },
+                Name = "Аксесуары",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
         };
 
@@ -39,7 +44,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[1].Id,
                 Description = "Материал - металл. " +
                 "Диаметр значка 58 мм",
-                Price =  1.5m },
+                Price =  1.5m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 2,
@@ -47,7 +53,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[1].Id,
                 Description = "Материал - металл. " +
                 "Диаметр значка 44 мм",
-                Price = 1.2m },
+                Price = 1.2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 3,
@@ -55,7 +62,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[1].Id,
                 Description = "Материал - металл. " +
                 "Диаметр значка 58 мм",
-                Price = 1m },
+                Price = 1m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 4,
@@ -63,7 +71,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[2].Id,
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
-                Price = 4m },
+                Price = 4m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 5,
@@ -71,7 +80,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[2].Id,
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
-                Price = 10m },
+                Price = 10m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 6,
@@ -79,7 +89,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[2].Id,
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
-                Price = 1m },
+                Price = 1m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 7,
@@ -87,7 +98,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[3].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m },
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 8,
@@ -95,7 +107,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[3].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m },
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 9,
@@ -103,7 +116,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[3].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m },
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 10,
@@ -111,7 +125,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[4].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m },
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 11,
@@ -119,7 +134,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[4].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m },
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
 
             new ProductDto{
                 Id = 12,
@@ -127,7 +143,8 @@ namespace Store.Data
                 CategoryId = CategoryDtoList[4].Id,
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
-                Price = 2m }
+                Price = 2m,
+                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } }
         };
 
         public static List<UserDto> UserDtoList = new List<UserDto>

@@ -10,5 +10,6 @@ namespace Store.Web.App
         public string Description { get; set; }
 
         public decimal Price { get; set; }
+        public string[] ImgLinks { get; set; }
     }
 }

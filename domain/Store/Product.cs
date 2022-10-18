@@ -39,6 +39,12 @@ namespace Store
             set => dto.Price = value;
         }
 
+        public string[] ImgLinks
+        {
+            get => dto.ImgLinks;
+            set => dto.ImgLinks = value;
+        }
+
         internal Product(ProductDto dto)
         {
             this.dto = dto;
@@ -49,7 +55,8 @@ namespace Store
             public static ProductDto Create(int categoryId,
                                          string title,
                                          string description,
-                                         decimal price)
+                                         decimal price,
+                                         string[] imgLinks)
             {           
 
                 if (string.IsNullOrWhiteSpace(title))
@@ -61,6 +68,7 @@ namespace Store
                     Title = title.Trim(),
                     Description = description?.Trim(),
                     Price = price,
+                    ImgLinks = imgLinks
                 };
             }
         }
