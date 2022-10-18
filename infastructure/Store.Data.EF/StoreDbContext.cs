@@ -55,10 +55,19 @@ namespace Store.Data.EF
                       .HasMaxLength(20);
 
                 action.Property(dto => dto.DeliveryUniqueCode)
-                      .HasMaxLength(40);
+                      .HasMaxLength(40);                
 
                 action.Property(dto => dto.DeliveryPrice)
                       .HasColumnType("money");
+
+                action.Property(dto => dto.ShippingUserName)
+                      .HasMaxLength(40);
+                action.Property(dto => dto.ShippingAddress)
+                      .HasMaxLength(40);
+                action.Property(dto => dto.ShippingCity)
+                      .HasMaxLength(40);
+                action.Property(dto => dto.ShippingCountry)
+                      .HasMaxLength(40);
 
                 action.Property(dto => dto.PaymentServiceName)
                       .HasMaxLength(40);

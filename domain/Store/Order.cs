@@ -47,6 +47,27 @@ namespace Store
                                               .ToDictionary(p => p.Key, p => p.Value);
             }
         }
+        public ShippingDetails ShippingDetails
+        {
+            get
+            {               
+                return new ShippingDetails(
+                    dto.ShippingUserName,
+                    dto.ShippingAddress,
+                    dto.ShippingCity,
+                    dto.ShippingCountry);
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentException(nameof(ShippingDetails));
+
+                dto.ShippingUserName = value.UserName;
+                dto.ShippingAddress = value.Address;
+                dto.ShippingCity = value.City;
+                dto.ShippingCountry = value.Country;                                             
+            }
+        }
 
         public OrderPayment Payment
         {

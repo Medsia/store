@@ -9,8 +9,8 @@ using Store.Data.EF;
 namespace Store.Data.EF.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20220929201651_FullTextSearch")]
-    partial class FullTextSearch
+    [Migration("20221018151416_ShippingDetails")]
+    partial class ShippingDetails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,21 +39,26 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Значки"
+                            Name = "Default"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Плакаты"
+                            Name = "Значки"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Брелки"
+                            Name = "Плакаты"
                         },
                         new
                         {
                             Id = 4,
+                            Name = "Брелки"
+                        },
+                        new
+                        {
+                            Id = 5,
                             Name = "Аксесуары"
                         });
                 });
@@ -89,6 +94,22 @@ namespace Store.Data.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentServiceName")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingAddress")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingCity")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingCountry")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingUserName")
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
@@ -151,7 +172,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryId = 1,
+                            CategoryId = 2,
                             Description = "Материал - металл. Диаметр значка 58 мм",
                             Price = 1.5m,
                             Title = "Значок Тетрадь смерти"
@@ -159,7 +180,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 2,
-                            CategoryId = 1,
+                            CategoryId = 2,
                             Description = "Материал - металл. Диаметр значка 44 мм",
                             Price = 1.2m,
                             Title = "Значок Наруто Шипуден"
@@ -167,7 +188,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 3,
-                            CategoryId = 1,
+                            CategoryId = 2,
                             Description = "Материал - металл. Диаметр значка 58 мм",
                             Price = 1m,
                             Title = "Значок Один кусок"
@@ -175,7 +196,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 4,
-                            CategoryId = 2,
+                            CategoryId = 3,
                             Description = "Формат А3(29,7см х42 см). плотность бумаги 150гр",
                             Price = 4m,
                             Title = "Плакат Ван пис"
@@ -183,7 +204,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 5,
-                            CategoryId = 2,
+                            CategoryId = 3,
                             Description = "Формат А3(29,7см х42 см). плотность бумаги 150гр",
                             Price = 10m,
                             Title = "Плакат БТС"
@@ -191,7 +212,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 6,
-                            CategoryId = 2,
+                            CategoryId = 3,
                             Description = "Формат А3(29,7см х42 см). плотность бумаги 150гр",
                             Price = 1m,
                             Title = "Плакат Геншын Инфаркт"
@@ -199,7 +220,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 7,
-                            CategoryId = 3,
+                            CategoryId = 4,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Брелок Тетрадь смерти"
@@ -207,7 +228,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 8,
-                            CategoryId = 3,
+                            CategoryId = 4,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Брелок Атака Гигантов"
@@ -215,7 +236,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 9,
-                            CategoryId = 3,
+                            CategoryId = 4,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Брелок Девочки Волшебницы"
@@ -223,7 +244,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 10,
-                            CategoryId = 4,
+                            CategoryId = 5,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Кольцо БТС"
@@ -231,7 +252,7 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 11,
-                            CategoryId = 4,
+                            CategoryId = 5,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Браслет Кросс Фаер)"
@@ -239,10 +260,38 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 12,
-                            CategoryId = 4,
+                            CategoryId = 5,
                             Description = "Размер: 4х5.5 см. Материал: PVC",
                             Price = 2m,
                             Title = "Очки \"Как у Двачера\""
+                        });
+                });
+
+            modelBuilder.Entity("Store.Data.UserDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Login = "admin",
+                            Password = "$MYHASH$V1$10000$iSZbCJtBHeAXae7+tfKFjYMBn+ZhygDcDdytZ+e2uSm47Y5C"
                         });
                 });
 
