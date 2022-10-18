@@ -235,6 +235,17 @@ namespace Store.Web.App
             
         }
 
+        public async Task <OrderModel> SetShippingDetailsAsync(ShippingDetails shippingDetails)
+        {
+            var order = await GetOrderAsync();
+
+            order.ShippingDetails = shippingDetails;
+
+            await orderRepository.UpdateAsync(order);
+
+            return await MapAsync(order);
+        }
+
         public async Task<OrderModel> SetDeliveryAsync(OrderDelivery delivery)
         {
             var order =  await GetOrderAsync();

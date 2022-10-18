@@ -183,7 +183,8 @@ namespace Store.Web.Controllers
             var (hasValue, model) = await orderService.TryGetModelAsync();
             
             if (ModelState.IsValid)
-            {                            
+            {
+                await orderService.SetShippingDetailsAsync(shippingDetails);
                 return View("ConfirmationCode", model);
             }
             

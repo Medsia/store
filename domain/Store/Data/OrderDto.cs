@@ -18,6 +18,11 @@ namespace Store.Data
 
         public Dictionary<string, string> DeliveryParameters { get; set; }
 
+        public string ShippingUserName { get; set; }
+        public string ShippingAddress { get; set; }
+        public string ShippingCity { get; set; }
+        public string ShippingCountry { get; set; }
+
         public string PaymentServiceName { get; set; }
 
         public string PaymentDescription { get; set; }

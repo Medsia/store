@@ -20,12 +20,12 @@
     <tbody>
         @for (int i = 0; i < Model.Items.Length; i++)
         {
-        <tr>
-            <td class="text-right">@(i + 1)</td>
-            <td>@Model.Items[i].Title</td>
-            <td class="text-right">@Model.Items[i].Count</td>
-            <td class="text-right">@Model.Items[i].Price</td>
-        </tr>
+            <tr>
+                <td class="text-right">@(i + 1)</td>
+                <td>@Model.Items[i].Title</td>
+                <td class="text-right">@Model.Items[i].Count</td>
+                <td class="text-right">@Model.Items[i].Price</td>
+            </tr>
         }
     </tbody>
     <tfoot>
@@ -42,10 +42,14 @@
 @Model.DeliveryDescription
 </pre>
 
+
+
 <strong>Оплата</strong>
 <pre>
 @Model.PaymentDescription
 </pre>
+
+
 <p>
     <a href="@Url.Action("Index", "Home")">Вернутся в магазин</a>.
 </p>

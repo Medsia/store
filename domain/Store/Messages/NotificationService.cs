@@ -93,7 +93,7 @@ namespace Store.Messages
                     body.AppendFormat("Общая стоимость: {0:c}", order.TotalPrice)
                     .AppendLine("---")
                     .AppendLine("Доставка:")
-                    .AppendLine(shippingInfo.Name)
+                    .AppendLine(shippingInfo.UserName)
                     .AppendLine(shippingInfo.Address)                   
                     .AppendLine(shippingInfo.City)
                     .AppendLine(shippingInfo.Country)
