@@ -45,7 +45,7 @@ namespace Store.Data
                 Description = "Материал - металл. " +
                 "Диаметр значка 58 мм",
                 Price =  1.5m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 2,
@@ -54,7 +54,7 @@ namespace Store.Data
                 Description = "Материал - металл. " +
                 "Диаметр значка 44 мм",
                 Price = 1.2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 3,
@@ -63,7 +63,7 @@ namespace Store.Data
                 Description = "Материал - металл. " +
                 "Диаметр значка 58 мм",
                 Price = 1m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 4,
@@ -72,7 +72,7 @@ namespace Store.Data
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
                 Price = 4m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 5,
@@ -81,7 +81,7 @@ namespace Store.Data
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
                 Price = 10m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 6,
@@ -90,7 +90,7 @@ namespace Store.Data
                 Description = "Формат А3(29,7см х42 см). " +
                 "плотность бумаги 150гр",
                 Price = 1m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 7,
@@ -99,7 +99,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 8,
@@ -108,7 +108,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 9,
@@ -117,7 +117,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 10,
@@ -126,7 +126,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 11,
@@ -135,7 +135,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } },
+                ImgLinks = new List<ImgLinkItemDto>{} },
 
             new ProductDto{
                 Id = 12,
@@ -144,7 +144,7 @@ namespace Store.Data
                 Description = "Размер: 4х5.5 см. " +
                 "Материал: PVC",
                 Price = 2m,
-                ImgLinks = new string[]{ "../wwwroot/Img/Empty.jpg" } }
+                ImgLinks = new List<ImgLinkItemDto>{} }
         };
 
         public static List<UserDto> UserDtoList = new List<UserDto>

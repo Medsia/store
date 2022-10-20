@@ -1,5 +1,6 @@
 ﻿using Store.Data;
 using System;
+using System.Collections.Generic;
 
 namespace Store
 {
@@ -39,7 +40,7 @@ namespace Store
             set => dto.Price = value;
         }
 
-        public string[] ImgLinks
+        public List<ImgLinkItemDto> ImgLinks
         {
             get => dto.ImgLinks;
             set => dto.ImgLinks = value;
@@ -56,7 +57,7 @@ namespace Store
                                          string title,
                                          string description,
                                          decimal price,
-                                         string[] imgLinks)
+                                         List<ImgLinkItemDto> imgLinks)
             {           
 
                 if (string.IsNullOrWhiteSpace(title))

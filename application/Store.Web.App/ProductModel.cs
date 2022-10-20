@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace Store.Web.App
 {
     public class ProductModel
@@ -10,6 +11,6 @@ namespace Store.Web.App
         public string Description { get; set; }
 
         public decimal Price { get; set; }
-        public string[] ImgLinks { get; set; }
+        public List<ImgLinkItemModel> ImgLinks { get; set; }
     }
 }
