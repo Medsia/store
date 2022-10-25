@@ -33,7 +33,8 @@ namespace Store.Web.App
             return new CategoryModel
             {
                 Id = category.Id,
-                Name = category.Name
+                Name = category.Name,
+                ImgLink = category.ImgLink
             };
         }
 

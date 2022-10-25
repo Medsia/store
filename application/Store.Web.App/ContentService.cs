@@ -1,20 +1,60 @@
-﻿using Store.Data.Content;
-using System;
+﻿using Store.Data;
+using Store.Data.Content;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Store.Web.App
 {
     public class ContentService
     {
-        IInfoRepository infoRepository;
+        private readonly IInfoRepository infoRepository;
+        private readonly IProductImgLinkRepository productImgLinkRepository;
 
-        public ContentService(IInfoRepository infoRepository)
+        private static readonly string EmptyImageLink = "/Img/Empty.jpg";
+        private static readonly ProductImgLinkModel EmptyImageModel = new ProductImgLinkModel { ImgLink = EmptyImageLink, IsThumbnail = true };
+
+        public ContentService(IInfoRepository infoRepository, IProductImgLinkRepository productImgLinkRepository)
         {
             this.infoRepository = infoRepository;
+            this.productImgLinkRepository = productImgLinkRepository;
         }
+
+
+        public async Task<IEnumerable<ProductImgLinkModel>> GetAllImagesByProdIdAsync(int productId)
+        {
+            var images = await productImgLinkRepository.GetAllByProductIdAsync(productId);
+
+            if (images == null)
+            {
+                var emptyList = new List<ProductImgLinkModel>();
+                emptyList.Add(EmptyImageModel);
+
+                return emptyList.ToArray();
+            }
+
+            return images.Select(Map)
+                        .ToArray();
+        }
+
+        public async Task<ProductImgLinkModel> GetThumbnailByProdIdAsync(int productId)
+        {
+            var image = await productImgLinkRepository.GetThumbnailByProductIdAsync(productId);
+
+            if (image == null) return EmptyImageModel;
+
+            return Map(image);
+        }
+
+        private ProductImgLinkModel Map(ProductImgLink productImgLink)
+        {
+            return new ProductImgLinkModel
+            {
+                ImgLink = productImgLink.ImgLink,
+                IsThumbnail = productImgLink.IsThumbnail
+            };
+        }
+
 
         public ContactsSO GetContacts()
         {
@@ -32,8 +72,5 @@ namespace Store.Web.App
         {
             return infoRepository.GetData().About;
         }
-
-
-        
     }
 }

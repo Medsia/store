@@ -8,11 +8,13 @@ namespace Store.Web.App
     {
         private readonly IProductRepository productRepository;
         private readonly CategoryService categoryService;
+        private readonly ContentService contentService;
 
-        public ProductService(IProductRepository productRepository, CategoryService categoryService)
+        public ProductService(IProductRepository productRepository, CategoryService categoryService, ContentService contentService)
         {
             this.productRepository = productRepository;
             this.categoryService = categoryService;
+            this.contentService = contentService;
         }
 
         public async Task<ProductModel> GetByIdAsync(int id)
@@ -55,6 +57,7 @@ namespace Store.Web.App
                 Category = categoryService.GetByIdAsync(product.CategoryId).Result,
                 Description = product.Description,
                 Price = product.Price,
+                ThumbnailLink = contentService.GetThumbnailByProdIdAsync(product.Id).Result.ImgLink
             };
         }
 
