@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,14 +22,18 @@ namespace Store.Web.Controllers
         private readonly ContentService contentService;
         private readonly AuthService authService;
 
+        private readonly IWebHostEnvironment appEnvironment;
+
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService, ContentService contentService, AuthService authService)
+                                CategoryService categoryService, ContentService contentService, AuthService authService,
+                                IWebHostEnvironment appEnvironment)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
             this.contentService = contentService;
             this.authService = authService;
+            this.appEnvironment = appEnvironment;
         }
 
         public IActionResult Index()
@@ -115,43 +122,65 @@ namespace Store.Web.Controllers
         [HttpPost]
         public IActionResult CategoryAdd(string categoryName)
         {
-            CategoryModel categoryModel = new CategoryModel
+            if (!string.IsNullOrWhiteSpace(categoryName))
             {
-                Name = categoryName,
-            };
-
-            if (categoryService.IsValid(categoryModel))
-            {
-                adminControlService.AddCategory(categoryModel);
+                adminControlService.AddCategory(categoryName);
                 TempData["message"] = string.Format("Добавлено");
             }
+            else TempData["warn"] = string.Format("Поле \"Название\" не должно быть пустым");
 
             return RedirectToAction("Category");
         }
 
         [HttpPost]
-        public IActionResult CategoryEdit(int categoryId, string categoryName)
+        public async Task<IActionResult> CategoryImageEdit(IFormFile uploadedFile, int categoryId)
         {
-            CategoryModel categoryModel = new CategoryModel
+            string message;
+            if(contentService.IsImageValid(uploadedFile, out message))
             {
-                Id = categoryId,
-                Name = categoryName,
-            };
+                string fileName = "CategoryImg_" + categoryId.ToString() + "_";
+                string path = "/Img/Categories/" + fileName + uploadedFile.FileName;
 
-            if (categoryService.IsValid(categoryModel))
-            {
-                adminControlService.EditCategory(categoryModel);
-                TempData["message"] = string.Format("Изменения сохранены");
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+
+                string oldImgLink;
+                adminControlService.EditCategoryImage(categoryId, path, out oldImgLink);
+
+                FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
+                fileInf.Delete();
+
+                TempData["message"] = message;
             }
+            else TempData["warn"] = message;
 
             return RedirectToAction("Category");
         }
 
         [HttpPost]
-        public IActionResult CategoryDelete(int categoryId, string categoryName)
+        public IActionResult CategoryNameEdit(int categoryId, string categoryName)
+        {
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                adminControlService.EditCategoryName(categoryId, categoryName);
+                TempData["message"] = string.Format($"{categoryName} -> сохранено");
+            }
+            else TempData["warn"] = string.Format("Поле \"Название\" не должно быть пустым");
+
+            return RedirectToAction("Category");
+        }
+
+        [HttpPost]
+        public IActionResult CategoryDelete(int categoryId, string categoryName, string oldImgLink)
         {
             adminControlService.DeleteCategory(categoryId);
-            TempData["message"] = string.Format("Удалено: " + categoryName);
+
+            FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
+            fileInf.Delete();
+
+            TempData["message"] = string.Format("Удалено -> " + categoryName);
 
             return RedirectToAction("Category");
         }

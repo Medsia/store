@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\plugins\Store.YandexKassa\Store.YandexKassa.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Img\Products\" />
+  </ItemGroup>
+
 </Project>

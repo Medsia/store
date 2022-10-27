@@ -35,15 +35,6 @@ namespace Store.Web.App
             };
         }
 
-        private CategoryDto Map(CategoryModel productModel)
-        {
-            return new CategoryDto
-            {
-                Id = productModel.Id,
-                Name = productModel.Name,
-            };
-        }
-
         public void AddProduct(ProductModel productModel)
         {
             productRepository.AddNewItem(Map(productModel));
@@ -61,14 +52,34 @@ namespace Store.Web.App
         }
 
 
-        public void AddCategory(CategoryModel categoryModel)
+        public void AddCategory(string Name)
         {
-            categoryRepository.AddNewItem(Map(categoryModel));
+            CategoryDto dto = new CategoryDto
+            {
+                Name = Name,
+                ImgLink = ContentService.EmptyImageLink
+            };
+
+            categoryRepository.AddNewItem(dto);
         }
 
-        public void EditCategory(CategoryModel categoryModel)
+        public void EditCategoryName(int categoryId, string categoryName)
         {
-            categoryRepository.EditExistingItem(Map(categoryModel));
+            var dto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(categoryId).Result);
+
+            dto.Name = categoryName;
+
+            categoryRepository.EditExistingItem(dto);
+        }
+
+        public void EditCategoryImage(int categoryId, string imgLink, out string oldImgLink)
+        {
+            var dto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(categoryId).Result);
+            oldImgLink = dto.ImgLink;
+
+            dto.ImgLink = imgLink;
+
+            categoryRepository.EditExistingItem(dto);
         }
 
         public void ResetCategoryIdInProducts(int categoryId)

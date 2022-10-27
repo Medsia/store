@@ -8,30 +8,55 @@
 <h1>@ViewData["Title"]</h1>
 
 <table class="table category-edit-table">
-@foreach (var item in Model) {
-    @if (item.Id == 1) continue;
-    <tr>
-        <td>
-            <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryEdit", "Admin")" method="post">
-                <input type="hidden" name="categoryId" value="@item.Id"/>
-                <input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30" value="@Html.DisplayFor(modelItem => item.Name)"/>
-                <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Обновить</button>
+    <thead class="thead-dark">
+        <tr>
+            <td scope="col">Изображение</td>
+            <td scope="col">Название</td>
+            <td scope="col">Удаление</td>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model) {
+        @if (item.Id == 1) continue;
+        <tr class="my-4">
+            <td>
+                <form class="form-inline my-2 my-lg-0 ml-auto" asp-controller="Admin" asp-action="CategoryImageEdit" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="categoryId" value="@item.Id"/>
+
+                    <div class="my-2">
+                        <img class="my-2" src="@item.ImgLink" height="200" width="200"/>
+                        <input class="form-control-file" type="file" name="uploadedFile"/>
+                        <p class="text-warning">Максимальный размер: 4 МБ</p>
+                        <button class="btn btn-outline-info my-2" type="submit">Обновить</button>
+                    </div>
+                </form>
+            </td>
+            <td>
+                <form class="form-inline my-2 my-lg-0 ml-auto" asp-controller="Admin" asp-action="CategoryNameEdit" method="post">
+                    <input type="hidden" name="categoryId" value="@item.Id"/>
+
+                    <div class="my-2">
+                        <input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30" value="@Html.DisplayFor(modelItem => item.Name)"/>
+                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Обновить</button>
+                    </div>
+                </form>
+            </td>
+            <td>
+                <form class="form-inline my-2 my-lg-0 ml-auto" asp-controller="Admin" asp-action="CategoryDelete" method="post">
+                    <input type="hidden" name="categoryId" value="@item.Id"/>
+                    <input type="hidden" name="categoryName" value="@item.Name"/>
+                    <input type="hidden" name="oldImgLink" value="@item.ImgLink"/>
+                    
+                    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+        <tr>
+            <form class="form-inline my-2 my-lg-0 ml-auto" asp-controller="Admin" asp-action="CategoryAdd" method="post">
+                <td><input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30"/></td>
+                <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
             </form>
-        </td>
-        <td>
-            <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryDelete", "Admin")" method="post">
-                <input type="hidden" name="categoryId" value="@item.Id"/>
-                <input type="hidden" name="categoryName" value="@item.Name"/>
-                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Удалить</button>
-            </form>
-        </td>
-    </tr>
-}
-    <tr>
-        <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("CategoryAdd", "Admin")" method="post">
-             <td><input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30"/></td>
-            <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
-        </form>
-    </tr>
+        </tr>
 </table>
 

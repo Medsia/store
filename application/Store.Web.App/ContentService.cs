@@ -1,4 +1,5 @@
-﻿using Store.Data;
+﻿using Microsoft.AspNetCore.Http;
+using Store.Data;
 using Store.Data.Content;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Store.Web.App
         private readonly IInfoRepository infoRepository;
         private readonly IProductImgLinkRepository productImgLinkRepository;
 
-        private static readonly string EmptyImageLink = "/Img/Empty.jpg";
-        private static readonly ProductImgLinkModel EmptyImageModel = new ProductImgLinkModel { ImgLink = EmptyImageLink, IsThumbnail = true };
+        public static readonly string EmptyImageLink = "/Img/Empty.jpg";
+        public static readonly ProductImgLinkModel EmptyImageModel = new ProductImgLinkModel { ImgLink = EmptyImageLink, IsThumbnail = true };
 
         public ContentService(IInfoRepository infoRepository, IProductImgLinkRepository productImgLinkRepository)
         {
@@ -21,11 +22,36 @@ namespace Store.Web.App
         }
 
 
+        public bool IsImageValid(IFormFile uploadedFile, out string message)
+        {
+            if (uploadedFile == null)
+            {
+                message = string.Format("Изображение не загружено");
+                return false;
+            }
+
+            if (uploadedFile.ContentType != "image/jpeg" && uploadedFile.ContentType != "image/png")
+            {
+                message = string.Format("Выбранный файл должен быть типа .jpg или .png");
+                return false;
+            }
+
+            if (uploadedFile.Length >= 4194304)
+            {
+                message = string.Format("Выбранный файл больше 4 МБ");
+                return false;
+            }
+
+            message = "Изображение сохранено";
+            return true;
+        }
+
+
         public async Task<IEnumerable<ProductImgLinkModel>> GetAllImagesByProdIdAsync(int productId)
         {
             var images = await productImgLinkRepository.GetAllByProductIdAsync(productId);
 
-            if (images == null)
+            if (images.Count() == 0)
             {
                 var emptyList = new List<ProductImgLinkModel>();
                 emptyList.Add(EmptyImageModel);

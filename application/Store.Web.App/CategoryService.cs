@@ -38,12 +38,12 @@ namespace Store.Web.App
             };
         }
 
-        public bool IsValid(CategoryModel categoryModel)
-        {
-            if (categoryModel == null || string.IsNullOrWhiteSpace(categoryModel.Name))
-                return false;
+        //public bool IsValid(CategoryModel categoryModel)
+        //{
+        //    if (categoryModel == null || string.IsNullOrWhiteSpace(categoryModel.Name))
+        //        return false;
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }
