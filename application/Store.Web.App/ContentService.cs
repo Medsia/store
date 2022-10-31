@@ -24,25 +24,26 @@ namespace Store.Web.App
 
         public bool IsImageValid(IFormFile uploadedFile, out string message)
         {
+            message = "";
+
             if (uploadedFile == null)
             {
-                message = string.Format("Изображение не загружено");
+                message = string.Format("Изображение не загружено.");
                 return false;
             }
 
             if (uploadedFile.ContentType != "image/jpeg" && uploadedFile.ContentType != "image/png")
             {
-                message = string.Format("Выбранный файл должен быть типа .jpg или .png");
+                message = string.Format("Выбранный файл должен быть типа .jpg или .png.");
                 return false;
             }
 
             if (uploadedFile.Length >= 4194304)
             {
-                message = string.Format("Выбранный файл больше 4 МБ");
+                message = string.Format("Выбранный файл больше 4 МБ.");
                 return false;
             }
 
-            message = "Изображение сохранено";
             return true;
         }
 

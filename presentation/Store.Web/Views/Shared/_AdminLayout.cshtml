@@ -30,7 +30,7 @@
             </a>
         </span>
         <span class="d-block admin-menu-item my-2">
-            <a href="@Url.Action("Category", "Admin")">
+            <a href="@Url.Action("CategoryList", "Admin")">
                 <span class="col-auto"></span>
                 <span class="col">Категории</span>
             </a>
@@ -73,7 +73,11 @@
             }
             @if (TempData["warn"] != null)
             {
-                <div class="alert alert-danger">@TempData["warn"]</div>
+                <div class="alert alert-warning">@TempData["warn"]</div>
+            }
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["error"]</div>
             }
             @RenderBody()
         </main>

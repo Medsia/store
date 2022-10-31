@@ -61,10 +61,27 @@ namespace Store.Web.App
             };
         }
 
-        public bool IsValid(ProductModel productModel)
+        public bool IsValid(ProductModel productModel, out string message)
         {
-            if (productModel == null || string.IsNullOrWhiteSpace(productModel.Title) || productModel.Price == 0)
+            message = "";
+
+            if (productModel == null)
+            {
+                message = "Ошибка отправки данных";
                 return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(productModel.Title))
+            {
+                message = "Поле \"Название\" не должно быть пустым";
+                return false;
+            }
+
+            if (productModel.Price == 0)
+            {
+                message = "Цена -> 0";
+                return false;
+            }
 
             return true;
         }

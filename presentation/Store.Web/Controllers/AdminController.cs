@@ -49,6 +49,20 @@ namespace Store.Web.Controllers
         }
 
         [HttpPost]
+        public IActionResult Product(int categoryId)
+        {
+            ProductModel productModel = new ProductModel
+            {
+                Category = categoryService.GetByIdAsync(categoryId).Result
+            };
+
+            ViewBag.Categories = categoryService.GetAll();
+            ViewBag.Mode = "ProductAdd";
+
+            return View("Product", productModel);
+        }
+
+        [HttpPost]
         public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
         {
             ProductModel productModel = new ProductModel
@@ -60,13 +74,15 @@ namespace Store.Web.Controllers
                 Price = price,
             };
 
-            if (productService.IsValid(productModel))
+            string message;
+            if (productService.IsValid(productModel, out message))
             {
                 adminControlService.AddProduct(productModel);
-                TempData["message"] = string.Format("Добавлено");
+                TempData["message"] = string.Format("Добавлено -> title");
 
                 return RedirectToAction("ProductList");
             }
+            else TempData["error"] = message;
 
             ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductAdd";
@@ -85,14 +101,16 @@ namespace Store.Web.Controllers
                 Description = description,
                 Price = price,
             };
-            
-            if (productService.IsValid(productModel))
+
+            string message;
+            if (productService.IsValid(productModel, out message))
             {
                 adminControlService.EditProduct(productModel);
                 TempData["message"] = string.Format("Изменения сохранены");
 
                 return RedirectToAction("ProductList");
             }
+            else TempData["error"] = message;
 
             ViewBag.Categories = categoryService.GetAll();
             ViewBag.Mode = "ProductEdit";
@@ -103,19 +121,25 @@ namespace Store.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult ProductDelete(int productId)
+        public IActionResult ProductDelete(int productId, string title)
         {
             adminControlService.DeleteProduct(productId);
 
-            TempData["message"] = string.Format("Изменения сохранены");
+            TempData["message"] = string.Format("Удалено -> " + title);
 
             return RedirectToAction("ProductList");
         }
 
 
-        public IActionResult Category()
+        public IActionResult CategoryList()
         {
             var model = categoryService.GetAll();
+            return View(model);
+        }
+
+        public IActionResult Category(int categoryId)
+        {
+            var model = categoryService.GetByIdAsync(categoryId).Result;
             return View(model);
         }
 
@@ -125,18 +149,19 @@ namespace Store.Web.Controllers
             if (!string.IsNullOrWhiteSpace(categoryName))
             {
                 adminControlService.AddCategory(categoryName);
-                TempData["message"] = string.Format("Добавлено");
+                TempData["message"] = string.Format("Добавлено -> " + categoryName);
             }
-            else TempData["warn"] = string.Format("Поле \"Название\" не должно быть пустым");
+            else TempData["error"] = string.Format("Поле \"Название\" не должно быть пустым");
 
-            return RedirectToAction("Category");
+            return RedirectToAction("CategoryList");
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> CategoryImageEdit(IFormFile uploadedFile, int categoryId)
+        public async Task<IActionResult> CategoryEdit(int categoryId, string categoryName, IFormFile uploadedFile)
         {
             string message;
-            if(contentService.IsImageValid(uploadedFile, out message))
+            if (contentService.IsImageValid(uploadedFile, out message))
             {
                 string fileName = "CategoryImg_" + categoryId.ToString() + "_";
                 string path = "/Img/Categories/" + fileName + uploadedFile.FileName;
@@ -151,25 +176,18 @@ namespace Store.Web.Controllers
 
                 FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
                 fileInf.Delete();
-
-                TempData["message"] = message;
             }
             else TempData["warn"] = message;
 
-            return RedirectToAction("Category");
-        }
-
-        [HttpPost]
-        public IActionResult CategoryNameEdit(int categoryId, string categoryName)
-        {
             if (!string.IsNullOrWhiteSpace(categoryName))
             {
                 adminControlService.EditCategoryName(categoryId, categoryName);
                 TempData["message"] = string.Format($"{categoryName} -> сохранено");
             }
-            else TempData["warn"] = string.Format("Поле \"Название\" не должно быть пустым");
+            else TempData["error"] = string.Format("Поле \"Название\" не должно быть пустым.");
 
-            return RedirectToAction("Category");
+            var model = categoryService.GetByIdAsync(categoryId).Result;
+            return View("Category", model);
         }
 
         [HttpPost]
@@ -182,7 +200,7 @@ namespace Store.Web.Controllers
 
             TempData["message"] = string.Format("Удалено -> " + categoryName);
 
-            return RedirectToAction("Category");
+            return RedirectToAction("CategoryList");
         }
 
 
@@ -268,7 +286,7 @@ namespace Store.Web.Controllers
 
                     TempData["message"] = string.Format("Изменения сохранены");
                 }
-                else TempData["warn"] = string.Format("Не правильный пароль!");
+                else TempData["error"] = string.Format("Не правильный пароль!");
             }
             else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
 
@@ -330,7 +348,7 @@ namespace Store.Web.Controllers
                 }
                 else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
             }
-            else TempData["warn"] = string.Format("Ошибка подтверждения!");
+            else TempData["error"] = string.Format("Ошибка подтверждения!");
 
             var model = authService.GetAllAccounts();
             return View("AccountManagement", model);
