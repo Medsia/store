@@ -6,7 +6,7 @@
 }
 
 
-<form class="form-group my-4 ml-auto" asp-controller="Admin" asp-action="CategoryEdit" method="post">
+<form class="form-group my-4 ml-auto" asp-controller="Admin" asp-action="CategoryEdit" method="post" enctype="multipart/form-data">
     <input type="hidden" name="categoryId" value="@Model.Id"/>
 
     <div class="my-4">

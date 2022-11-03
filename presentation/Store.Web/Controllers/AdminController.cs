@@ -49,21 +49,32 @@ namespace Store.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Product(int categoryId)
+        public IActionResult Product(int productId)
         {
-            ProductModel productModel = new ProductModel
-            {
-                Category = categoryService.GetByIdAsync(categoryId).Result
-            };
+            var productModel = productService.GetByIdAsync(productId).Result;
 
             ViewBag.Categories = categoryService.GetAll();
-            ViewBag.Mode = "ProductAdd";
 
-            return View("Product", productModel);
+            if(productId == 0) ViewBag.EditMode = false;
+            else ViewBag.EditMode = true;
+
+            return View(productModel);
         }
 
+
+
+
+
+
+
+
+
+
+
+
         [HttpPost]
-        public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
+        public async Task<IActionResult> ProductAdd(int productId, string title, int categoryId, decimal price, string description,
+                                            IFormFile uploadedFile)
         {
             ProductModel productModel = new ProductModel
             {
@@ -75,6 +86,20 @@ namespace Store.Web.Controllers
             };
 
             string message;
+            if (contentService.IsImageValid(uploadedFile, out message))
+            {
+                string fileName = "ProductThumbnail_" + productId.ToString() + "_";
+                string path = "/Img/Products/" + fileName + uploadedFile.FileName;
+
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+
+                // adminControlService.AddProductThumbnail(productId, path);
+            }
+            else TempData["warn"] = message;
+
             if (productService.IsValid(productModel, out message))
             {
                 adminControlService.AddProduct(productModel);
@@ -85,13 +110,22 @@ namespace Store.Web.Controllers
             else TempData["error"] = message;
 
             ViewBag.Categories = categoryService.GetAll();
-            ViewBag.Mode = "ProductAdd";
+            ViewBag.EditMode = false;
 
             return View("Product", productModel);
         }
 
+
+
+
+
+
+
+
+
         [HttpPost]
-        public IActionResult ProductEdit(int productId, string title, int categoryId, decimal price, string description)
+        public async Task<IActionResult> ProductEdit(int productId, string title, int categoryId, decimal price, string description,
+                                                        IFormFile uploadedFile)
         {
             ProductModel productModel = new ProductModel
             {
@@ -103,6 +137,27 @@ namespace Store.Web.Controllers
             };
 
             string message;
+            if (contentService.IsImageValid(uploadedFile, out message))
+            {
+                string fileName = "ProductThumbnail_" + productId.ToString() + "_";
+                string path = "/Img/Products/" + fileName + uploadedFile.FileName;
+
+                using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+
+                string oldImgLink = contentService.GetThumbnailByProdIdAsync(productId).Result.ImgLink;
+                adminControlService.EditProductThumbnail(productId, path);
+
+                if(!string.IsNullOrEmpty(oldImgLink) && !oldImgLink.Equals("/Img/Empty.jpg"))
+                {
+                    FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
+                    fileInf.Delete();
+                }
+            }
+            else TempData["warn"] = message;
+
             if (productService.IsValid(productModel, out message))
             {
                 adminControlService.EditProduct(productModel);
@@ -113,12 +168,19 @@ namespace Store.Web.Controllers
             else TempData["error"] = message;
 
             ViewBag.Categories = categoryService.GetAll();
-            ViewBag.Mode = "ProductEdit";
+            ViewBag.EditMode = true;
 
             var model = productService.GetByIdAsync(productId).Result;
 
             return View("Product", model);
         }
+
+
+
+
+
+
+
 
         [HttpPost]
         public IActionResult ProductDelete(int productId, string title)
@@ -157,6 +219,14 @@ namespace Store.Web.Controllers
         }
 
 
+
+
+
+
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> CategoryEdit(int categoryId, string categoryName, IFormFile uploadedFile)
         {
@@ -174,8 +244,11 @@ namespace Store.Web.Controllers
                 string oldImgLink;
                 adminControlService.EditCategoryImage(categoryId, path, out oldImgLink);
 
-                FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
-                fileInf.Delete();
+                if (!oldImgLink.Equals("/Img/Empty.jpg"))
+                {
+                    FileInfo fileInf = new FileInfo(appEnvironment.WebRootPath + oldImgLink);
+                    fileInf.Delete();
+                }
             }
             else TempData["warn"] = message;
 
@@ -189,6 +262,16 @@ namespace Store.Web.Controllers
             var model = categoryService.GetByIdAsync(categoryId).Result;
             return View("Category", model);
         }
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost]
         public IActionResult CategoryDelete(int categoryId, string categoryName, string oldImgLink)

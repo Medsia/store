@@ -2,6 +2,7 @@
 using Store.Data.Content;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Store.Web.App
 {
@@ -13,14 +14,20 @@ namespace Store.Web.App
         private readonly ICategoryRepository categoryRepository;
         private readonly IInfoRepository infoRepository;
         private readonly IUserRepository userRepository;
+        private readonly IProductImgLinkRepository productImgLinkRepository;
+        private readonly ProductService productService;
 
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
-                                    IInfoRepository infoRepository, IUserRepository userRepository)
+                                    IInfoRepository infoRepository, IUserRepository userRepository,
+                                    IProductImgLinkRepository productImgLinkRepository,
+                                    ProductService productService)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.infoRepository = infoRepository;
             this.userRepository = userRepository;
+            this.productService = productService;
+            this.productImgLinkRepository = productImgLinkRepository;
         }
 
         private ProductDto Map(ProductModel productModel)
@@ -39,6 +46,45 @@ namespace Store.Web.App
         {
             productRepository.AddNewItem(Map(productModel));
         }
+
+
+        public async void EditProductThumbnail(int productId, string imgLink)
+        {
+            ProductImgLink productImgLink = await productImgLinkRepository.GetThumbnailOrDefaultByProdIdAsync(productId);
+            ProductImgLinkDto dto;
+
+            if (productImgLink.Id != 0)
+            {
+                dto = ProductImgLink.Mapper.Map(productImgLink);
+                dto.ImgLink = imgLink;
+
+                productImgLinkRepository.EditExistingItem(dto);
+            }
+            else
+            {
+                dto = new ProductImgLinkDto
+                {
+                    ProductId = productId,
+                    ImgLink = imgLink,
+                    IsThumbnail = true,
+                };
+                
+                productImgLinkRepository.AddNewItem(dto);
+            }
+        }
+
+        //public void EditProductImages(int productId, IEnumerable<string> imgLink, out IEnumerable<string> oldImgLink)
+        //{
+        //    var productImgLinks = productImgLinkRepository.GetAllByProductIdAsync(productId).Result;
+
+
+        //    var dto = ProductImgLink.Mapper.Map();
+        //    oldImgLink = dto.ImgLink;
+
+        //    dto.ImgLink = imgLink;a
+
+        //    categoryRepository.EditExistingItem(dto);
+        //}
 
         public void EditProduct(ProductModel productModel)
         {

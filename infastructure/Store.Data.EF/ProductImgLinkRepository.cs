@@ -26,14 +26,15 @@ namespace Store.Data.EF
                        .ToArray();
         }
 
-        public async Task<ProductImgLink> GetThumbnailByProductIdAsync(int productId)
+        public async Task<ProductImgLink> GetThumbnailOrDefaultByProdIdAsync(int productId)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductImgLinkRepository));
 
             var dto = await dbContext.ProductImages
                                .SingleOrDefaultAsync(img => img.ProductId == productId && img.IsThumbnail == true);
 
-            if (dto == null) return null;
+            if (dto == null)
+                dto = new ProductImgLinkDto { Id=0 ,ImgLink="", ProductId=0, IsThumbnail=true };
 
             return ProductImgLink.Mapper.Map(dto);
         }

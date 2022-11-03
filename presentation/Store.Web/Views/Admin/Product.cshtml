@@ -6,16 +6,25 @@
 }
 
 @{
-    string actionName = @ViewBag.Mode;
+    string actionName;
+    if(ViewBag.EditMode) actionName = "ProductEdit";
+    else actionName = "ProductAdd";
 }
 
-<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action(actionName, "Admin")" method="post">
+<form class="form-text my-2 ml-auto" asp-controller="Admin" asp-action="@actionName" method="post" enctype="multipart/form-data">
     <input type="hidden" name="productId" value="@Model.Id"/>
 
     <body>
         <div class="my-2">
             <h5 class="editor-label">Название:</h5>
             <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Название" name="title" value="@Model.Title"/>
+        </div>
+
+        <div class="my-4">
+            <h5 class="editor-label">Превью (отображается на страницах поиска):</h5>
+            <img class="img-thumbnail" src="@Model.ThumbnailLink" height="200" width="200"/>
+            <input class="form-control-file my-2" type="file" name="uploadedFile"/>
+            <p class="text-danger">Максимальный размер: 4 МБ</p>
         </div>
 
         <div class="my-2">
@@ -28,7 +37,7 @@
                         <option value="@category.Id" selected>@category.Name</option>
                         continue;
                     }
-                    @if (category.Id == 0) continue;
+                    @if (category.Id == 1) continue;
                     <option value="@category.Id">@category.Name</option>
                 }
             </select>

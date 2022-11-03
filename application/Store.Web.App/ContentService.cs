@@ -66,9 +66,9 @@ namespace Store.Web.App
 
         public async Task<ProductImgLinkModel> GetThumbnailByProdIdAsync(int productId)
         {
-            var image = await productImgLinkRepository.GetThumbnailByProductIdAsync(productId);
+            var image = await productImgLinkRepository.GetThumbnailOrDefaultByProdIdAsync(productId);
 
-            if (image == null) return EmptyImageModel;
+            if (image.Id == 0) return EmptyImageModel;
 
             return Map(image);
         }

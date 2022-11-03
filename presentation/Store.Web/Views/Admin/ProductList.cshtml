@@ -10,7 +10,7 @@
 
 <div class="form-inline my-4">
     <form class="btn-offset my-2" action="@Url.Action("Product", "Admin")" method="post">
-        <input type="hidden" name="categoryId" value="1"/>
+        <input type="hidden" name="productId" value="0"/>
         <button class="btn btn-primary btn-info">Добавить товар</button>
     </form>
     
@@ -37,9 +37,8 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <form action="@Url.Action("ProductEdit", "Admin")" method="post">
+            <form action="@Url.Action("Product", "Admin")" method="post">
                 <input type="hidden" name="productId" value="@item.Id"/>
-                <input type="hidden" name="categoryId" value="1"/>
                 <button class="btn btn-outline-info" type="submit">@item.Title</button>
             </form>
         </td>
