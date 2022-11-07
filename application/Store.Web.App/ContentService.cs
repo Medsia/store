@@ -12,15 +12,13 @@ namespace Store.Web.App
         private readonly IInfoRepository infoRepository;
         private readonly IProductImgLinkRepository productImgLinkRepository;
 
-        public static readonly string EmptyImageLink = "/Img/Empty.jpg";
-        public static readonly ProductImgLinkModel EmptyImageModel = new ProductImgLinkModel { ImgLink = EmptyImageLink, IsThumbnail = true };
-
         public ContentService(IInfoRepository infoRepository, IProductImgLinkRepository productImgLinkRepository)
         {
             this.infoRepository = infoRepository;
             this.productImgLinkRepository = productImgLinkRepository;
         }
 
+        public static string EmptyImageLink = "/Img/Empty.jpg";
 
         public bool IsImageValid(IFormFile uploadedFile, out string message)
         {
@@ -48,14 +46,14 @@ namespace Store.Web.App
         }
 
 
-        public async Task<IEnumerable<ProductImgLinkModel>> GetAllImagesByProdIdAsync(int productId)
+        public async Task<IEnumerable<string>> GetAllImagesByProdIdAsync(int productId)
         {
-            var images = await productImgLinkRepository.GetAllByProductIdAsync(productId);
+            var images = await productImgLinkRepository.GetAllOrDefaultByProductIdAsync(productId);
 
             if (images.Count() == 0)
             {
-                var emptyList = new List<ProductImgLinkModel>();
-                emptyList.Add(EmptyImageModel);
+                var emptyList = new List<string>();
+                emptyList.Add(EmptyImageLink);
 
                 return emptyList.ToArray();
             }
@@ -64,22 +62,18 @@ namespace Store.Web.App
                         .ToArray();
         }
 
-        public async Task<ProductImgLinkModel> GetThumbnailByProdIdAsync(int productId)
+        public async Task<string> GetThumbnailByProdIdAsync(int productId)
         {
-            var image = await productImgLinkRepository.GetThumbnailOrDefaultByProdIdAsync(productId);
+            var image = await productImgLinkRepository.GetImageOrDefaultAsync(productId, true);
 
-            if (image.Id == 0) return EmptyImageModel;
+            if (image.Id == 0) return EmptyImageLink;
 
             return Map(image);
         }
 
-        private ProductImgLinkModel Map(ProductImgLink productImgLink)
+        private string Map(ProductImgLink productImgLink)
         {
-            return new ProductImgLinkModel
-            {
-                ImgLink = productImgLink.ImgLink,
-                IsThumbnail = productImgLink.IsThumbnail
-            };
+            return productImgLink.ImgLink;
         }
 
 

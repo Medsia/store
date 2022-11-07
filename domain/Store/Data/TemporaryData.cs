@@ -144,16 +144,5 @@ namespace Store.Data
                 Password = "$MYHASH$V1$10000$iSZbCJtBHeAXae7+tfKFjYMBn+ZhygDcDdytZ+e2uSm47Y5C"
             }
         };
-
-        public static List<ProductImgLinkDto> ImgLinksDtoList = new List<ProductImgLinkDto>
-        {
-            new ProductImgLinkDto
-            {
-                Id = 1,
-                ImgLink = "/Img/Products/AMONG_ASS.jpg",
-                ProductId = 1,
-                IsThumbnail = true,
-            }
-        };
     }
 }

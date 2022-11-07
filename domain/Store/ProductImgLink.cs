@@ -22,6 +22,12 @@ namespace Store
             set => dto.ProductId = value;
         }
 
+        public int PersonalId
+        {
+            get => dto.PersonalId;
+            set => dto.PersonalId = value;
+        }
+
         public bool IsThumbnail
         {
             get => dto.IsThumbnail;
@@ -36,7 +42,7 @@ namespace Store
 
         public static class DtoFactory
         {
-            public static ProductImgLinkDto Create(int id, string imgLink, int productId, bool isThumbnail)
+            public static ProductImgLinkDto Create(int id, string imgLink, int productId, int personalId, bool isThumbnail)
             {
 
                 if (string.IsNullOrWhiteSpace(imgLink))
@@ -47,6 +53,7 @@ namespace Store
                     Id = id,
                     ImgLink = imgLink.Trim(),
                     ProductId = productId,
+                    PersonalId = personalId,
                     IsThumbnail = isThumbnail
                 };
             }

@@ -1,14 +1,19 @@
 ﻿@model ProductModel
 
 @{
-    ViewData["Title"] = Model.Title;
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
-
-@{
     string actionName;
-    if(ViewBag.EditMode) actionName = "ProductEdit";
-    else actionName = "ProductAdd";
+    if(ViewBag.EditMode)
+    {
+        ViewData["Title"] = Model.Title;
+        actionName = "ProductEdit";
+    }
+    else
+    {
+        ViewData["Title"] = "Новый товар";
+        actionName = "ProductAdd";
+    }
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <form class="form-text my-2 ml-auto" asp-controller="Admin" asp-action="@actionName" method="post" enctype="multipart/form-data">
@@ -20,12 +25,6 @@
             <input class="form-control title-input mr-ms-2" type="text" maxlength="30" placeholder="Название" name="title" value="@Model.Title"/>
         </div>
 
-        <div class="my-4">
-            <h5 class="editor-label">Превью (отображается на страницах поиска):</h5>
-            <img class="img-thumbnail" src="@Model.ThumbnailLink" height="200" width="200"/>
-            <input class="form-control-file my-2" type="file" name="uploadedFile"/>
-            <p class="text-danger">Максимальный размер: 4 МБ</p>
-        </div>
 
         <div class="my-2">
             <h5 class="editor-label">Категория:</h5>
@@ -43,15 +42,55 @@
             </select>
         </div>
 
+
         <div class="my-2">
             <h5 class="editor-label">Цена:</h5>
             <input class="form-control price-input" type="text" placeholder="0.00" name="price" value="@Model.Price"/>
         </div>
 
+
         <div class="my-2">
             <h5 class="editor-label" >Описание:</h5>
             <textarea class="form-control description-textarea mr-ms-2" name="description" placeholder="Описание" maxlength="255" rows="10" wrap="soft">@Model.Description</textarea>
         </div>
+
+
+        <div class="my-4">
+            <h5 class="editor-label">Превью (отображается на страницах поиска):</h5>
+            <img class="img-thumbnail" src="@Model.ThumbnailLink" height="200" width="200"/>
+            <input class="form-control-file my-2" type="file" name="uploadedThumbnail"/>
+            <p class="text-danger">Максимальный размер: 4 МБ</p>
+        </div>
+
+        
+        <div class="my-5">
+            <h5 class="editor-label">Изображения товара (отображаются только на странице этого товара):</h5>
+            <p class="text-danger">Максимальный размер 1 файла: 4 МБ</p>
+
+            <div class="form-inline my-2">
+                @{
+                    int counter = 0;
+                    foreach(var image in ViewBag.Images)
+                    {
+                        if (string.IsNullOrWhiteSpace(image)) continue;
+                        <div class="my-4">
+                            <img class="img-thumbnail" src="@image" height="200" width="200"/>
+                            <input class="form-control-file my-2" type="file" id="uploadedImages" name="uploadedImages"/>
+                        </div>
+                        counter++;
+                    }
+
+                    for(; counter < 10; counter++)
+                    {
+                        <div class="my-4">
+                            <img class="img-thumbnail" src="@ViewBag.EmptyImage" height="200" width="200"/>
+                            <input class="form-control-file my-2" type="file" id="uploadedImages" name="uploadedImages"/>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
 
         <div class="btn-offset my-4">
             <button class="btn btn-primary btn-update my-2 my-sm-0" type="submit">Сохранить</button>
@@ -59,4 +98,5 @@
         </div>
     </body>
 </form>
+
 

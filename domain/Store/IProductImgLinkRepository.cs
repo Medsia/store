@@ -6,8 +6,9 @@ namespace Store
 {
     public interface IProductImgLinkRepository
     {
-        Task<IEnumerable<ProductImgLink>> GetAllByProductIdAsync(int productId);
-        Task<ProductImgLink> GetThumbnailOrDefaultByProdIdAsync(int productId);
+        Task<IEnumerable<ProductImgLink>> GetAllOrDefaultByProductIdAsync(int productId);
+        Task<ProductImgLink> GetImageOrDefaultAsync(int productId, int personalId);
+        Task<ProductImgLink> GetImageOrDefaultAsync(int productId, bool isThumbnail);
         void AddNewItem(ProductImgLinkDto item);
         void EditExistingItem(ProductImgLinkDto item);
         void DeleteItem(ProductImgLinkDto item);

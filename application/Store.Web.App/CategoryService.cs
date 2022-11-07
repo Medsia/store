@@ -8,6 +8,8 @@ namespace Store.Web.App
     {
         private readonly ICategoryRepository categoryRepository;
 
+        private readonly int defaultCategoryId = 1;
+
         public CategoryService(ICategoryRepository categoryRepository)
         {
             this.categoryRepository = categoryRepository;
@@ -16,6 +18,13 @@ namespace Store.Web.App
         public async Task<CategoryModel> GetByIdAsync(int id)
         {
             var category = await categoryRepository.GetCategoryByIdAsync(id);
+
+            return Map(category);
+        }
+
+        public async Task<CategoryModel> GetDefaultAsync()
+        {
+            var category = await categoryRepository.GetCategoryByIdAsync(defaultCategoryId);
 
             return Map(category);
         }

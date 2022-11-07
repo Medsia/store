@@ -1,4 +1,5 @@
-﻿using Store.Data;
+﻿using Microsoft.AspNetCore.Http;
+using Store.Data;
 using Store.Data.Content;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +10,27 @@ namespace Store.Web.App
     public class AdminControlService
     {
         private readonly int resetId = 1;
+        string fileType = ".png";
 
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IInfoRepository infoRepository;
         private readonly IUserRepository userRepository;
         private readonly IProductImgLinkRepository productImgLinkRepository;
-        private readonly ProductService productService;
+        private readonly IImageRepository imageRepository;
 
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
                                     IInfoRepository infoRepository, IUserRepository userRepository,
-                                    IProductImgLinkRepository productImgLinkRepository,
-                                    ProductService productService)
+                                    IProductImgLinkRepository productImgLinkRepository, IImageRepository imageRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.infoRepository = infoRepository;
             this.userRepository = userRepository;
-            this.productService = productService;
             this.productImgLinkRepository = productImgLinkRepository;
+            this.imageRepository = imageRepository;
         }
+
 
         private ProductDto Map(ProductModel productModel)
         {
@@ -42,59 +44,109 @@ namespace Store.Web.App
             };
         }
 
+
         public void AddProduct(ProductModel productModel)
         {
             productRepository.AddNewItem(Map(productModel));
         }
 
 
-        public async void EditProductThumbnail(int productId, string imgLink)
+        public async Task EditProductThumbnail(IFormFile uploadedImage, int productId, string webRootPath)
         {
-            ProductImgLink productImgLink = await productImgLinkRepository.GetThumbnailOrDefaultByProdIdAsync(productId);
+            ProductImgLink productImgLink = await productImgLinkRepository.GetImageOrDefaultAsync(productId, true);
             ProductImgLinkDto dto;
+
+            string fileName = "ProductThumbnail_" + productId.ToString() + fileType;
+            string path = "/Img/Products/" + fileName;
+            string fullPath = webRootPath + path;
 
             if (productImgLink.Id != 0)
             {
                 dto = ProductImgLink.Mapper.Map(productImgLink);
-                dto.ImgLink = imgLink;
+                dto.ImgLink = path;
 
                 productImgLinkRepository.EditExistingItem(dto);
+                imageRepository.EditImageAsync(uploadedImage, fullPath);
             }
             else
             {
                 dto = new ProductImgLinkDto
                 {
                     ProductId = productId,
-                    ImgLink = imgLink,
+                    PersonalId = 0,
+                    ImgLink = path,
                     IsThumbnail = true,
                 };
                 
                 productImgLinkRepository.AddNewItem(dto);
+                imageRepository.SaveImageAsync(uploadedImage, fullPath);
             }
         }
 
-        //public void EditProductImages(int productId, IEnumerable<string> imgLink, out IEnumerable<string> oldImgLink)
-        //{
-        //    var productImgLinks = productImgLinkRepository.GetAllByProductIdAsync(productId).Result;
+        public async Task EditProductImage(IFormFile uploadedImage, int productId, int personalId, string webRootPath)
+        {
+            ProductImgLink productImgLink = await productImgLinkRepository.GetImageOrDefaultAsync(productId, personalId);
+            ProductImgLinkDto dto;
 
+            string fileName = "ProductImage_" + productId.ToString() + "_" + personalId.ToString() + fileType;
+            string path = "/Img/Products/" + fileName;
+            string fullPath = webRootPath + path;
 
-        //    var dto = ProductImgLink.Mapper.Map();
-        //    oldImgLink = dto.ImgLink;
+            if (productImgLink.Id != 0)
+            {
+                dto = ProductImgLink.Mapper.Map(productImgLink);
+                dto.ImgLink = path;
 
-        //    dto.ImgLink = imgLink;a
+                productImgLinkRepository.EditExistingItem(dto);
+                imageRepository.EditImageAsync(uploadedImage, fullPath);
+            }
+            else
+            {
+                dto = new ProductImgLinkDto
+                {
+                    ProductId = productId,
+                    PersonalId = personalId,
+                    ImgLink = path,
+                    IsThumbnail = false,
+                };
 
-        //    categoryRepository.EditExistingItem(dto);
-        //}
+                productImgLinkRepository.AddNewItem(dto);
+                imageRepository.SaveImageAsync(uploadedImage, fullPath);
+            }
+        }
+
 
         public void EditProduct(ProductModel productModel)
         {
             productRepository.EditExistingItem(Map(productModel));
         }
 
-        public void DeleteProduct(int productId)
+
+        public async Task DeleteAllProductImages(int productId, string webRootPath)
+        {
+            ProductImgLink productThumbnail = await productImgLinkRepository.GetImageOrDefaultAsync(productId, true);
+            IEnumerable<ProductImgLink> productImages = await productImgLinkRepository.GetAllOrDefaultByProductIdAsync(productId);
+
+            if(productThumbnail.Id != 0)
+            {
+                imageRepository.DeleteImage(webRootPath + productThumbnail.ImgLink);
+                productImgLinkRepository.DeleteItem(ProductImgLink.Mapper.Map(productThumbnail));
+            }
+            
+            foreach (var image in productImages)
+            {
+                imageRepository.DeleteImage(webRootPath + image.ImgLink);
+                productImgLinkRepository.DeleteItem(ProductImgLink.Mapper.Map(image));
+            }
+
+        }
+
+
+        public async Task DeleteProduct(int productId, string webRootPath)
         {
             ProductDto productDto = Product.Mapper.Map(productRepository.GetByIdAsync(productId).Result);
             productRepository.DeleteItem(productDto);
+            await DeleteAllProductImages(productId, webRootPath);
         }
 
 
@@ -103,11 +155,12 @@ namespace Store.Web.App
             CategoryDto dto = new CategoryDto
             {
                 Name = Name,
-                ImgLink = ContentService.EmptyImageLink
+                ImgLink = ContentService.EmptyImageLink 
             };
 
             categoryRepository.AddNewItem(dto);
         }
+
 
         public void EditCategoryName(int categoryId, string categoryName)
         {
@@ -118,6 +171,7 @@ namespace Store.Web.App
             categoryRepository.EditExistingItem(dto);
         }
 
+
         public void EditCategoryImage(int categoryId, string imgLink, out string oldImgLink)
         {
             var dto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(categoryId).Result);
@@ -127,6 +181,7 @@ namespace Store.Web.App
 
             categoryRepository.EditExistingItem(dto);
         }
+
 
         public void ResetCategoryIdInProducts(int categoryId)
         {
@@ -140,6 +195,7 @@ namespace Store.Web.App
                 productRepository.EditExistingItem(productDto);
             }
         }
+
 
         public void DeleteCategory(int id)
         {
@@ -163,6 +219,7 @@ namespace Store.Web.App
             infoRepository.UpdateContactsData(contactsSO);
         }
 
+
         public void EditPayment(string title, List<string> options, string additional)
         {
             PaymentSO paymentSO = new PaymentSO
@@ -174,6 +231,7 @@ namespace Store.Web.App
             infoRepository.UpdatePaymentData(paymentSO);
         }
 
+
         public void EditDelivery(string title, List<string> options, string additional)
         {
             DeliverySO deliverySO = new DeliverySO
@@ -184,6 +242,7 @@ namespace Store.Web.App
             };
             infoRepository.UpdateDeliveryData(deliverySO);
         }
+
 
         public void EditAbout(string title, string description)
         {
@@ -211,6 +270,7 @@ namespace Store.Web.App
             }
         }
 
+
         public void ChangePassword(string login, string newPassword)
         {
             User user = userRepository.GetUserOrDedaultAsync(login).Result;
@@ -220,6 +280,7 @@ namespace Store.Web.App
 
             userRepository.EditUser(userDto);
         }
+
 
         public void DeleteAccount(string login)
         {

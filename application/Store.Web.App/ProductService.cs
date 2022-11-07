@@ -17,6 +17,19 @@ namespace Store.Web.App
             this.contentService = contentService;
         }
 
+        public async Task<ProductModel> GetEmptyModelAsync()
+        {
+            return new ProductModel
+            {
+                Id = 0,
+                Title = "",
+                Category = await categoryService.GetDefaultAsync(),
+                Description = "",
+                Price = 0,
+                ThumbnailLink = ContentService.EmptyImageLink
+            };
+        }
+
         public async Task<ProductModel> GetByIdAsync(int id)
         {
             var product = await productRepository.GetByIdAsync(id);
@@ -48,6 +61,13 @@ namespace Store.Web.App
                         .ToArray();
         }
 
+        public async Task<ProductModel> GetLastCreated()
+        {
+            var product = await productRepository.GetLastCreatedAsync();
+
+            return Map(product);
+        }
+
         private ProductModel Map(Product product)
         {
             return new ProductModel
@@ -57,7 +77,7 @@ namespace Store.Web.App
                 Category = categoryService.GetByIdAsync(product.CategoryId).Result,
                 Description = product.Description,
                 Price = product.Price,
-                ThumbnailLink = contentService.GetThumbnailByProdIdAsync(product.Id).Result.ImgLink
+                ThumbnailLink = contentService.GetThumbnailByProdIdAsync(product.Id).Result
             };
         }
 

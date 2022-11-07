@@ -139,10 +139,11 @@ namespace Store.Data.EF
                 action.Property(dto => dto.ProductId)
                       .IsRequired();
 
-                action.Property(dto => dto.IsThumbnail)
+                action.Property(dto => dto.PersonalId)
                       .IsRequired();
 
-                action.HasData( TemporaryData.ImgLinksDtoList );
+                action.Property(dto => dto.IsThumbnail)
+                      .IsRequired();
             });
         }
     }

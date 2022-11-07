@@ -29,9 +29,10 @@
 
 <div class="my-4">
     <h3 class="">Фотографии товара:</h3>
+    <img class="" src="@Model.ThumbnailLink" height="200" width="200"/>
     @foreach (var image in ViewBag.Images)
     {
-        <img class="" src="@image.ImgLink" height="200" width="200"/>
+        <img class="" src="@image" height="200" width="200"/>
     }
 </div>
 

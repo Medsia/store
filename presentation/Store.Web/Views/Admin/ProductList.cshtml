@@ -37,10 +37,12 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <form action="@Url.Action("Product", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <button class="btn btn-outline-info" type="submit">@item.Title</button>
-            </form>
+            <div class="">
+                <a class="nav-link" href="@Url.Action("Product", "Admin", new { productId=item.Id })">
+                    <img class="img-thumbnail my-2 ml-3" src="@item.ThumbnailLink" height="100" width="100"/>
+                    <p class="text-info">@item.Title</p>
+                </a>
+            </div>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category.Name)
