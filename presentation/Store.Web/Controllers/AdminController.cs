@@ -46,6 +46,13 @@ namespace Store.Web.Controllers
         }
 
 
+        public async Task<IActionResult> ProductSearch(string query)
+        {
+            var model = await productService.GetAllByQueryAsync(query);
+            return View("ProductList", model);
+        }
+
+
         public async Task<IActionResult> Product(int productId)
         {
             ProductModel productModel = await productService.GetEmptyModelAsync();
