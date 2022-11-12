@@ -42,6 +42,7 @@ namespace Store.Web.Controllers
             return View();
         }
 
+
         public IActionResult ProductList()
         {
             var model = productService.GetAll();
@@ -67,16 +68,6 @@ namespace Store.Web.Controllers
 
             return View(productModel);
         }
-
-
-
-
-
-
-
-
-
-
 
 
         [HttpPost]
@@ -126,12 +117,6 @@ namespace Store.Web.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpPost]
         public async Task<IActionResult> ProductEdit(int productId, string title, int categoryId, decimal price, string description,
                                                         IFormFile uploadedThumbnail, List<IFormFile> uploadedImages)
@@ -175,12 +160,6 @@ namespace Store.Web.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpPost]
         public async Task<IActionResult> ProductDelete(int productId, string title)
         {
@@ -198,11 +177,13 @@ namespace Store.Web.Controllers
             return View(model);
         }
 
+
         public IActionResult Category(int categoryId)
         {
             var model = categoryService.GetByIdAsync(categoryId).Result;
             return View(model);
         }
+
 
         [HttpPost]
         public IActionResult CategoryAdd(string categoryName)
@@ -218,39 +199,11 @@ namespace Store.Web.Controllers
         }
 
 
-
-
-
-
-
-
-
-
         [HttpPost]
         public async Task<IActionResult> CategoryEdit(int categoryId, string categoryName, IFormFile uploadedFile)
         {
             string message;
-            if (contentService.IsImageValid(uploadedFile, out message))
-            {
-                string fileName = "CategoryImg_" + categoryId.ToString() + "_";
-                string path = "/Img/Categories/" + fileName + uploadedFile.FileName;
-
-                using (var fileStream = new FileStream(WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedFile.CopyToAsync(fileStream);
-                }
-
-                string oldImgLink;
-                adminControlService.EditCategoryImage(categoryId, path, out oldImgLink);
-
-                if (!oldImgLink.Equals("/Img/Empty.jpg"))
-                {
-                    FileInfo fileInf = new FileInfo(WebRootPath + oldImgLink);
-                    fileInf.Delete();
-                }
-            }
-            else TempData["warn"] = message;
-
+            
             if (!string.IsNullOrWhiteSpace(categoryName))
             {
                 adminControlService.EditCategoryName(categoryId, categoryName);
@@ -258,27 +211,21 @@ namespace Store.Web.Controllers
             }
             else TempData["error"] = string.Format("Поле \"Название\" не должно быть пустым.");
 
-            var model = categoryService.GetByIdAsync(categoryId).Result;
+            if (contentService.IsImageValid(uploadedFile, out message))
+            {
+                await adminControlService.EditCategoryImage(uploadedFile, categoryId, WebRootPath);
+            }
+            else TempData["warn"] = message;
+
+            var model = await categoryService.GetByIdAsync(categoryId);
             return View("Category", model);
         }
 
 
-
-
-
-
-
-
-
-
-
         [HttpPost]
-        public IActionResult CategoryDelete(int categoryId, string categoryName, string oldImgLink)
+        public async Task<IActionResult> CategoryDelete(int categoryId, string categoryName)
         {
-            adminControlService.DeleteCategory(categoryId);
-
-            FileInfo fileInf = new FileInfo(WebRootPath + oldImgLink);
-            fileInf.Delete();
+            await adminControlService.DeleteCategory(categoryId, WebRootPath);
 
             TempData["message"] = string.Format("Удалено -> " + categoryName);
 

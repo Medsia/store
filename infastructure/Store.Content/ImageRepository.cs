@@ -6,7 +6,7 @@ namespace Store.Content
 {
     public class ImageRepository : IImageRepository
     {
-        public async void SaveImageAsync(IFormFile uploadedImage, string path)
+        public async Task SaveImageAsync(IFormFile uploadedImage, string path)
         {
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
@@ -14,10 +14,10 @@ namespace Store.Content
             }
         }
 
-        public void EditImageAsync(IFormFile uploadedImage, string path)
+        public async Task EditImageAsync(IFormFile uploadedImage, string path)
         {
             DeleteImage(path);
-            SaveImageAsync(uploadedImage, path);
+            await SaveImageAsync(uploadedImage, path);
         }
 
         public void DeleteImage(string path)

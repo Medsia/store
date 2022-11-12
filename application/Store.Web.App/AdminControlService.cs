@@ -66,7 +66,7 @@ namespace Store.Web.App
                 dto.ImgLink = path;
 
                 productImgLinkRepository.EditExistingItem(dto);
-                imageRepository.EditImageAsync(uploadedImage, fullPath);
+                await imageRepository.EditImageAsync(uploadedImage, fullPath);
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Store.Web.App
                 };
                 
                 productImgLinkRepository.AddNewItem(dto);
-                imageRepository.SaveImageAsync(uploadedImage, fullPath);
+                await imageRepository.SaveImageAsync(uploadedImage, fullPath);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Store.Web.App
                 dto.ImgLink = path;
 
                 productImgLinkRepository.EditExistingItem(dto);
-                imageRepository.EditImageAsync(uploadedImage, fullPath);
+                await imageRepository.EditImageAsync(uploadedImage, fullPath);
             }
             else
             {
@@ -111,7 +111,7 @@ namespace Store.Web.App
                 };
 
                 productImgLinkRepository.AddNewItem(dto);
-                imageRepository.SaveImageAsync(uploadedImage, fullPath);
+                await imageRepository.SaveImageAsync(uploadedImage, fullPath);
             }
         }
 
@@ -172,13 +172,19 @@ namespace Store.Web.App
         }
 
 
-        public void EditCategoryImage(int categoryId, string imgLink, out string oldImgLink)
+        public async Task EditCategoryImage(IFormFile uploadedImage, int categoryId, string webRootPath)
         {
-            var dto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(categoryId).Result);
-            oldImgLink = dto.ImgLink;
+            string fileName = "CategoryImg_" + categoryId.ToString() + fileType;
+            string path = "/Img/Categories/" + fileName;
+            string fullpath = webRootPath + path;
 
-            dto.ImgLink = imgLink;
+            var dto = Category.Mapper.Map(await categoryRepository.GetCategoryByIdAsync(categoryId));
 
+            if (string.IsNullOrWhiteSpace(dto.ImgLink))
+                await imageRepository.SaveImageAsync(uploadedImage, fullpath);
+            else await imageRepository.EditImageAsync(uploadedImage, fullpath);
+
+            dto.ImgLink = path;
             categoryRepository.EditExistingItem(dto);
         }
 
@@ -197,11 +203,13 @@ namespace Store.Web.App
         }
 
 
-        public void DeleteCategory(int id)
+        public async Task DeleteCategory(int categoryId, string webRootPath)
         {
-            ResetCategoryIdInProducts(id);
+            ResetCategoryIdInProducts(categoryId);
 
-            CategoryDto categoryDto = Category.Mapper.Map(categoryRepository.GetCategoryByIdAsync(id).Result);
+            CategoryDto categoryDto = Category.Mapper.Map(await categoryRepository.GetCategoryByIdAsync(categoryId));
+
+            imageRepository.DeleteImage(webRootPath + categoryDto.ImgLink);
             categoryRepository.DeleteItem(categoryDto);
         }
 

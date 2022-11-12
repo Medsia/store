@@ -5,8 +5,8 @@ namespace Store
 {
     public interface IImageRepository
     {
-        void SaveImageAsync(IFormFile uploadedImage, string path);
-        void EditImageAsync(IFormFile uploadedImage, string path);
+        Task SaveImageAsync(IFormFile uploadedImage, string path);
+        Task EditImageAsync(IFormFile uploadedImage, string path);
         void DeleteImage(string path);
     }
 }
