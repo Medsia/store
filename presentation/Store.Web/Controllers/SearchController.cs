@@ -8,10 +8,12 @@ namespace Store.Web.Controllers
     public class SearchController : Controller
     {
         private readonly ProductService productService;
+        private readonly ContentService contentService;
 
-        public SearchController(ProductService productService)
+        public SearchController(ProductService productService, ContentService contentService)
         {
             this.productService = productService;
+            this.contentService = contentService;
         }
 
         public async Task<IActionResult> Index(string query)

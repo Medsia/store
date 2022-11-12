@@ -12,10 +12,11 @@
 }
 else
 {
-    <ul>
-        @foreach (var product in Model)
-        {
-            <li><a href="@Url.Action("Index", "Product", new { id = product.Id })">@product.Title</a></li>
-        }
-    </ul>
+    @foreach (var product in Model)
+    {
+        <a href="@Url.Action("Index", "Product", new { id = product.Id })">
+            <img class="" src="@product.ThumbnailLink" height="100" width="100"/>
+            <p class="">@product.Title</p>
+        </a>
+    }
 }

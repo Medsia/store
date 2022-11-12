@@ -5,16 +5,23 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("AboutEdit", "Admin")" method="post">
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("AboutEdit", "Admin")" method="post" enctype="multipart/form-data">
     <input type="hidden" name="title" value="@Model.Title"/>
 
     <div class="my-4">
-        <label class="text-info editor-label">О магазине</label>
+        <h5 class="editor-label">Изображение:</h5>
+        <img class="" src="@Model.ImgLink" height="200" width="800"/>
+        <input class="form-control-file my-2" type="file" name="uploadedImage"/>
+        <p class="text-danger">Максимальный размер: 4 МБ</p>
+    </div>
+
+    <div class="my-4">
+        <h5 class="editor-label">О магазине:</h5>
         <textarea class="form-control form-text" rows="10" cols="20" name="description">@Model.Description</textarea>
     </div>
 
     <div class="my-4">
         <button class="btn btn-success" type="submit">Сохранить</button>
-        <a class="nav-link" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
+        <a class="ml-5" href="@Url.Action("InfoList", "Admin")">Отменить изменения и вернуться к списку</a>
     </div>
 </form>

@@ -3,37 +3,33 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h3>@ViewData["Title"]</h3>
 
 <table class="table">
         <tr>
             <td>
-                <form action="@Url.Action("InfoList", "Admin")" method="post">
-                    <input type="hidden" name="id" value="1"/>
+                <form action="@Url.Action("ContactsInfo", "Admin")" method="post">
                     <button class="btn btn-outline-info" type="submit">Контакты</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("InfoList", "Admin")" method="post">
-                    <input type="hidden" name="id" value="2"/>
+                <form action="@Url.Action("PaymentInfo", "Admin")" method="post">
                     <button class="btn btn-outline-info" type="submit">Оплата</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("InfoList", "Admin")" method="post">
-                    <input type="hidden" name="id" value="3"/>
+                <form action="@Url.Action("DeliveryInfo", "Admin")" method="post">
                     <button class="btn btn-outline-info" type="submit">Доставка</button>
                 </form>
             </td>
         </tr>
         <tr>
             <td>
-                <form action="@Url.Action("InfoList", "Admin")" method="post">
-                    <input type="hidden" name="id" value="4"/>
+                <form action="@Url.Action("AboutInfo", "Admin")" method="post">
                     <button class="btn btn-outline-info" type="submit">О магазине</button>
                 </form>
             </td>

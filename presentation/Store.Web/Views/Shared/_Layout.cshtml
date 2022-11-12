@@ -16,10 +16,10 @@
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
             </form>
             
-            <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=1 })">Контакты</a>
-            <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=2 })">Оплата</a>
-            <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=3 })">Доставка</a>
-            <a class="navbar-nav" href="@Url.Action("Info", "Home", new { id=4 })">О магазине</a>
+            <a class="navbar-nav ml-2" href="@Url.Action("ContactsInfo", "Home")">Контакты</a>
+            <a class="navbar-nav ml-2" href="@Url.Action("PaymentInfo", "Home")">Оплата</a>
+            <a class="navbar-nav ml-2" href="@Url.Action("DeliveryInfo", "Home")">Доставка</a>
+            <a class="navbar-nav ml-2" href="@Url.Action("AboutInfo", "Home")">О магазине</a>
             
             <span class="navbar-text ml-auto">
                 @{

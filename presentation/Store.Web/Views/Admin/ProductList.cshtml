@@ -5,17 +5,21 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form class="form-inline my-2" action="@Url.Action("Search", "Admin")" method="post">
-    <input class="form-control" type="search" name="query" placeholder="Поиск в каталоге"/>
-    <button class="btn btn-primary" type="submit">Искать</button>
-</form>
+<h3>@ViewData["Title"]</h3>
 
-<form class="btn-offset my-2" action="@Url.Action("ProductAdd", "Admin")" method="post">
-    <input type="hidden" name="categoryId" value="1"/>
-    <button class="btn btn-primary btn-info">Добавить продукт</button>
-</form>
 
-<h1>@ViewData["Title"]</h1>
+<div class="form-inline my-4">
+    <form class="btn-offset my-2" action="@Url.Action("Product", "Admin")" method="post">
+        <input type="hidden" name="productId" value="0"/>
+        <button class="btn btn-primary btn-info">Добавить товар</button>
+    </form>
+    
+    <form class="form-inline my-2 ml-auto" action="@Url.Action("Search", "Admin")" method="post">
+        <input class="form-control" type="search" name="query" placeholder="Поиск в каталоге"/>
+        <button class="btn btn-primary" type="submit">Искать</button>
+    </form>
+</div>
+
 
 <table class="table">
     <tr>
@@ -33,11 +37,12 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            <form action="@Url.Action("ProductEdit", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <input type="hidden" name="categoryId" value="1"/>
-                <button class="btn btn-outline-info" type="submit">@item.Title</button>
-            </form>
+            <div class="">
+                <a class="nav-link" href="@Url.Action("Product", "Admin", new { productId=item.Id })">
+                    <img class="img-thumbnail my-2 ml-3" src="@item.ThumbnailLink" height="100" width="100"/>
+                    <p class="text-info">@item.Title</p>
+                </a>
+            </div>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category.Name)
@@ -48,6 +53,7 @@
         <td>
             <form action="@Url.Action("ProductDelete", "Admin")" method="post">
                 <input type="hidden" name="productId" value="@item.Id"/>
+                <input type="hidden" name="title" value="@item.Title"/>
                 <button class="btn btn-outline-danger" type="submit">Удалить</button>
             </form>
         </td>

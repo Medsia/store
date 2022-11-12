@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -35,41 +38,87 @@ namespace Store.Web.Controllers
             return View();
         }
 
+
         public IActionResult ProductList()
         {
             var model = productService.GetAll();
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult ProductAdd(int productId, string title, int categoryId, decimal price, string description)
+
+        public async Task<IActionResult> Product(int productId)
         {
-            ProductModel productModel = new ProductModel
-            {
-                Id = productId,
-                Title = title,
-                Category = categoryService.GetByIdAsync(categoryId).Result,
-                Description = description,
-                Price = price,
-            };
-
-            if (productService.IsValid(productModel))
-            {
-                adminControlService.AddProduct(productModel);
-                TempData["message"] = string.Format("Добавлено");
-
-                return RedirectToAction("ProductList");
-            }
+            ProductModel productModel = await productService.GetEmptyModelAsync();
 
             ViewBag.Categories = categoryService.GetAll();
-            ViewBag.Mode = "ProductAdd";
 
-            return View("Product", productModel);
+            ViewBag.Images = await contentService.GetAllImagesByProdIdAsync(productId);
+            ViewBag.EmptyImage = ContentService.EmptyImageLink;
+
+            if (productId == 0) ViewBag.EditMode = false;
+            else
+            {
+                ViewBag.EditMode = true;
+                productModel = productService.GetByIdAsync(productId).Result;
+            }
+
+            return View(productModel);
         }
 
+
         [HttpPost]
-        public IActionResult ProductEdit(int productId, string title, int categoryId, decimal price, string description)
+        public async Task<IActionResult> ProductAdd(string title, int categoryId, decimal price, string description,
+                                                        IFormFile uploadedThumbnail, List<IFormFile> uploadedImages)
         {
+            string message = "";
+
+            ProductModel productModel = new ProductModel
+            {
+                Title = title,
+                Category = categoryService.GetByIdAsync(categoryId).Result,
+                Description = description,
+                Price = price,
+            };
+
+            if (productService.IsValid(productModel, out message))
+            {
+                adminControlService.AddProduct(productModel);
+                TempData["message"] = string.Format("Добавлено -> " + title);
+
+                var createdProduct = await productService.GetLastCreated();
+                if (contentService.IsImageValid(uploadedThumbnail, out message))
+                {
+                    await adminControlService.EditProductThumbnail(uploadedThumbnail, createdProduct.Id);
+                }
+                else TempData["warn"] += $"\n Превью: " + message;
+
+                int counter = 1;
+                foreach (var image in uploadedImages)
+                {
+                    if (contentService.IsImageValid(image, out message))
+                    {
+                        await adminControlService.EditProductImage(image, createdProduct.Id, counter);
+                    }
+                    else TempData["warn"] += $"\n Файл {counter}: " + message;
+                    counter++;
+                }
+
+                return RedirectToAction("ProductList", "Admin");
+            }
+            else
+            {
+                TempData["error"] += message;
+                return RedirectToAction("Product", "Admin", new { productId=0 });
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ProductEdit(int productId, string title, int categoryId, decimal price, string description,
+                                                        IFormFile uploadedThumbnail, List<IFormFile> uploadedImages)
+        {
+            string message = "";
+
             ProductModel productModel = new ProductModel
             {
                 Id = productId,
@@ -78,129 +127,190 @@ namespace Store.Web.Controllers
                 Description = description,
                 Price = price,
             };
-            
-            if (productService.IsValid(productModel))
+
+            if (productService.IsValid(productModel, out message))
             {
                 adminControlService.EditProduct(productModel);
                 TempData["message"] = string.Format("Изменения сохранены");
+            }
+            else TempData["error"] += message;
 
-                return RedirectToAction("ProductList");
+            if (contentService.IsImageValid(uploadedThumbnail, out message))
+            {
+                await adminControlService.EditProductThumbnail(uploadedThumbnail, productId);
+            }
+            else TempData["warn"] += $"\n Превью: " + message;
+
+            int counter = 1;
+            foreach(var image in uploadedImages)
+            {
+                if (contentService.IsImageValid(image, out message))
+                {
+                    await adminControlService.EditProductImage(image, productId, counter);
+                }
+                else TempData["warn"] += $"\n Файл {counter}: " + message;
+                counter++;
             }
 
-            ViewBag.Categories = categoryService.GetAll();
-            ViewBag.Mode = "ProductEdit";
-
-            var model = productService.GetByIdAsync(productId).Result;
-
-            return View("Product", model);
+            return RedirectToAction("Product", "Admin", new { productId });
         }
 
-        [HttpPost]
-        public IActionResult ProductDelete(int productId)
-        {
-            adminControlService.DeleteProduct(productId);
 
-            TempData["message"] = string.Format("Изменения сохранены");
+        [HttpPost]
+        public async Task<IActionResult> ProductDelete(int productId, string title)
+        {
+            await adminControlService.DeleteProduct(productId);
+
+            TempData["message"] = string.Format("Удалено -> " + title);
 
             return RedirectToAction("ProductList");
         }
 
 
-        public IActionResult Category()
+        public IActionResult CategoryList()
         {
             var model = categoryService.GetAll();
             return View(model);
         }
 
+
+        public IActionResult Category(int categoryId)
+        {
+            var model = categoryService.GetByIdAsync(categoryId).Result;
+            return View(model);
+        }
+
+
         [HttpPost]
         public IActionResult CategoryAdd(string categoryName)
         {
-            CategoryModel categoryModel = new CategoryModel
+            if (!string.IsNullOrWhiteSpace(categoryName))
             {
-                Name = categoryName,
-            };
-
-            if (categoryService.IsValid(categoryModel))
-            {
-                adminControlService.AddCategory(categoryModel);
-                TempData["message"] = string.Format("Добавлено");
+                adminControlService.AddCategory(categoryName);
+                TempData["message"] = string.Format("Добавлено -> " + categoryName);
             }
+            else TempData["error"] = string.Format("Поле \"Название\" не должно быть пустым");
 
-            return RedirectToAction("Category");
+            return RedirectToAction("CategoryList");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CategoryEdit(int categoryId, string categoryName, IFormFile uploadedFile)
+        {
+            string message;
+            
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                adminControlService.EditCategoryName(categoryId, categoryName);
+                TempData["message"] = string.Format($"{categoryName} -> сохранено");
+            }
+            else TempData["error"] = string.Format("Поле \"Название\" не должно быть пустым.");
+
+            if (contentService.IsImageValid(uploadedFile, out message))
+            {
+                await adminControlService.EditCategoryImage(uploadedFile, categoryId);
+            }
+            else TempData["warn"] = message;
+
+            var model = await categoryService.GetByIdAsync(categoryId);
+            return View("Category", model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CategoryDelete(int categoryId, string categoryName)
+        {
+            await adminControlService.DeleteCategory(categoryId);
+
+            TempData["message"] = string.Format("Удалено -> " + categoryName);
+
+            return RedirectToAction("CategoryList");
+        }
+
+
+        public IActionResult InfoList() => View();
+
+        public IActionResult ContactsInfo()
+        {
+            var contactsSO = contentService.GetContacts();
+            return View(contactsSO);
+        }
+
+        public IActionResult PaymentInfo()
+        {
+            var paymentSO = contentService.GetPayment();
+            return View(paymentSO);
+        }
+
+        public IActionResult DeliveryInfo()
+        {
+            var deliverySO = contentService.GetDelivery();
+            return View(deliverySO);
+        }
+
+        public IActionResult AboutInfo()
+        {
+            var aboutSO = contentService.GetAbout();
+            return View(aboutSO);
         }
 
         [HttpPost]
-        public IActionResult CategoryEdit(int categoryId, string categoryName)
+        public IActionResult ContactsEdit(string title, string location, string worktime, 
+                                            List<string> numbers, string additional, IFormFile uploadedImage)
         {
-            CategoryModel categoryModel = new CategoryModel
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
             {
-                Id = categoryId,
-                Name = categoryName,
-            };
+                adminControlService.EditContacts(title, location, worktime, numbers, additional, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
 
-            if (categoryService.IsValid(categoryModel))
+            }
+            else TempData["warn"] = message;
+
+            return RedirectToAction("ContactsInfo");
+        }
+
+        [HttpPost]
+        public IActionResult PaymentEdit(string title, List<string> options, string additional, IFormFile uploadedImage)
+        {
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
             {
-                adminControlService.EditCategory(categoryModel);
+                adminControlService.EditPayment(title, options, additional, uploadedImage);
                 TempData["message"] = string.Format("Изменения сохранены");
             }
+            else TempData["warn"] = message;
 
-            return RedirectToAction("Category");
+            return RedirectToAction("PaymentInfo");
         }
 
         [HttpPost]
-        public IActionResult CategoryDelete(int categoryId, string categoryName)
+        public IActionResult DeliveryEdit(string title, List<string> options, string additional, IFormFile uploadedImage)
         {
-            adminControlService.DeleteCategory(categoryId);
-            TempData["message"] = string.Format("Удалено: " + categoryName);
-
-            return RedirectToAction("Category");
-        }
-
-
-        public IActionResult InfoList(int id)
-        {
-            switch (id)
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
             {
-                case 1: var contactsSO = contentService.GetContacts(); return View("ContactsInfo", contactsSO);
-                case 2: var paymentSO = contentService.GetPayment(); return View("PaymentInfo", paymentSO);
-                case 3: var deliverySO = contentService.GetDelivery(); return View("DeliveryInfo", deliverySO);
-                case 4: var aboutSO = contentService.GetAbout(); return View("AboutInfo", aboutSO);
-                default: return View();
+                adminControlService.EditDelivery(title, options, additional, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
             }
-        }
+            else TempData["warn"] = message;
 
-        public IActionResult InfoEdited()
-        {
-            TempData["message"] = string.Format("Изменения сохранены");
-            return View("InfoList");
+            return RedirectToAction("DeliveryInfo");
         }
 
         [HttpPost]
-        public IActionResult ContactsEdit(string title, string location, string worktime, List<string> numbers, string additional)
+        public IActionResult AboutEdit(string title, string description, IFormFile uploadedImage)
         {
-            adminControlService.EditContacts(title, location, worktime, numbers, additional);
-            return RedirectToAction("InfoEdited");
-        }
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
+            {
+                adminControlService.EditAbout(title, description, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+            else TempData["warn"] = message;
 
-        [HttpPost]
-        public IActionResult PaymentEdit(string title, List<string> options, string additional)
-        {
-            adminControlService.EditPayment(title, options, additional);
-            return RedirectToAction("InfoEdited");
-        }
-
-        [HttpPost]
-        public IActionResult DeliveryEdit(string title, List<string> options, string additional)
-        {
-            adminControlService.EditDelivery(title, options, additional);
-            return RedirectToAction("InfoEdited");
-        }
-
-        [HttpPost]
-        public IActionResult AboutEdit(string title, string description)
-        {
-            adminControlService.EditAbout(title, description);
-            return RedirectToAction("InfoEdited");
+            return RedirectToAction("AboutInfo");
         }
 
 
@@ -239,7 +349,7 @@ namespace Store.Web.Controllers
 
                     TempData["message"] = string.Format("Изменения сохранены");
                 }
-                else TempData["warn"] = string.Format("Не правильный пароль!");
+                else TempData["error"] = string.Format("Не правильный пароль!");
             }
             else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
 
@@ -301,7 +411,7 @@ namespace Store.Web.Controllers
                 }
                 else TempData["warn"] = string.Format("Поля ввода не должны быть пустыми!");
             }
-            else TempData["warn"] = string.Format("Ошибка подтверждения!");
+            else TempData["error"] = string.Format("Ошибка подтверждения!");
 
             var model = authService.GetAllAccounts();
             return View("AccountManagement", model);

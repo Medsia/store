@@ -63,8 +63,8 @@ namespace Store.Web
             services.AddSingleton<CategoryService>();
             services.AddSingleton<ProductService>();
             services.AddSingleton<OrderService>();
-            services.AddSingleton<AdminControlService>();
             services.AddSingleton<ContentService>();
+            services.AddSingleton<AdminControlService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,7 @@
 {
   "Contacts": {
     "Title": "Контакты",
+    "ImgLink": "/Img/Other/ContactsBanner.png",
     "Location": "какой-то город",
     "Worktime": "какое-то рабочее время",
     "Numbers": [
@@ -12,6 +13,7 @@
   },
   "Payment": {
     "Title": "Оплата",
+    "ImgLink": "",
     "Options": [
       "Оплата через ХХХ",
       "Оплата через YYY",
@@ -21,6 +23,7 @@
   },
   "Delivery": {
     "Title": "Доставка",
+    "ImgLink": "",
     "Options": [
       "Доставка через ХХХ",
       "Доставка через YYY",
@@ -30,6 +33,7 @@
   },
   "About": {
     "Title": "О магазине",
+    "ImgLink": "",
     "Description": "Некое описание"
   }
 }

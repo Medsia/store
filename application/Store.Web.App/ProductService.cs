@@ -8,11 +8,26 @@ namespace Store.Web.App
     {
         private readonly IProductRepository productRepository;
         private readonly CategoryService categoryService;
+        private readonly ContentService contentService;
 
-        public ProductService(IProductRepository productRepository, CategoryService categoryService)
+        public ProductService(IProductRepository productRepository, CategoryService categoryService, ContentService contentService)
         {
             this.productRepository = productRepository;
             this.categoryService = categoryService;
+            this.contentService = contentService;
+        }
+
+        public async Task<ProductModel> GetEmptyModelAsync()
+        {
+            return new ProductModel
+            {
+                Id = 0,
+                Title = "",
+                Category = await categoryService.GetDefaultAsync(),
+                Description = "",
+                Price = 0,
+                ThumbnailLink = ContentService.EmptyImageLink
+            };
         }
 
         public async Task<ProductModel> GetByIdAsync(int id)
@@ -46,6 +61,13 @@ namespace Store.Web.App
                         .ToArray();
         }
 
+        public async Task<ProductModel> GetLastCreated()
+        {
+            var product = await productRepository.GetLastCreatedAsync();
+
+            return Map(product);
+        }
+
         private ProductModel Map(Product product)
         {
             return new ProductModel
@@ -55,13 +77,31 @@ namespace Store.Web.App
                 Category = categoryService.GetByIdAsync(product.CategoryId).Result,
                 Description = product.Description,
                 Price = product.Price,
+                ThumbnailLink = contentService.GetThumbnailByProdIdAsync(product.Id).Result
             };
         }
 
-        public bool IsValid(ProductModel productModel)
+        public bool IsValid(ProductModel productModel, out string message)
         {
-            if (productModel == null || string.IsNullOrWhiteSpace(productModel.Title) || productModel.Price == 0)
+            message = "";
+
+            if (productModel == null)
+            {
+                message = "Ошибка отправки данных";
                 return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(productModel.Title))
+            {
+                message = "Поле \"Название\" не должно быть пустым";
+                return false;
+            }
+
+            if (productModel.Price == 0)
+            {
+                message = "Цена -> 0";
+                return false;
+            }
 
             return true;
         }

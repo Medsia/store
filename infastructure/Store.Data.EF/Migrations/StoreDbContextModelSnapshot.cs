@@ -25,6 +25,9 @@ namespace Store.Data.EF.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ImgLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -37,26 +40,31 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 1,
+                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Default"
                         },
                         new
                         {
                             Id = 2,
+                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Значки"
                         },
                         new
                         {
                             Id = 3,
+                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Плакаты"
                         },
                         new
                         {
                             Id = 4,
+                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Брелки"
                         },
                         new
                         {
                             Id = 5,
+                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Аксесуары"
                         });
                 });
@@ -263,6 +271,31 @@ namespace Store.Data.EF.Migrations
                             Price = 2m,
                             Title = "Очки \"Как у Двачера\""
                         });
+                });
+
+            modelBuilder.Entity("Store.Data.ProductImgLinkDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ImgLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsThumbnail")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PersonalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Store.Data.UserDto", b =>

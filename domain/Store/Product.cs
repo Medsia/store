@@ -1,5 +1,6 @@
 ﻿using Store.Data;
 using System;
+using System.Collections.Generic;
 
 namespace Store
 {
@@ -38,6 +39,7 @@ namespace Store
             get => dto.Price;
             set => dto.Price = value;
         }
+
 
         internal Product(ProductDto dto)
         {

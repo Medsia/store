@@ -21,6 +21,8 @@ namespace Store.Data.EF
 
         public DbSet<UserDto> Users { get; set; }
 
+        public DbSet<ProductImgLinkDto> ProductImages { get; set; }
+
         public StoreDbContext(DbContextOptions<StoreDbContext> options) 
             : base(options)
         { }
@@ -32,6 +34,7 @@ namespace Store.Data.EF
             BuildOrderItems(modelBuilder);
             BuildCategories(modelBuilder);
             BuildUsers(modelBuilder);
+            BuildProductImages(modelBuilder);
         }
 
         private void BuildOrderItems(ModelBuilder modelBuilder)
@@ -132,6 +135,24 @@ namespace Store.Data.EF
                       .IsRequired();
 
                 action.HasData( TemporaryData.UserDtoList );
+            });
+        }
+
+        private void BuildProductImages(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductImgLinkDto>(action =>
+            {
+                action.Property(dto => dto.ImgLink)
+                      .IsRequired();
+
+                action.Property(dto => dto.ProductId)
+                      .IsRequired();
+
+                action.Property(dto => dto.PersonalId)
+                      .IsRequired();
+
+                action.Property(dto => dto.IsThumbnail)
+                      .IsRequired();
             });
         }
     }

@@ -8,7 +8,8 @@ namespace Store.Content
 {
     public class InfoRepository : IInfoRepository
     {
-        private string InfoJsonLocation { get => @"Content\InfoPagesData.json"; }
+        public string WebRootPath { private get; set; }
+        private string InfoJsonLocation { get => WebRootPath + @"/Content/InfoPagesData.json"; }
 
         private InfoSO GetJsData()
         {

@@ -11,23 +11,28 @@ namespace Store.Data
         {
              new CategoryDto{
                 Id = 1,
-                Name = "Default" },
+                Name = "Default",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 2,
-                Name = "Значки" },
+                Name = "Значки",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 3,
-                Name = "Плакаты" },
+                Name = "Плакаты",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 4,
-                Name = "Брелки" },
+                Name = "Брелки",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
             new CategoryDto{
                 Id = 5,
-                Name = "Аксесуары" },
+                Name = "Аксесуары",
+                ImgLink = "../wwwroot/Img/Empty.jpg" },
 
         };
 

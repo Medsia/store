@@ -74,6 +74,16 @@ namespace Store.Data.EF
                             .ToArray();
         }
 
+        public async Task<Product> GetLastCreatedAsync()
+        {
+            var dbContext = dbContextFactory.Create(typeof(ProductRepository));
+
+            var dto = await dbContext.Products.OrderBy(product => product.Id)
+                               .LastAsync();
+
+            return Product.Mapper.Map(dto);
+        }
+
         public void AddNewItem(ProductDto item)
         {
             var dbContext = dbContextFactory.Create(typeof(ProductRepository));

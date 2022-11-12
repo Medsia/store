@@ -8,6 +8,8 @@ namespace Store.Web.App
     {
         private readonly ICategoryRepository categoryRepository;
 
+        private readonly int defaultCategoryId = 1;
+
         public CategoryService(ICategoryRepository categoryRepository)
         {
             this.categoryRepository = categoryRepository;
@@ -16,6 +18,13 @@ namespace Store.Web.App
         public async Task<CategoryModel> GetByIdAsync(int id)
         {
             var category = await categoryRepository.GetCategoryByIdAsync(id);
+
+            return Map(category);
+        }
+
+        public async Task<CategoryModel> GetDefaultAsync()
+        {
+            var category = await categoryRepository.GetCategoryByIdAsync(defaultCategoryId);
 
             return Map(category);
         }
@@ -33,16 +42,17 @@ namespace Store.Web.App
             return new CategoryModel
             {
                 Id = category.Id,
-                Name = category.Name
+                Name = category.Name,
+                ImgLink = category.ImgLink
             };
         }
 
-        public bool IsValid(CategoryModel categoryModel)
-        {
-            if (categoryModel == null || string.IsNullOrWhiteSpace(categoryModel.Name))
-                return false;
+        //public bool IsValid(CategoryModel categoryModel)
+        //{
+        //    if (categoryModel == null || string.IsNullOrWhiteSpace(categoryModel.Name))
+        //        return false;
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

@@ -14,6 +14,7 @@ namespace Store
         Task<Product> GetByIdAsync(int id);
         Task<IEnumerable<Product>> GetAllByIdsAsync(IEnumerable<int> productIds);
         IEnumerable<Product> GetAllProducts();
+        Task<Product> GetLastCreatedAsync();
         void AddNewItem(ProductDto item);
         void EditExistingItem(ProductDto item);
         void DeleteItem(ProductDto item);

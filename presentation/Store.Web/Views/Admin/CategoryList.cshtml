@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CategoryModel>
+
+@{
+    ViewData["Title"] = "Категории";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h3 class="my-3">@ViewData["Title"]</h3>
+
+<table class="table category-edit-table">
+    <tr>
+        <form class="form-inline my-4 ml-auto" asp-controller="Admin" asp-action="CategoryAdd" method="post">
+            <td><input class="form-control mr-ms-2" type="text" name="categoryName" placeholder="Название категории" maxlength="30"/></td>
+            <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
+        </form>
+    </tr>
+
+    @foreach (var item in Model) {
+        @if (item.Id == 1) continue;
+        <tr class="">
+            <td>
+                <div class="">
+                    <a class="nav-link" href="@Url.Action("Category", "Admin", new { categoryId=item.Id })">
+                        <img class="img-thumbnail my-2" src="@item.ImgLink" height="100" width="100"/>
+                        <p class="text-info ml-3">@item.Name</p>
+                    </a>
+                </div>
+            </td>
+            <td>
+                <form class="form-inline my-2 ml-auto" asp-controller="Admin" asp-action="CategoryDelete" method="post">
+                    <input type="hidden" name="categoryId" value="@item.Id"/>
+                    <input type="hidden" name="categoryName" value="@item.Name"/>
+                    <input type="hidden" name="oldImgLink" value="@item.ImgLink"/>
+                    
+                    <button class="btn btn-outline-danger my-5" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+

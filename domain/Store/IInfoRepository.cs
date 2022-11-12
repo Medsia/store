@@ -4,6 +4,7 @@ namespace Store
 {
     public interface IInfoRepository
     {
+        string WebRootPath { set; }
         InfoSO GetData();
         void UpdateContactsData(ContactsSO contactsSO);
         void UpdatePaymentData(PaymentSO paymentSO);

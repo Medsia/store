@@ -1,47 +1,84 @@
 ﻿@model IEnumerable<UserModel>
 
 @{
-    ViewData["Title"] = "AccountManagement";
+    ViewData["Title"] = "Менеджер аккаунтов";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 
-<table class="table account-edit-table">
-    <colgroup>
-       <col span="1" style="width: 15%;">
-       <col span="1" style="width: 30%;">
-       <col span="1" style="width: 55%;">
-    </colgroup>
+<h3>@ViewData["Title"]</h3>
 
 
-    @foreach (var item in Model) {
-        @if (item.Id == 1) continue;
+<div class="my-5">
+    <h5>Добавление аккаунта:</h5>
+
+    <table class="table account-edit-table">
+        <colgroup>
+           <col span="1" style="width: 15%;">
+           <col span="1" style="width: 30%;">
+           <col span="1" style="width: 55%;">
+        </colgroup>
+    
+    
+        <thead>
+            <tr>
+                <th>Логин:</th>
+                <th>Пароль:</th>
+            </tr>
+        </thead>
+    
         <tr>
-            <td>
-                <p>@item.Login</p>
-            </td>
-            <td>
-                <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountEdit", "Admin")" method="post">
-                    <input type="hidden" name="login" value="@item.Login"/>
-                    <input class="form-control" type="password" name="password" placeholder="Новый пароль" maxlength="30"/>
-                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Обновить</button>
-                </form>
-            </td>
-            <td>
-                <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountDelete", "Admin")" method="post">
-                    <input type="hidden" name="login" value="@item.Login"/>
-                    <input class="form-control ml-auto mr-auto col-7" type="text" name="confirmation" placeholder="Повторите логин для подтверждения" maxlength="30"/>
-                    <button class="btn btn-outline-danger ml-auto mr-auto" type="submit">Удалить</button>
-                </form>
-            </td>
+            <form class="form-inline my-2 ml-auto" action="@Url.Action("AccountAdd", "Admin")" method="post">
+                 <td><input class="form-control" type="text" name="login" placeholder="Логин" maxlength="30"/></td>
+                 <td><input class="form-control" type="password" name="password" placeholder="Пароль" maxlength="30"/></td>
+                 <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
+            </form>
         </tr>
-    }
-    <tr>
-        <form class="form-inline my-2 my-lg-0 ml-auto" action="@Url.Action("AccountAdd", "Admin")" method="post">
-             <td><input class="form-control" type="text" name="login" placeholder="Логин" maxlength="30"/></td>
-             <td><input class="form-control" type="password" name="password" placeholder="Пароль" maxlength="30"/></td>
-             <td><button class="btn btn-primary btn-info my-2 my-sm-0" type="submit">Добавить</button></td>
-        </form>
-    </tr>
-</table>
+    </table>
+</div>
+
+
+<div class="my-5">
+    <h5>Редактирование аккаунтов:</h5>
+
+    <table class="table account-edit-table">
+        <colgroup>
+           <col span="1" style="width: 15%;">
+           <col span="1" style="width: 30%;">
+           <col span="1" style="width: 55%;">
+        </colgroup>
+    
+    
+        <thead>
+            <tr>
+                <th>Логин:</th>
+                <th>Установить новый пароль:</th>
+                <th>Удаление аккаунта:</th>
+            </tr>
+        </thead>
+    
+        @foreach (var item in Model) {
+            @if (item.Id == 1) continue;
+            <tr>
+                <td>
+                    <p>@item.Login</p>
+                </td>
+                <td>
+                    <form class="form-inline my-2 ml-auto" action="@Url.Action("AccountEdit", "Admin")" method="post">
+                        <input type="hidden" name="login" value="@item.Login"/>
+                        <input class="form-control" type="password" name="password" placeholder="Новый пароль" maxlength="30"/>
+                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Обновить</button>
+                    </form>
+                </td>
+                <td>
+                    <form class="form-inline my-2 ml-auto" action="@Url.Action("AccountDelete", "Admin")" method="post">
+                        <input type="hidden" name="login" value="@item.Login"/>
+                        <input class="form-control ml-auto mr-auto col-7" type="text" name="confirmation" placeholder="Повторите логин для подтверждения" maxlength="30"/>
+                        <button class="btn btn-outline-danger ml-auto mr-auto" type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 

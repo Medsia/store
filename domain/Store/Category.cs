@@ -21,6 +21,12 @@ namespace Store
             }
         }
 
+        public string ImgLink
+        {
+            get => dto.ImgLink;
+            set => dto.ImgLink = value;
+        }
+
         internal Category(CategoryDto dto)
         {
             this.dto = dto;
@@ -28,7 +34,7 @@ namespace Store
 
         public static class DtoFactory
         {
-            public static CategoryDto Create(string name)
+            public static CategoryDto Create(string name, string imgLink)
             {
 
                 if (string.IsNullOrWhiteSpace(name))
@@ -36,7 +42,8 @@ namespace Store
 
                 return new CategoryDto
                 {
-                    Name = name
+                    Name = name,
+                    ImgLink = imgLink
                 };
             }
         }

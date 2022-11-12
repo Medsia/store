@@ -4,16 +4,12 @@
     ViewData["Title"] = "Интернет Аниме-магазин";
 }
 
-<table class="table">
-    <tbody>
-        @foreach (var item in Model) {
-            @if (item.Id == 1) continue;
-                <tr>
-                    <td>
-                        <a href="@Url.Action("SearchByCategory", "Search", new { categoryId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
-                    </td>
-                </tr>
-        }
-    </tbody>
-</table>
+
+@foreach (var item in Model) {
+    @if (item.Id == 1) continue;
+    <a class="" href="@Url.Action("SearchByCategory", "Search", new { categoryId = item.Id })">
+        <img class="" src="@item.ImgLink" height="250" width="250"/>
+        <p class="">@item.Name</p>
+    </a>
+}
 
