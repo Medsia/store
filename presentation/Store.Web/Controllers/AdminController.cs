@@ -22,18 +22,14 @@ namespace Store.Web.Controllers
         private readonly ContentService contentService;
         private readonly AuthService authService;
 
-        private readonly string WebRootPath;
-
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService, ContentService contentService, AuthService authService,
-                                IWebHostEnvironment appEnvironment)
+                                CategoryService categoryService, ContentService contentService, AuthService authService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
             this.contentService = contentService;
             this.authService = authService;
-            this.WebRootPath = appEnvironment.WebRootPath;
         }
 
         public IActionResult Index()
@@ -92,7 +88,7 @@ namespace Store.Web.Controllers
                 var createdProduct = await productService.GetLastCreated();
                 if (contentService.IsImageValid(uploadedThumbnail, out message))
                 {
-                    await adminControlService.EditProductThumbnail(uploadedThumbnail, createdProduct.Id, WebRootPath);
+                    await adminControlService.EditProductThumbnail(uploadedThumbnail, createdProduct.Id);
                 }
                 else TempData["warn"] += $"\n Превью: " + message;
 
@@ -101,7 +97,7 @@ namespace Store.Web.Controllers
                 {
                     if (contentService.IsImageValid(image, out message))
                     {
-                        await adminControlService.EditProductImage(image, createdProduct.Id, counter, WebRootPath);
+                        await adminControlService.EditProductImage(image, createdProduct.Id, counter);
                     }
                     else TempData["warn"] += $"\n Файл {counter}: " + message;
                     counter++;
@@ -141,7 +137,7 @@ namespace Store.Web.Controllers
 
             if (contentService.IsImageValid(uploadedThumbnail, out message))
             {
-                await adminControlService.EditProductThumbnail(uploadedThumbnail, productId, WebRootPath);
+                await adminControlService.EditProductThumbnail(uploadedThumbnail, productId);
             }
             else TempData["warn"] += $"\n Превью: " + message;
 
@@ -150,7 +146,7 @@ namespace Store.Web.Controllers
             {
                 if (contentService.IsImageValid(image, out message))
                 {
-                    await adminControlService.EditProductImage(image, productId, counter, WebRootPath);
+                    await adminControlService.EditProductImage(image, productId, counter);
                 }
                 else TempData["warn"] += $"\n Файл {counter}: " + message;
                 counter++;
@@ -163,7 +159,7 @@ namespace Store.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductDelete(int productId, string title)
         {
-            await adminControlService.DeleteProduct(productId, WebRootPath);
+            await adminControlService.DeleteProduct(productId);
 
             TempData["message"] = string.Format("Удалено -> " + title);
 
@@ -213,7 +209,7 @@ namespace Store.Web.Controllers
 
             if (contentService.IsImageValid(uploadedFile, out message))
             {
-                await adminControlService.EditCategoryImage(uploadedFile, categoryId, WebRootPath);
+                await adminControlService.EditCategoryImage(uploadedFile, categoryId);
             }
             else TempData["warn"] = message;
 
@@ -225,7 +221,7 @@ namespace Store.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CategoryDelete(int categoryId, string categoryName)
         {
-            await adminControlService.DeleteCategory(categoryId, WebRootPath);
+            await adminControlService.DeleteCategory(categoryId);
 
             TempData["message"] = string.Format("Удалено -> " + categoryName);
 
@@ -233,50 +229,88 @@ namespace Store.Web.Controllers
         }
 
 
-        public IActionResult InfoList(int id)
+        public IActionResult InfoList() => View();
+
+        public IActionResult ContactsInfo()
         {
-            switch (id)
+            var contactsSO = contentService.GetContacts();
+            return View(contactsSO);
+        }
+
+        public IActionResult PaymentInfo()
+        {
+            var paymentSO = contentService.GetPayment();
+            return View(paymentSO);
+        }
+
+        public IActionResult DeliveryInfo()
+        {
+            var deliverySO = contentService.GetDelivery();
+            return View(deliverySO);
+        }
+
+        public IActionResult AboutInfo()
+        {
+            var aboutSO = contentService.GetAbout();
+            return View(aboutSO);
+        }
+
+        [HttpPost]
+        public IActionResult ContactsEdit(string title, string location, string worktime, 
+                                            List<string> numbers, string additional, IFormFile uploadedImage)
+        {
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
             {
-                case 1: var contactsSO = contentService.GetContacts(); return View("ContactsInfo", contactsSO);
-                case 2: var paymentSO = contentService.GetPayment(); return View("PaymentInfo", paymentSO);
-                case 3: var deliverySO = contentService.GetDelivery(); return View("DeliveryInfo", deliverySO);
-                case 4: var aboutSO = contentService.GetAbout(); return View("AboutInfo", aboutSO);
-                default: return View();
+                adminControlService.EditContacts(title, location, worktime, numbers, additional, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
+
             }
-        }
+            else TempData["warn"] = message;
 
-        public IActionResult InfoEdited()
-        {
-            TempData["message"] = string.Format("Изменения сохранены");
-            return View("InfoList");
+            return RedirectToAction("ContactsInfo");
         }
 
         [HttpPost]
-        public IActionResult ContactsEdit(string title, string location, string worktime, List<string> numbers, string additional)
+        public IActionResult PaymentEdit(string title, List<string> options, string additional, IFormFile uploadedImage)
         {
-            adminControlService.EditContacts(title, location, worktime, numbers, additional);
-            return RedirectToAction("InfoEdited");
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
+            {
+                adminControlService.EditPayment(title, options, additional, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+            else TempData["warn"] = message;
+
+            return RedirectToAction("PaymentInfo");
         }
 
         [HttpPost]
-        public IActionResult PaymentEdit(string title, List<string> options, string additional)
+        public IActionResult DeliveryEdit(string title, List<string> options, string additional, IFormFile uploadedImage)
         {
-            adminControlService.EditPayment(title, options, additional);
-            return RedirectToAction("InfoEdited");
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
+            {
+                adminControlService.EditDelivery(title, options, additional, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+            else TempData["warn"] = message;
+
+            return RedirectToAction("DeliveryInfo");
         }
 
         [HttpPost]
-        public IActionResult DeliveryEdit(string title, List<string> options, string additional)
+        public IActionResult AboutEdit(string title, string description, IFormFile uploadedImage)
         {
-            adminControlService.EditDelivery(title, options, additional);
-            return RedirectToAction("InfoEdited");
-        }
+            string message;
+            if (contentService.IsImageValid(uploadedImage, out message))
+            {
+                adminControlService.EditAbout(title, description, uploadedImage);
+                TempData["message"] = string.Format("Изменения сохранены");
+            }
+            else TempData["warn"] = message;
 
-        [HttpPost]
-        public IActionResult AboutEdit(string title, string description)
-        {
-            adminControlService.EditAbout(title, description);
-            return RedirectToAction("InfoEdited");
+            return RedirectToAction("AboutInfo");
         }
 
 

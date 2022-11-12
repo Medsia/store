@@ -5,8 +5,15 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("DeliveryEdit", "Admin")" method="post">
+<form class="form-text my-2 my-lg-0 ml-auto" action="@Url.Action("DeliveryEdit", "Admin")" method="post" enctype="multipart/form-data">
     <input type="hidden" name="title" value="@Model.Title"/>
+
+    <div class="my-4">
+        <h5 class="editor-label">Изображение:</h5>
+        <img class="" src="@Model.ImgLink" height="200" width="800"/>
+        <input class="form-control-file my-2" type="file" name="uploadedImage"/>
+        <p class="text-danger">Максимальный размер: 4 МБ</p>
+    </div>
 
     <div class="my-4" id="optionsList">
         <h5 class="editor-label">Способы доставки:</h5>

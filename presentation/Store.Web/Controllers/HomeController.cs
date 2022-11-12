@@ -22,16 +22,28 @@ namespace Store.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Info(int id)
+        public IActionResult ContactsInfo()
         {
-            switch (id)
-            {
-                case 1: var contactsSO = contentService.GetContacts();  return View("ContactsInfo", contactsSO);
-                case 2: var paymentSO = contentService.GetPayment();  return View("PaymentInfo", paymentSO);
-                case 3: var deliverySO = contentService.GetDelivery();  return View("DeliveryInfo", deliverySO);
-                case 4: var aboutSO = contentService.GetAbout();  return View("AboutInfo", aboutSO);
-                default: return RedirectToAction("Index");
-            }
+            var contactsSO = contentService.GetContacts();
+            return View(contactsSO);
+        }
+
+        public IActionResult PaymentInfo()
+        {
+            var paymentSO = contentService.GetPayment();
+            return View(paymentSO);
+        }
+
+        public IActionResult DeliveryInfo()
+        {
+            var deliverySO = contentService.GetDelivery();
+            return View(deliverySO);
+        }
+
+        public IActionResult AboutInfo()
+        {
+            var aboutSO = contentService.GetAbout();
+            return View(aboutSO);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

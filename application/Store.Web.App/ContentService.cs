@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Store.Data;
 using Store.Data.Content;
 using System.Collections.Generic;
@@ -12,10 +13,13 @@ namespace Store.Web.App
         private readonly IInfoRepository infoRepository;
         private readonly IProductImgLinkRepository productImgLinkRepository;
 
-        public ContentService(IInfoRepository infoRepository, IProductImgLinkRepository productImgLinkRepository)
+        public ContentService(IInfoRepository infoRepository, IProductImgLinkRepository productImgLinkRepository,
+                                    IWebHostEnvironment appEnvironment)
         {
             this.infoRepository = infoRepository;
             this.productImgLinkRepository = productImgLinkRepository;
+
+            infoRepository.WebRootPath = appEnvironment.WebRootPath;
         }
 
         public static string EmptyImageLink = "/Img/Empty.jpg";
@@ -79,19 +83,35 @@ namespace Store.Web.App
 
         public ContactsSO GetContacts()
         {
-            return infoRepository.GetData().Contacts;
+            var contacts = infoRepository.GetData().Contacts;
+
+            if (string.IsNullOrWhiteSpace(contacts.ImgLink)) contacts.ImgLink = EmptyImageLink;
+
+            return contacts;
         }
         public PaymentSO GetPayment()
         {
-            return infoRepository.GetData().Payment;
+            var payment = infoRepository.GetData().Payment;
+
+            if (string.IsNullOrWhiteSpace(payment.ImgLink)) payment.ImgLink = EmptyImageLink;
+
+            return payment;
         }
         public DeliverySO GetDelivery()
         {
-            return infoRepository.GetData().Delivery;
+            var delivery = infoRepository.GetData().Delivery;
+
+            if (string.IsNullOrWhiteSpace(delivery.ImgLink)) delivery.ImgLink = EmptyImageLink;
+
+            return delivery;
         }
         public AboutSO GetAbout()
         {
-            return infoRepository.GetData().About;
+            var about = infoRepository.GetData().About;
+
+            if (string.IsNullOrWhiteSpace(about.ImgLink)) about.ImgLink = EmptyImageLink;
+
+            return about;
         }
     }
 }

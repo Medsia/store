@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Store.Data;
 using Store.Data.Content;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Store.Web.App
     public class AdminControlService
     {
         private readonly int resetId = 1;
-        string fileType = ".png";
+        private readonly string fileType = ".png";
 
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
@@ -19,9 +20,12 @@ namespace Store.Web.App
         private readonly IProductImgLinkRepository productImgLinkRepository;
         private readonly IImageRepository imageRepository;
 
+        public string WebRootPath { private get; set; }
+
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
                                     IInfoRepository infoRepository, IUserRepository userRepository,
-                                    IProductImgLinkRepository productImgLinkRepository, IImageRepository imageRepository)
+                                    IProductImgLinkRepository productImgLinkRepository, IImageRepository imageRepository,
+                                    IWebHostEnvironment appEnvironment)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
@@ -29,6 +33,9 @@ namespace Store.Web.App
             this.userRepository = userRepository;
             this.productImgLinkRepository = productImgLinkRepository;
             this.imageRepository = imageRepository;
+
+            this.WebRootPath = appEnvironment.WebRootPath;
+            infoRepository.WebRootPath = this.WebRootPath;
         }
 
 
@@ -51,14 +58,14 @@ namespace Store.Web.App
         }
 
 
-        public async Task EditProductThumbnail(IFormFile uploadedImage, int productId, string webRootPath)
+        public async Task EditProductThumbnail(IFormFile uploadedImage, int productId)
         {
             ProductImgLink productImgLink = await productImgLinkRepository.GetImageOrDefaultAsync(productId, true);
             ProductImgLinkDto dto;
 
             string fileName = "ProductThumbnail_" + productId.ToString() + fileType;
             string path = "/Img/Products/" + fileName;
-            string fullPath = webRootPath + path;
+            string fullPath = WebRootPath + path;
 
             if (productImgLink.Id != 0)
             {
@@ -83,14 +90,14 @@ namespace Store.Web.App
             }
         }
 
-        public async Task EditProductImage(IFormFile uploadedImage, int productId, int personalId, string webRootPath)
+        public async Task EditProductImage(IFormFile uploadedImage, int productId, int personalId)
         {
             ProductImgLink productImgLink = await productImgLinkRepository.GetImageOrDefaultAsync(productId, personalId);
             ProductImgLinkDto dto;
 
             string fileName = "ProductImage_" + productId.ToString() + "_" + personalId.ToString() + fileType;
             string path = "/Img/Products/" + fileName;
-            string fullPath = webRootPath + path;
+            string fullPath = WebRootPath + path;
 
             if (productImgLink.Id != 0)
             {
@@ -122,31 +129,31 @@ namespace Store.Web.App
         }
 
 
-        public async Task DeleteAllProductImages(int productId, string webRootPath)
+        public async Task DeleteAllProductImages(int productId)
         {
             ProductImgLink productThumbnail = await productImgLinkRepository.GetImageOrDefaultAsync(productId, true);
             IEnumerable<ProductImgLink> productImages = await productImgLinkRepository.GetAllOrDefaultByProductIdAsync(productId);
 
             if(productThumbnail.Id != 0)
             {
-                imageRepository.DeleteImage(webRootPath + productThumbnail.ImgLink);
+                imageRepository.DeleteImage(WebRootPath + productThumbnail.ImgLink);
                 productImgLinkRepository.DeleteItem(ProductImgLink.Mapper.Map(productThumbnail));
             }
             
             foreach (var image in productImages)
             {
-                imageRepository.DeleteImage(webRootPath + image.ImgLink);
+                imageRepository.DeleteImage(WebRootPath + image.ImgLink);
                 productImgLinkRepository.DeleteItem(ProductImgLink.Mapper.Map(image));
             }
 
         }
 
 
-        public async Task DeleteProduct(int productId, string webRootPath)
+        public async Task DeleteProduct(int productId)
         {
             ProductDto productDto = Product.Mapper.Map(productRepository.GetByIdAsync(productId).Result);
             productRepository.DeleteItem(productDto);
-            await DeleteAllProductImages(productId, webRootPath);
+            await DeleteAllProductImages(productId);
         }
 
 
@@ -172,11 +179,11 @@ namespace Store.Web.App
         }
 
 
-        public async Task EditCategoryImage(IFormFile uploadedImage, int categoryId, string webRootPath)
+        public async Task EditCategoryImage(IFormFile uploadedImage, int categoryId)
         {
             string fileName = "CategoryImg_" + categoryId.ToString() + fileType;
             string path = "/Img/Categories/" + fileName;
-            string fullpath = webRootPath + path;
+            string fullpath = WebRootPath + path;
 
             var dto = Category.Mapper.Map(await categoryRepository.GetCategoryByIdAsync(categoryId));
 
@@ -203,63 +210,92 @@ namespace Store.Web.App
         }
 
 
-        public async Task DeleteCategory(int categoryId, string webRootPath)
+        public async Task DeleteCategory(int categoryId)
         {
             ResetCategoryIdInProducts(categoryId);
 
             CategoryDto categoryDto = Category.Mapper.Map(await categoryRepository.GetCategoryByIdAsync(categoryId));
 
-            imageRepository.DeleteImage(webRootPath + categoryDto.ImgLink);
+            imageRepository.DeleteImage(WebRootPath + categoryDto.ImgLink);
             categoryRepository.DeleteItem(categoryDto);
         }
 
 
-        public void EditContacts(string title, string location, string worktime, List<string> numbers, string additional)
+        public void EditContacts(string title, string location, string worktime, 
+                                    List<string> numbers, string additional, IFormFile uploadedImage)
         {
+            string fileName = "ContactsBanner" + fileType;
+            string path = "/Img/Other/" + fileName;
+            string fullPath = WebRootPath + path;
+
             ContactsSO contactsSO = new ContactsSO
             {
                 Title = title,
+                ImgLink = path,
                 Location = location,
                 Worktime = worktime,
                 Numbers = numbers.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
                 Additional = additional
             };
+
             infoRepository.UpdateContactsData(contactsSO);
+            imageRepository.EditImageAsync(uploadedImage, fullPath);
         }
 
 
-        public void EditPayment(string title, List<string> options, string additional)
+        public void EditPayment(string title, List<string> options, string additional, IFormFile uploadedImage)
         {
+            string fileName = "PaymentBanner" + fileType;
+            string path = "/Img/Other/" + fileName;
+            string fullPath = WebRootPath + path;
+
             PaymentSO paymentSO = new PaymentSO
             {
                 Title = title,
+                ImgLink = path,
                 Options = options.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
                 Additional = additional
             };
+
             infoRepository.UpdatePaymentData(paymentSO);
+            imageRepository.EditImageAsync(uploadedImage, fullPath);
         }
 
 
-        public void EditDelivery(string title, List<string> options, string additional)
+        public void EditDelivery(string title, List<string> options, string additional, IFormFile uploadedImage)
         {
+            string fileName = "DeliveryBanner" + fileType;
+            string path = "/Img/Other/" + fileName;
+            string fullPath = WebRootPath + path;
+
             DeliverySO deliverySO = new DeliverySO
             {
                 Title = title,
+                ImgLink = path,
                 Options = options.Where(str => !string.IsNullOrEmpty(str)).ToArray(),
                 Additional = additional
             };
+
             infoRepository.UpdateDeliveryData(deliverySO);
+            imageRepository.EditImageAsync(uploadedImage, fullPath);
         }
 
 
-        public void EditAbout(string title, string description)
+        public void EditAbout(string title, string description, IFormFile uploadedImage)
         {
+            string fileName = "AboutBanner" + fileType;
+            string path = "/Img/Other/" + fileName;
+            string fullPath = WebRootPath + path;
+
             AboutSO aboutSO = new AboutSO
             {
                 Title = title,
+                ImgLink = path,
                 Description = description
             };
+
             infoRepository.UpdateAboutData(aboutSO);
+            imageRepository.EditImageAsync(uploadedImage, fullPath);
         }
 
 
