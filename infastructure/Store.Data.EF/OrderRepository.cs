@@ -43,5 +43,16 @@ namespace Store.Data.EF
 
             await dbContext.SaveChangesAsync();
         }
+
+        public IEnumerable<Order> GetAll()
+        {
+            var dbContext = dbContextFactory.Create(typeof(OrderRepository));
+
+            var dto = dbContext.Orders.AsEnumerable()
+                               .Select(Order.Mapper.Map)
+                               .ToArray();
+
+            return dto;
+        }
     }
 }

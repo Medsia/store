@@ -12,5 +12,6 @@ namespace Store
         Task<Order> GetByIdAsync(int id);
 
         Task UpdateAsync(Order order);
+        IEnumerable<Order> GetAll();
     }
 }

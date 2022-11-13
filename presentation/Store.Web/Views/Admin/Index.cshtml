@@ -20,28 +20,18 @@
         </th>
     </tr>
 
-@*@foreach (var item in Model) {
+@foreach (var item in Model) {
     <tr>
         <td>
-            <form action="@Url.Action("ProductEdit", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <input type="hidden" name="categoryId" value="1"/>
-                <button class="btn btn-outline-info" type="submit">@item.Title</button>
-            </form>
+            @Html.DisplayFor(modelItem => item.Id)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
+            @Html.DisplayFor(modelItem => item.CellPhone)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            <form action="@Url.Action("ProductDelete", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <button class="btn btn-outline-danger" type="submit">Удалить</button>
-            </form>
+            @Html.DisplayFor(modelItem => item.TotalPrice)
         </td>
     </tr>
-}*@
+}
 
 </table>

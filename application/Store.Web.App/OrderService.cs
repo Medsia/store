@@ -268,5 +268,20 @@ namespace Store.Web.App
 
             return await MapAsync(order);
         }
+
+
+        public async Task<IEnumerable<OrderModel>> GetAllOrdersAsync()
+        {
+            var orders = orderRepository.GetAll();
+
+            List<OrderModel> orderModels = new List<OrderModel>();
+
+            foreach (var order in orders)
+            {
+                orderModels.Add( await MapAsync(order) );
+            }
+
+            return orderModels.ToArray();
+        }
     }
 }
