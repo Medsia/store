@@ -21,21 +21,25 @@ namespace Store.Web.Controllers
         private readonly CategoryService categoryService;
         private readonly ContentService contentService;
         private readonly AuthService authService;
+        private readonly OrderService orderService;
 
         public AdminController(ProductService productService, AdminControlService adminControlService,  
-                                CategoryService categoryService, ContentService contentService, AuthService authService)
+                                CategoryService categoryService, ContentService contentService, 
+                                AuthService authService, OrderService orderService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
             this.adminControlService = adminControlService;
             this.contentService = contentService;
             this.authService = authService;
+            this.orderService = orderService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //var model = productService.GetAll();
-            return View();
+            var model = await orderService.GetAllOrdersAsync();
+
+            return View(model);
         }
 
 
@@ -43,6 +47,13 @@ namespace Store.Web.Controllers
         {
             var model = productService.GetAll();
             return View(model);
+        }
+
+
+        public async Task<IActionResult> ProductSearch(string query)
+        {
+            var model = await productService.GetAllByQueryAsync(query);
+            return View("ProductList", model);
         }
 
 

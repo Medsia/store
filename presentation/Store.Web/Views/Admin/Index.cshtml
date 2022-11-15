@@ -10,38 +10,40 @@
 <table class="table">
     <tr>
         <th>
-            1
+            Номер заказа
         </th>
         <th>
-            2
+            Номер телефона заказчика
         </th>
         <th>
-            3
+            Кол-во предметов
+        </th>
+        <th>
+            Сумма
         </th>
     </tr>
-
-@*@foreach (var item in Model) {
-    <tr>
-        <td>
-            <form action="@Url.Action("ProductEdit", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <input type="hidden" name="categoryId" value="1"/>
-                <button class="btn btn-outline-info" type="submit">@item.Title</button>
-            </form>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            <form action="@Url.Action("ProductDelete", "Admin")" method="post">
-                <input type="hidden" name="productId" value="@item.Id"/>
-                <button class="btn btn-outline-danger" type="submit">Удалить</button>
-            </form>
-        </td>
-    </tr>
-}*@
-
 </table>
+
+@foreach (var order in Model) {
+    <div class="">
+        <details>
+            <summary class="form-inline">
+                <p class="mr-auto">@order.Id</p>
+                <p class="mr-auto">@order.CellPhone</p>
+                <p class="ml-auto">@order.TotalCount</p>
+                <p class="ml-auto">@order.TotalPrice</p>
+            </summary>
+
+            <div class="">
+                <table class="table">
+                    <tr>
+                        <td>Корзина:</td>
+                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Title</p>}</td>
+                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Count</p>}</td>
+                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Price</p>}</td>
+                    </tr>
+                </table>
+            </div>
+        </details>
+    </div>
+}

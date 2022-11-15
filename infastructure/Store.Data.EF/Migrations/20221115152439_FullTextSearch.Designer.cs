@@ -9,8 +9,8 @@ using Store.Data.EF;
 namespace Store.Data.EF.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20221105151612_ImagesUpdate_3")]
-    partial class ImagesUpdate_3
+    [Migration("20221115152439_FullTextSearch")]
+    partial class FullTextSearch
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,31 +42,26 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 1,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Default"
                         },
                         new
                         {
                             Id = 2,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Значки"
                         },
                         new
                         {
                             Id = 3,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Плакаты"
                         },
                         new
                         {
                             Id = 4,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Брелки"
                         },
                         new
                         {
                             Id = 5,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Аксесуары"
                         });
                 });
@@ -102,6 +97,22 @@ namespace Store.Data.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentServiceName")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingAddress")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingCity")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingCountry")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("ShippingUserName")
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
