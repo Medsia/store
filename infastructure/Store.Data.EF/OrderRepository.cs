@@ -48,7 +48,9 @@ namespace Store.Data.EF
         {
             var dbContext = dbContextFactory.Create(typeof(OrderRepository));
 
-            var dto = dbContext.Orders.AsEnumerable()
+            var dto = dbContext.Orders
+                               .Include(order => order.Items)
+                               .AsEnumerable()
                                .Select(Order.Mapper.Map)
                                .ToArray();
 

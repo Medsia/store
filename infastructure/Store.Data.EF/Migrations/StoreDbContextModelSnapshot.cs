@@ -40,31 +40,26 @@ namespace Store.Data.EF.Migrations
                         new
                         {
                             Id = 1,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Default"
                         },
                         new
                         {
                             Id = 2,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Значки"
                         },
                         new
                         {
                             Id = 3,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Плакаты"
                         },
                         new
                         {
                             Id = 4,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Брелки"
                         },
                         new
                         {
                             Id = 5,
-                            ImgLink = "../wwwroot/Img/Empty.jpg",
                             Name = "Аксесуары"
                         });
                 });

@@ -12,7 +12,8 @@ namespace Store.Data.EF.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImgLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,6 +31,10 @@ namespace Store.Data.EF.Migrations
                     DeliveryDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryPrice = table.Column<decimal>(type: "money", nullable: false),
                     DeliveryParameters = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShippingUserName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    ShippingAddress = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    ShippingCity = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    ShippingCountry = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     PaymentServiceName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     PaymentDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PaymentParameters = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -37,6 +42,22 @@ namespace Store.Data.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImgLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    PersonalId = table.Column<int>(type: "int", nullable: false),
+                    IsThumbnail = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,14 +114,14 @@ namespace Store.Data.EF.Migrations
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "ImgLink", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Default" },
-                    { 2, "Значки" },
-                    { 3, "Плакаты" },
-                    { 4, "Брелки" },
-                    { 5, "Аксесуары" }
+                    { 1, null, "Default" },
+                    { 2, null, "Значки" },
+                    { 3, null, "Плакаты" },
+                    { 4, null, "Брелки" },
+                    { 5, null, "Аксесуары" }
                 });
 
             migrationBuilder.InsertData(
@@ -140,6 +161,9 @@ namespace Store.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "ProductImages");
 
             migrationBuilder.DropTable(
                 name: "Products");
