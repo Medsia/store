@@ -4,7 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Интернет Аниме-магазин</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/prism-okaidia.css" />
+    <link rel="stylesheet" href="~/css/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -12,15 +14,15 @@
         <nav class="navbar navbar-expand-sm navbar-light bg-white">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Интернет Аниме-магазин</a>
             <form class="form-inline my-2 my-lg-0" action="@Url.Action("Index", "Search")" method="get">
-                <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге"/>
+                <input class="form-control mr-ms-2" type="search" name="query" placeholder="Поиск в каталоге" />
                 <button class="btn btn-primary my-2 my-sm-0" type="submit">Искать</button>
             </form>
-            
+
             <a class="navbar-nav ml-2" href="@Url.Action("ContactsInfo", "Home")">Контакты</a>
             <a class="navbar-nav ml-2" href="@Url.Action("PaymentInfo", "Home")">Оплата</a>
             <a class="navbar-nav ml-2" href="@Url.Action("DeliveryInfo", "Home")">Доставка</a>
             <a class="navbar-nav ml-2" href="@Url.Action("AboutInfo", "Home")">О магазине</a>
-            
+
             <span class="navbar-text ml-auto">
                 @{
                     if (Context.Session.TryGetCart(out Cart cart) && cart.TotalCount > 0)
@@ -43,6 +45,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/prism.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
