@@ -20,7 +20,7 @@ namespace Store.Contractors
 
         public static Form CreateFirst(string serviceName)
         {
-            return new Form(serviceName, 1, false, null);
+            return new Form(serviceName, 1, true, null);
         }
 
         public static Form CreateNext(string serviceName, int step, IReadOnlyDictionary<string, string> parameters)

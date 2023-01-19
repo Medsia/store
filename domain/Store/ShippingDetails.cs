@@ -23,7 +23,6 @@ namespace Store
         [Display(Name = "Страна")]
         public string Country { get; set; }
 
-        public bool GiftWrap { get; set; }
         public ShippingDetails(string userName,
                              string address,
                              string city,

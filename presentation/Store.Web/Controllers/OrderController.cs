@@ -106,7 +106,11 @@ namespace Store.Web.Controllers
 
             var webContractorservice = webContractorServices.SingleOrDefault(service => service.Name == serviceName);
             if (webContractorservice == null)
-                return View("DeliveryStep", form);
+            {
+                var paymentMethods = paymentServices.ToDictionary(service => service.Name, service => service.Title);
+                return View("PaymentMethod", paymentMethods);
+            }
+
 
             var returnUri = GetReturnUri(nameof(NextDelivery));
             var redirectUri = await webContractorservice.StartSessionAsync(form.Parameters, returnUri);
@@ -134,8 +138,8 @@ namespace Store.Web.Controllers
             var deliveryService = deliveryServices.Single(service => service.Name == serviceName);
 
             var form = deliveryService.NextForm(step, values);
-            if (!form.IsFinal)
-                return View("deliveryStep", form);
+            //if (!form.IsFinal)
+            //    return View("deliveryStep", form);
 
             var delivery = deliveryService.GetDelivery(form);
             await orderService.SetDeliveryAsync(delivery);

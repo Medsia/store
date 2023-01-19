@@ -21,22 +21,14 @@
     <h3>Адрес доставки</h3>
     foreach (var property in ViewData.ModelMetadata.Properties)
     {
-        if (property.PropertyName != "UserName" && property.PropertyName != "GiftWrap")
+        if (property.PropertyName != "UserName")
         {
             <div class="form-group">
                 <label>@(property.DisplayName ?? property.PropertyName)</label>
                 @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
             </div>
         }
-    }
-
-    <h3>Опции</h3>
-    <div class="checkbox">
-        <label>
-            @Html.EditorFor(x => x.GiftWrap)
-            Использовать подарочную упаковку?
-        </label>
-    </div>
+    } 
 
 
     <button href="@Url.Action("ConfirmationCode", "Order")" type="submit" class="btn btn-success">Оформить заказ</button>

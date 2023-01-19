@@ -37,7 +37,7 @@ namespace Store.Contractors
 
         public string Name => "Postamate";
 
-        public string Title => "Доставка через постаматы в Москве и Санкт-Перербурге";
+        public string Title => "Европочта";
 
         public Form FirstForm(Order order)
         {
@@ -73,13 +73,13 @@ namespace Store.Contractors
 
         public OrderDelivery GetDelivery(Form form)
         {
-            if (form.ServiceName != Name || !form.IsFinal)
+            if (form.ServiceName != Name)
                 throw new InvalidOperationException("Invalid form.");
 
-            var cityId = form.Parameters["city"];
-            var cityName = cities[cityId];
-            var postamateId = form.Parameters["postamate"];
-            var postamateName = postamates[cityId][postamateId];
+            var cityId = string.Empty;
+            var cityName = string.Empty;
+            var postamateId = string.Empty;
+            var postamateName = string.Empty;
 
             var parameters = new Dictionary<string, string>
             {
