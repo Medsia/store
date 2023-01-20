@@ -42,7 +42,11 @@
     </tfoot>
 </table>
 
+@if(Model.Items.Count() > 0)
+{
 <form action="@Url.Action(nameof(OrderController.OrderConfirmation))" method="post">
     <button type="submit" class="btn btn-success">Оформить заказ</button>
 </form>
+}
+
 
