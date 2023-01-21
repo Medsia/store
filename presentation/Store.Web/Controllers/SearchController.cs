@@ -18,9 +18,15 @@ namespace Store.Web.Controllers
 
         public async Task<IActionResult> Index(string query)
         {
-            var products = await productService.GetAllByQueryAsync(query);
+            if (query == null)
+                return RedirectToAction("Index", "Home");
+            else
+            {
+                var products = await productService.GetAllByQueryAsync(query);
 
-            return View("Index", products);
+                return View("Index", products);
+            }
+            
         }
         public async Task<IActionResult> SearchByCategory(int categoryId)
         {
