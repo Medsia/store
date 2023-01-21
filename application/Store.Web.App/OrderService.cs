@@ -267,7 +267,8 @@ namespace Store.Web.App
         {
             var order = await GetOrderAsync();
             order.Payment = payment;
-           // var shippingInfo = ShippingDetails.;
+            order.FullOrder = true;
+            // var shippingInfo = ShippingDetails.;
             await orderRepository.UpdateAsync(order);
             Session.RemoveCart();
 
