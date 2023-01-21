@@ -63,12 +63,12 @@ namespace Store.Web.Controllers
             return View("Index", model);
         }
         [HttpPost]
-        public async Task<IActionResult> ConfirmationCode()
+        public async Task<IActionResult> CellPhoneInfo()
         {
 
             var (hasValue, model) = await orderService.TryGetModelAsync();
             if (hasValue)
-                return View("ConfirmationCode", model);
+                return View("CellPhoneInfo", model);
 
             return View("Empty");
            
@@ -79,7 +79,7 @@ namespace Store.Web.Controllers
             var model = await orderService.SendConfirmationAsync(cellPhone);
 
             if (model.Errors.Count > 0)
-                return View("Index", model);
+                return View("CellPhoneInfo", model);
 
             return View("Confirmation", model);
         }
@@ -89,8 +89,12 @@ namespace Store.Web.Controllers
         {
             var model = await orderService.ConfirmCellPhoneAsync(cellPhone, confirmationCode);
 
-            if(model.Errors.Count > 0)
-                return View("Confirmation", model);
+            if(!orderService.TryFormatPhone(cellPhone, out string formattedPhone))
+            {
+                model.Errors["cellPhone"] = "Номер телефона не соответствует формату +ххх(хх)ххх-хх-хх.";
+                return View("CellPhoneInfo", model);
+            }
+
 
             var deliveryMethods = deliveryServices.ToDictionary(service => service.Name, service => service.Title);
 
@@ -106,7 +110,11 @@ namespace Store.Web.Controllers
 
             var webContractorservice = webContractorServices.SingleOrDefault(service => service.Name == serviceName);
             if (webContractorservice == null)
-                return View("DeliveryStep", form);
+            {
+                var paymentMethods = paymentServices.ToDictionary(service => service.Name, service => service.Title);
+                return View("PaymentMethod", paymentMethods);
+            }
+
 
             var returnUri = GetReturnUri(nameof(NextDelivery));
             var redirectUri = await webContractorservice.StartSessionAsync(form.Parameters, returnUri);
@@ -134,8 +142,8 @@ namespace Store.Web.Controllers
             var deliveryService = deliveryServices.Single(service => service.Name == serviceName);
 
             var form = deliveryService.NextForm(step, values);
-            if (!form.IsFinal)
-                return View("deliveryStep", form);
+            //if (!form.IsFinal)
+            //    return View("deliveryStep", form);
 
             var delivery = deliveryService.GetDelivery(form);
             await orderService.SetDeliveryAsync(delivery);
@@ -185,7 +193,7 @@ namespace Store.Web.Controllers
             if (ModelState.IsValid)
             {
                 await orderService.SetShippingDetailsAsync(shippingDetails);
-                return View("ConfirmationCode", model);
+                return View("CellPhoneInfo", model);
             }
             
             else

@@ -90,16 +90,14 @@ namespace Store.Messages
                             body.AppendLine();
                         }
 
-                    body.AppendFormat("Общая стоимость: {0:c}", order.TotalPrice)
-                    .AppendLine("---")
-                    .AppendLine("Доставка:")
-                    .AppendLine(shippingInfo.UserName)
-                    .AppendLine(shippingInfo.Address)                   
-                    .AppendLine(shippingInfo.City)
-                    .AppendLine(shippingInfo.Country)
-                    .AppendLine("---")
-                    .AppendFormat("Подарочная упаковка: {0}",
-                        shippingInfo.GiftWrap ? "Да" : "Нет");
+                body.AppendFormat("Общая стоимость: {0:c}", order.TotalPrice)
+                .AppendLine("---")
+                .AppendLine("Доставка:")
+                .AppendLine(shippingInfo.UserName)
+                .AppendLine(shippingInfo.Address)
+                .AppendLine(shippingInfo.City)
+                .AppendLine(shippingInfo.Country)
+                .AppendLine("---");
 
                 MailMessage mailMessage = new MailMessage(
                                        emailSettings.MailFromAddress,	// От кого

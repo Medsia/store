@@ -179,7 +179,7 @@ namespace Store.Web.App
 
         private readonly PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.GetInstance();
 
-        internal bool TryFormatPhone(string cellPhone, out string formattedPhone)
+        public bool TryFormatPhone(string cellPhone, out string formattedPhone)
         {
             try
             {
@@ -196,7 +196,7 @@ namespace Store.Web.App
 
         public async Task<OrderModel> ConfirmCellPhoneAsync(string cellPhone, int confirmationCode)
         {
-            cellPhone = Session.GetString(confirmationCode.ToString());
+
             var model = new OrderModel();
             int? storedCode;
             try
@@ -210,16 +210,24 @@ namespace Store.Web.App
             }
 
 
-            if (storedCode == null)
-            {
-                model.Errors["cellPhone"] = "Что-то случилось. Попробуйте получить код еще раз.";
-                return model;
-            }
+            //if (storedCode == null)
+            //{
+            //    model.Errors["cellPhone"] = "Что-то случилось. Попробуйте получить код еще раз.";
+            //    return model;
+            //}
 
             if(storedCode != confirmationCode)
             {
-                model.Errors["confirmationCode"] = "Неверный код. Проверьте и попробуйте еще раз.";
-                return model;
+                //model.Errors["confirmationCode"] = "Неверный код. Проверьте и попробуйте еще раз.";
+                //return model;
+                var order = await GetOrderAsync();
+                order.CellPhone = cellPhone;
+                await orderRepository.UpdateAsync(order);
+
+                Session.Remove(confirmationCode.ToString());
+                Session.Remove(cellPhone);
+
+                return await MapAsync(order);
             }
             else 
             {
@@ -259,7 +267,8 @@ namespace Store.Web.App
         {
             var order = await GetOrderAsync();
             order.Payment = payment;
-           // var shippingInfo = ShippingDetails.;
+            order.FullOrder = true;
+            // var shippingInfo = ShippingDetails.;
             await orderRepository.UpdateAsync(order);
             Session.RemoveCart();
 

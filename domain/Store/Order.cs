@@ -99,6 +99,14 @@ namespace Store
 
         public decimal TotalPrice => Items.Sum(item => item.Price * item.Count)
                                    + (Delivery?.Price ?? 0m);
+        public bool FullOrder
+        {
+            get => dto.FullOrder;
+            set
+            {
+                dto.FullOrder = value;
+            }
+        }
 
         public Order(OrderDto dto)
         {

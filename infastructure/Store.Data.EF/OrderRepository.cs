@@ -56,5 +56,20 @@ namespace Store.Data.EF
 
             return dto;
         }
+        public async Task DeleteNotFullOrdersAsync()
+        {
+            var dbContext = dbContextFactory.Create(typeof(OrderRepository));
+
+            var orders = dbContext.Orders.Where(x => x.FullOrder == false);
+
+            foreach(var order in orders)
+            {
+                if(order != null)
+                    dbContext.Orders.Remove(order);
+            }
+            
+
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
