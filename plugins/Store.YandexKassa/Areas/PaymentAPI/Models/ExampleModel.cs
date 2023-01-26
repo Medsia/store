@@ -1,5 +1,5 @@
 ﻿
-namespace Store.YandexKassa.Areas.YandexKassa.Models
+namespace Store.PaymentAPI.Areas.PaymentAPI.Models
 {
     public class ExampleModel
     {

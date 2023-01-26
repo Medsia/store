@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Store.YandexKassa
 {
-    public class YandexKassaPaymentService : IPaymentService, IWebContractorService
+    public class PaymentAPIPaymentService : IPaymentService, IWebContractorService
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public YandexKassaPaymentService(IHttpContextAccessor httpContextAccessor)
+        public PaymentAPIPaymentService(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
 
         private HttpRequest Request => httpContextAccessor.HttpContext.Request;
 
-        public string Name => "YandexKassa";
+        public string Name => "PaymentAPI";
 
         public string Title => "Оплата банковской картой";
 
-        public string GetUri => "/YandexKassa/";
+        public string GetUri => "/PaymentAPI/";
 
         public Form FirstForm(Order order)
         {
@@ -32,7 +32,7 @@ namespace Store.YandexKassa
         public Form NextForm(int step, IReadOnlyDictionary<string, string> values)
         {
             if (step != 1)
-                throw new InvalidOperationException("Invalid Yandex.Kassa payment step");
+                throw new InvalidOperationException("Invalid PaymentAPI payment step");
 
             return Form.CreateLast(Name, step + 1, values);
         }
@@ -52,7 +52,7 @@ namespace Store.YandexKassa
 
             var builder = new UriBuilder(Request.Scheme, Request.Host.Host)
             {
-                Path = "YandexKassa/",
+                Path = "PaymentAPI/",
                 Query = queryString.ToString(),
             };
 

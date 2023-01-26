@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Store.YandexKassa.Areas.YandexKassa.Models;
+using Store.PaymentAPI.Areas.PaymentAPI.Models;
 
-namespace Store.YandexKassa.Areas.YandexKassa.Controllers
+namespace Store.PaymentAPI.Areas.PaymentAPI.Controllers
 {
-    [Area("YandexKassa")]
+    [Area("PaymentAPI")]
     public class HomeController : Controller
     {
         public IActionResult Index(int orderId, string returnUri)

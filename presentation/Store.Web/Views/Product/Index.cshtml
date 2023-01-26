@@ -14,7 +14,7 @@
 <form action="@Url.Action(nameof(OrderController.AddItem), "Order")" method="post">
     <input type="hidden" name="productid" value="@Model.Id" />
 
-    <p class="my-2">Цена: <strong>@Model.Price б.р</strong></p>
+    <p class="my-2">Цена: <strong>@Model.Price.ToString("F2") б.р</strong></p>
 
     <button class="btn btn-success" type="submit">В корзину</button>
 </form>

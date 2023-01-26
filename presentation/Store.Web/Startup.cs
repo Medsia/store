@@ -56,8 +56,8 @@ namespace Store.Web
             //services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<INotificationService, DebugNotificationService>();
             services.AddSingleton<IDeliveryService, PostamateDeliveryService>();
-            services.AddSingleton<IPaymentService, YandexKassaPaymentService>();
-            services.AddSingleton<IWebContractorService, YandexKassaPaymentService>();
+            services.AddSingleton<IPaymentService, PaymentAPIPaymentService>();
+            services.AddSingleton<IWebContractorService, PaymentAPIPaymentService>();
 
             services.AddSingleton<CategoryService>();
             services.AddSingleton<ProductService>();
