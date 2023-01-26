@@ -8,6 +8,7 @@ using Store.Data;
 using Store.Web.App;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -38,8 +39,17 @@ namespace Store.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await orderService.GetAllOrdersAsync();
+            ViewBag.OrderStates = TemporaryData.OrderStates;
 
             return View(model);
+        }
+
+
+        public async Task<IActionResult> OrderStateChanged(int orderId, string newOrderState)
+        {
+            await adminControlService.ChangeOrderState(orderId, newOrderState);
+
+            return RedirectToAction("Index");
         }
 
 
@@ -329,9 +339,9 @@ namespace Store.Web.Controllers
         {
             return User.FindFirst(ClaimsIdentity.DefaultNameClaimType).Value;
         }
-        private bool IsMaster()
+        private bool IsAdmin()
         {
-            if (GetLogin() == "master")
+            if (GetLogin() == "admin")
                 return true;
 
             return false;
@@ -340,7 +350,7 @@ namespace Store.Web.Controllers
 
         public IActionResult Security()
         {
-            if (IsMaster())
+            if (IsAdmin())
                 return RedirectToAction("Index");
 
             return View();
@@ -370,7 +380,7 @@ namespace Store.Web.Controllers
 
         public IActionResult AccountManagement()
         {
-            if (IsMaster())
+            if (IsAdmin())
             {
                 var model = authService.GetAllAccounts();
                 return View(model);

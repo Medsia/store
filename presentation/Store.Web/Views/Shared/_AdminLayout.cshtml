@@ -9,79 +9,83 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white">
-            <a class="ml-auto" href="@Url.Action("Logout", "Auth")">
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a class="ml-auto mr-5" href="@Url.Action("Logout", "Auth")">
                 <span class="col">Выйти из аккаунта</span>
             </a>
         </nav>
     </header>
 
-    <div class="dropdown-menu-left sidebar admin-menu-list p-0 m-0 w-100">
-        <span class="d-block admin-menu-item my-2">
-            <a href="@Url.Action("Index", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Текущие заказы</span>
-            </a>
-        </span>
-        <span class="d-block admin-menu-item my-2">
-            <a href="@Url.Action("ProductList", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Товары</span>
-            </a>
-        </span>
-        <span class="d-block admin-menu-item my-2">
-            <a href="@Url.Action("CategoryList", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Категории</span>
-            </a>
-        </span>
 
-        <span class="d-block admin-menu-title my-2">
-            <a href="@Url.Action("InfoList", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Инфо страницы</span>
-            </a>
-        </span>
-
-
-        @if (User.HasClaim(System.Security.Claims.ClaimsIdentity.DefaultNameClaimType, "master"))
-        {
+    <div class="row mx-5">
+        <div class="dropdown-menu-left ml-5" style="width: 180px;">
             <span class="d-block admin-menu-item my-2">
-            <a href="@Url.Action("AccountManagement", "Admin")">
-                <span class="col-auto"></span>
-                <span class="col">Аккаунты</span>
-            </a>
-            </span>
-        }
-        else
-        {
-            <span class="d-block admin-menu-item my-2">
-                <a href="@Url.Action("Security", "Admin")">
+                <a href="@Url.Action("Index", "Admin")">
                     <span class="col-auto"></span>
-                    <span class="col">Безопасность</span>
+                    <span class="col">Текущие заказы</span>
                 </a>
             </span>
-        }
+            <span class="d-block admin-menu-item my-2">
+                <a href="@Url.Action("ProductList", "Admin")">
+                    <span class="col-auto"></span>
+                    <span class="col">Товары</span>
+                </a>
+            </span>
+            <span class="d-block admin-menu-item my-2">
+                <a href="@Url.Action("CategoryList", "Admin")">
+                    <span class="col-auto"></span>
+                    <span class="col">Категории</span>
+                </a>
+            </span>
 
-    </div>
+            <span class="d-block admin-menu-title my-2">
+                <a href="@Url.Action("InfoList", "Admin")">
+                    <span class="col-auto"></span>
+                    <span class="col">Инфо страницы</span>
+                </a>
+            </span>
 
-    <div class="container">
-        <main>
-            @if (TempData["message"] != null)
-            {
-                <div class="alert alert-success">@TempData["message"]</div>
-            }
-            @if (TempData["warn"] != null)
-            {
-                <div class="alert alert-warning">@TempData["warn"]</div>
-            }
-            @if (TempData["error"] != null)
-            {
-                <div class="alert alert-danger">@TempData["error"]</div>
-            }
-            @RenderBody()
-        </main>
+
+                @if (User.HasClaim(System.Security.Claims.ClaimsIdentity.DefaultNameClaimType, "admin"))
+                {
+                    <span class="d-block admin-menu-item my-2">
+                    <a href="@Url.Action("AccountManagement", "Admin")">
+                        <span class="col-auto"></span>
+                        <span class="col">Аккаунты</span>
+                    </a>
+                    </span>
+                }
+                else
+                {
+                    <span class="d-block admin-menu-item my-2">
+                        <a href="@Url.Action("Security", "Admin")">
+                            <span class="col-auto"></span>
+                            <span class="col">Безопасность</span>
+                        </a>
+                    </span>
+                }
+
+        </div>
+
+        <div class="container">
+            <main>
+                    @if (TempData["message"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["message"]</div>
+                    }
+                    @if (TempData["warn"] != null)
+                    {
+                        <div class="alert alert-warning">@TempData["warn"]</div>
+                    }
+                    @if (TempData["error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["error"]</div>
+                    }
+                    @RenderBody()
+            </main>
+        </div>
     </div>
+    
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

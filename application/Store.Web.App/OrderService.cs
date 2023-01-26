@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PhoneNumbers;
+using Store.Data;
 using Store.Messages;
 using System;
 using System.Collections.Generic;
@@ -49,17 +50,6 @@ namespace Store.Web.App
             return (false, null);
         }
 
-        //internal async Task<(bool hasValue, ShippingDetails shippingDetails)> TryGetshippingDetailsAsync()
-        //{
-        //    if (Session.TryGetCart(out Cart cart))
-        //    {
-        //        var shippingDetails = await orderRepository.GetByIdAsync(cart.OrderId);
-
-        //    }
-
-        //    return (false, null);
-        //}
-
         internal async Task<OrderModel> MapAsync(Order order)
         {
             var products = await GetProductsAsync(order);
@@ -82,6 +72,12 @@ namespace Store.Web.App
                 CellPhone = order.CellPhone,
                 DeliveryDescription = order.Delivery?.Description,
                 PaymentDescription = order.Payment?.Description,
+                IsFilled = order.FullOrder,
+                ShippingDetails = order.ShippingDetails,
+                OrderState = new Dictionary<string, string>
+                {
+                    { order.OrderState, TemporaryData.OrderStates[order.OrderState] }
+                },
             };
         }
 

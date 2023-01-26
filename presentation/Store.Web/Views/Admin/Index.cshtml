@@ -3,44 +3,114 @@
 @{
     ViewData["Title"] = "Заказы";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    List<string> orderStateKeys = new List<string>();
+    foreach (var item in ViewBag.OrderStates.Keys)
+    {
+        orderStateKeys.Add(item);
+    }
 }
 
-<h3>@ViewData["Title"]</h3>
+<h3 class="mb-3">@ViewData["Title"]</h3>
 
 <table class="table">
     <tr>
-        <th>
+        <th class="text-center" style="width: 25%;">
             Номер заказа
         </th>
-        <th>
-            Номер телефона заказчика
-        </th>
-        <th>
+        <th class="text-center" style="width: 25%;">
             Кол-во предметов
         </th>
-        <th>
+        <th class="text-center" style="width: 25%;">
             Сумма
+        </th>
+        <th class="text-center" style="width: 25%;">
+            Статус
         </th>
     </tr>
 </table>
 
 @foreach (var order in Model) {
-    <div class="">
+    @if (!order.IsFilled) continue;
+    <div class="box-shadow mb-4 border">
         <details>
             <summary class="form-inline">
-                <p class="mr-auto">@order.Id</p>
-                <p class="mr-auto">@order.CellPhone</p>
-                <p class="ml-auto">@order.TotalCount</p>
-                <p class="ml-auto">@order.TotalPrice</p>
+                <p class="text-center my-2 font-weight-bold" style="width: 25%;">№ @order.Id</p>
+                <p class="text-center my-2 font-weight-bold" style="width: 25%;">Количество: @order.TotalCount шт.</p>
+                <p class="text-center my-2 font-weight-bold" style="width: 25%;">Сумма: @order.TotalPrice руб.</p>
+                <p class="text-center my-2 font-weight-bold" style="width: 25%;">@order.OrderState.Values.First()</p>
             </summary>
 
-            <div class="">
+            <hr class="mt-1">
+            <div class="mx-3">
                 <table class="table">
                     <tr>
-                        <td>Корзина:</td>
-                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Title</p>}</td>
-                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Count</p>}</td>
-                        <td>@foreach(var orderItem in order.Items) {<p>@orderItem.Price</p>}</td>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Имя покупателя:</td>
+                        <td class="border">@order.ShippingDetails.UserName</td>
+
+                        <td rowspan="4" colspan="2" class="border" style="width: 25%;">
+                            @{
+                                var keys = order.OrderState.Keys;
+                                var thisOrderState = keys.First();
+                            }
+                            @if (thisOrderState == orderStateKeys.First())
+                            {
+                                <form class="text-center mt-4" action="@Url.Action("OrderStateChanged", "Admin")" method="post">
+                                    <input type="hidden" name="orderId" value="@order.Id"/>
+                                    <input type="hidden" name="newOrderState" value="@orderStateKeys.Skip(1).First()"/>
+                                    <button type="submit" class="btn btn-outline-success">Принять</button>
+                                </form>
+                            }
+                            else if (thisOrderState == orderStateKeys.Skip(1).First())
+                            {
+                                <form class="text-center mt-4" action="@Url.Action("OrderStateChanged", "Admin")" method="post">
+                                    <input type="hidden" name="orderId" value="@order.Id"/>
+                                    <input type="hidden" name="newOrderState" value="@orderStateKeys.Skip(2).First()"/>
+                                    <button type="submit" class="btn btn-outline-success">Завершить</button>
+                                </form>
+                            }
+                            else if (thisOrderState == orderStateKeys.Last())
+                            {
+                                <form class="text-center mt-4" action="@Url.Action("OrderStateChanged", "Admin")" method="post">
+                                    <input type="hidden" name="orderId" value="@order.Id"/>
+                                    <input type="hidden" name="newOrderState" value="@orderStateKeys.First()"/>
+                                    <button type="submit" class="btn btn-outline-success">Вернуть в обработку</button>
+                                </form>
+                            }
+
+                            @if (thisOrderState != orderStateKeys.Skip(2).First() && thisOrderState != orderStateKeys.Last())
+                            {
+                                <form class="text-center mt-5" action="@Url.Action("OrderStateChanged", "Admin")" method="post">
+                                    <input type="hidden" name="orderId" value="@order.Id"/>
+                                    <input type="hidden" name="newOrderState" value="@orderStateKeys.Last()"/>
+                                    <button type="submit" class="btn btn-outline-danger">Отклонить</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Номер телефона покупателя:</td>
+                        <td class="border">@order.CellPhone</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Адрес доставки:</td>
+                        <td class="border">@order.ShippingDetails.Address</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Способ оплаты:</td>
+                        <td class="border">@order.PaymentDescription</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Корзина:</td>
+                        <td class="border">@foreach(var orderItem in order.Items) {<p>@orderItem.Title</p>}</td>
+                        <td class="text-center border" style="width: 10%;">@foreach(var orderItem in order.Items) {<p>@orderItem.Count шт.</p>}</td>
+                        <td class="text-center border" style="width: 10%;">@foreach(var orderItem in order.Items) {<p>@orderItem.Price руб.</p>}</td>
+                    </tr>
+                    <tr>
+                        <td class="border"></td>
+                        <td class="text-right font-weight-bold border" style="width: 25%;">Итого:</td>
+                        <td class="text-center border" style="width: 10%;">@order.TotalCount шт.</td>
+                        <td class="text-center border" style="width: 10%;">@order.TotalPrice руб.</td>
                     </tr>
                 </table>
             </div>

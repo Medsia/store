@@ -108,6 +108,15 @@ namespace Store
             }
         }
 
+        public string OrderState
+        {
+            get => dto.OrderState;
+            set
+            {
+                dto.OrderState = value;
+            }
+        }
+
         public Order(OrderDto dto)
         {
             this.dto = dto;
@@ -116,10 +125,9 @@ namespace Store
 
         public static class DtoFactory
         {
-
             public static OrderDto Create() => new OrderDto();
-
         }
+
         public static class Mapper
         {
             public static Order Map(OrderDto dto) => new Order(dto);
