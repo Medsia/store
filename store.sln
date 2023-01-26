@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32630.192
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{254E899F-6E65-4764-AAA4-1C1F5CA6E53B}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.Web.Contractors", "pr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{B907BBCD-DE0D-4B7E-B8C1-9B8E799C6CED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.YandexKassa", "plugins\Store.YandexKassa\Store.YandexKassa.csproj", "{92D8F038-37CB-461D-91EE-113E32C68435}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Store.PaymentAPI", "plugins\Store.YandexKassa\Store.PaymentAPI.csproj", "{92D8F038-37CB-461D-91EE-113E32C68435}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{463ED36D-2798-42B2-BD0E-C6FBA0B0D03C}"
 EndProject
