@@ -29,16 +29,16 @@ namespace Store
                              string country)
         {
             if (string.IsNullOrWhiteSpace(userName))
-                throw new ArgumentException(nameof(userName));
+                userName = string.Empty;
 
             if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException(nameof(address));
+                address = string.Empty;
 
             if (string.IsNullOrWhiteSpace(city))
-                throw new ArgumentException(nameof(city));
+                city = string.Empty;
 
             if (string.IsNullOrWhiteSpace(country))
-                throw new ArgumentException(nameof(country));
+                country = string.Empty;
 
             UserName = userName;
             Address = address;

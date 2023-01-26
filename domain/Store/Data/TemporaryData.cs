@@ -28,7 +28,6 @@ namespace Store.Data
             new CategoryDto{
                 Id = 5,
                 Name = "Аксесуары" },
-
         };
 
         public static List<ProductDto> ProductDtoList = new List<ProductDto>
@@ -138,6 +137,14 @@ namespace Store.Data
                 Login = "admin",
                 Password = "$MYHASH$V1$10000$iSZbCJtBHeAXae7+tfKFjYMBn+ZhygDcDdytZ+e2uSm47Y5C"
             }
+        };
+
+        public static Dictionary<string, string> OrderStates = new Dictionary<string, string>
+        {
+            { "processing", "В обработке" }, // первый всегда тот, который устанавливается при создании заказа
+            { "waiting", "Ожидание доставки" },
+            { "finished", "Завершен" },
+            { "canceled", "Отменен" }, // последний всегда тот, который обозначает отмену/сброс заказа
         };
     }
 }

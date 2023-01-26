@@ -31,6 +31,8 @@ namespace Store.Data
 
         public bool FullOrder { get; set; }
 
+        public string OrderState { get; set; }
+
         public IList<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
     }
 }

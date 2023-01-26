@@ -19,12 +19,14 @@ namespace Store.Web.App
         private readonly IUserRepository userRepository;
         private readonly IProductImgLinkRepository productImgLinkRepository;
         private readonly IImageRepository imageRepository;
+        private readonly IOrderRepository orderRepository;
 
         public string WebRootPath { private get; set; }
 
         public AdminControlService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
                                     IInfoRepository infoRepository, IUserRepository userRepository,
                                     IProductImgLinkRepository productImgLinkRepository, IImageRepository imageRepository,
+                                    IOrderRepository orderRepository,
                                     IWebHostEnvironment appEnvironment)
         {
             this.productRepository = productRepository;
@@ -33,6 +35,7 @@ namespace Store.Web.App
             this.userRepository = userRepository;
             this.productImgLinkRepository = productImgLinkRepository;
             this.imageRepository = imageRepository;
+            this.orderRepository = orderRepository;
 
             this.WebRootPath = appEnvironment.WebRootPath;
             infoRepository.WebRootPath = this.WebRootPath;
@@ -49,6 +52,20 @@ namespace Store.Web.App
                 Price = productModel.Price,
                 CategoryId = productModel.Category.Id,
             };
+        }
+
+
+        public async Task ChangeOrderState(int orderId, string newState)
+        {
+            if(orderId > 0)
+            {
+                if (TemporaryData.OrderStates.ContainsKey(newState)) {
+                    var order = await orderRepository.GetByIdAsync(orderId);
+                    order.OrderState = newState;
+
+                    await orderRepository.UpdateAsync(order);
+                }
+            }
         }
 
 

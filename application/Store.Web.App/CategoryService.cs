@@ -39,20 +39,15 @@ namespace Store.Web.App
 
         private CategoryModel Map(Category category)
         {
+            string img = category.ImgLink;
+            if(string.IsNullOrWhiteSpace(category.ImgLink)) img = ContentService.EmptyImageLink;
+
             return new CategoryModel
             {
                 Id = category.Id,
                 Name = category.Name,
-                ImgLink = category.ImgLink
+                ImgLink = img
             };
         }
-
-        //public bool IsValid(CategoryModel categoryModel)
-        //{
-        //    if (categoryModel == null || string.IsNullOrWhiteSpace(categoryModel.Name))
-        //        return false;
-
-        //    return true;
-        //}
     }
 }

@@ -20,6 +20,8 @@ namespace Store.Data.EF
             var dbContext = dbContextFactory.Create(typeof(OrderRepository));
 
             var dto = Order.DtoFactory.Create();
+            dto.OrderState = TemporaryData.OrderStates.Keys.First();
+
             dbContext.Orders.Add(dto);
             await dbContext.SaveChangesAsync();
 
